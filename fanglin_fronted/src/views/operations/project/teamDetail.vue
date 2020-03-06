@@ -11,62 +11,53 @@
                             size="small"
                             class="demo-form-inline"
                     >
-                        <el-form-item label="活动名称 : ">
+                        <el-form-item label="项目名称：">
                             <div>用户名称</div>
                         </el-form-item>
-                        <el-form-item label="开始时间：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="时长：">
+                        <el-form-item label="发布时间：">
                             <div>用户名称</div>
                         </el-form-item>
                         <el-form-item label="联系电话：">
                             <div>用户名称</div>
                         </el-form-item>
-                        <el-form-item label="活动价值：">
+                        <el-form-item label="募资金额：">
                             <div>用户名称</div>
                         </el-form-item>
-                        <el-form-item label="所属项目：">
+                        <el-form-item label="回馈标准：">
+                            <div>用户名称</div>
+                        </el-form-item>
+                        <el-form-item label="项目状态：">
                             <div>用户名称</div>
                         </el-form-item>
                         <br>
 
-                        <el-form-item label="人员要求：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="活动状态：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="发布人：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="地点：" style="margin-right: 10px">
-                            <el-input v-model="formData.value"></el-input>
-                        </el-form-item>
-                        <el-form-item>
-                            <i class="el-icon-s-opportunity" style="font-size: 18px;color: #0099ff;cursor: pointer"></i>
-                        </el-form-item>
-                        <br>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
                             <el-image :src="src"></el-image>
                         </el-form-item>
+
                     </el-form>
 
                 </el-col>
             </el-row>
         </div>
         <div class="my-block">
-            <div class="sub-title">实施情况</div>
+            <div class="sub-title">执行情况</div>
             <el-form
                     :inline="true"
                     :model="formData"
                     size="small"
                     class="demo-form-inline"
             >
-                <el-form-item label="报名人数：">
+                <el-form-item label="募集金额：">
                     <div>用户名称</div>
                 </el-form-item>
-                <el-form-item label="签退人数：">
+                <el-form-item label="捐赠人数：">
+                    <div>用户名称</div>
+                </el-form-item>    <el-form-item label="活动次数：">
+                    <div>用户名称</div>
+                </el-form-item> <el-form-item label="活动人数：">
+                    <div>用户名称</div>
+                </el-form-item> <el-form-item label="服务时长：">
                     <div>用户名称</div>
                 </el-form-item>
             </el-form>
@@ -111,9 +102,7 @@
 </script>
 
 <style scoped>
-    .el-form-item {
-        margin-right: 30px;
-    }
+
     .el-image{
         width: 300px;
         height: 150px;

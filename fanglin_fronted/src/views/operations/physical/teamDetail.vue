@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">活动详情</div>
+            <div class="sub-title">实物详情</div>
             <el-row :gutter="20">
 
                 <el-col :span="24" class="el-right">
@@ -11,66 +11,45 @@
                             size="small"
                             class="demo-form-inline"
                     >
-                        <el-form-item label="活动名称 : ">
+                        <el-form-item label="物品名称：">
                             <div>用户名称</div>
                         </el-form-item>
-                        <el-form-item label="开始时间：">
+                        <el-form-item label="兑换标准：">
                             <div>用户名称</div>
                         </el-form-item>
-                        <el-form-item label="时长：">
+
+                        <el-form-item label="供应单位：">
                             <div>用户名称</div>
                         </el-form-item>
-                        <el-form-item label="联系电话：">
+                        <el-form-item label="入库数量：">
                             <div>用户名称</div>
                         </el-form-item>
-                        <el-form-item label="活动价值：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="所属项目：">
-                            <div>用户名称</div>
+                        <el-form-item label="状态：">
+                            <el-radio v-model="formData.radio" label="1">备选项</el-radio>
+                            <el-radio v-model="formData.radio" label="2">备选项</el-radio>
                         </el-form-item>
                         <br>
 
-                        <el-form-item label="人员要求：">
+                        <el-form-item label="摘要：">
                             <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="活动状态：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="发布人：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="地点：" style="margin-right: 10px">
-                            <el-input v-model="formData.value"></el-input>
-                        </el-form-item>
-                        <el-form-item>
-                            <i class="el-icon-s-opportunity" style="font-size: 18px;color: #0099ff;cursor: pointer"></i>
                         </el-form-item>
                         <br>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
                             <el-image :src="src"></el-image>
                         </el-form-item>
+
+                        <br>
+                        <el-form-item label="物品说明：">
+                            <div>用户名称</div>
+                            <el-image :src="src"></el-image>
+
+                        </el-form-item>
+
+
                     </el-form>
 
                 </el-col>
             </el-row>
-        </div>
-        <div class="my-block">
-            <div class="sub-title">实施情况</div>
-            <el-form
-                    :inline="true"
-                    :model="formData"
-                    size="small"
-                    class="demo-form-inline"
-            >
-                <el-form-item label="报名人数：">
-                    <div>用户名称</div>
-                </el-form-item>
-                <el-form-item label="签退人数：">
-                    <div>用户名称</div>
-                </el-form-item>
-            </el-form>
-
         </div>
         <detailBottom/>
     </div>
@@ -111,9 +90,7 @@
 </script>
 
 <style scoped>
-    .el-form-item {
-        margin-right: 30px;
-    }
+
     .el-image{
         width: 300px;
         height: 150px;

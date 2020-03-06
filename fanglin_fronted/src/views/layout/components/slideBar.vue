@@ -4,7 +4,7 @@
         <el-scrollbar>
             <el-menu
                     class="el-menu-vertical-demo"
-                    background-color="#3A3B3C"
+                    background-color="#282d2f"
                     text-color="#fff"
                     active-text-color="#FF9F08"
                     :router="true"
@@ -60,7 +60,7 @@
     .side-bar{
         width:13%;
         height: 100vh;
-        background: #3a3b3c;
+        background: #282d2f;
         display: flex;
         flex-direction: column;
         position: fixed;
@@ -83,6 +83,11 @@
         overflow: hidden;
         background: #ff9f08;
         text-align: center;
+    }
+    .side-bar /deep/ {
+        .el-menu-item is-active{
+            background: #232829;
+        }
     }
 </style>
 <style lang="less">

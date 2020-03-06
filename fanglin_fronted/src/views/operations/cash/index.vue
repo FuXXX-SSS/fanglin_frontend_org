@@ -2,7 +2,7 @@
     <div>
         <div class="main" v-if="isShow">
             <div class="my-block">
-                <div class="sub-title">汇率列表</div>
+                <div class="sub-title">实物管理</div>
                 <el-form
                         :inline="true"
                         :model="formData"
@@ -11,6 +11,17 @@
                 >
                     <el-form-item label="客户姓名">
                         <el-input v-model="formData.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="入库时间">
+                        <el-date-picker
+                                v-model="formData.value2"
+                                type="datetimerange"
+                                :picker-options="pickerOptions"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                align="right">
+                        </el-date-picker>
                     </el-form-item>
                     <el-form-item label="状态">
                         <el-select v-model="formData.accType">
@@ -27,13 +38,16 @@
                 </el-form>
             </div>
             <div class="my-block">
-                <el-button type="warning" class="form_btn">新增</el-button>
                 <el-table :data="tableData.records" border>
                     <el-table-column type="index" label="序号" width="50" />
-                    <el-table-column prop="name" label="本方" />
-                    <el-table-column prop="date" label="外方" />
-                    <el-table-column prop="address" label="交易单位" />
-                    <el-table-column prop="name" label="汇率" />
+                    <el-table-column prop="name" label="发布时间" />
+                    <el-table-column prop="date" label="发布机构" />
+                    <el-table-column prop="address" label="物品名称" />
+                    <el-table-column prop="name" label="缩略图" />
+                    <el-table-column prop="name" label="兑换标准" />
+                    <el-table-column prop="name" label="入库金额" />
+                    <el-table-column prop="name" label="库存金额" />
+                    <el-table-column prop="name" label="供应单位" />
                     <el-table-column prop="name" label="状态" />
                     <el-table-column label="操作">
                         <template slot-scope="scope">
@@ -49,15 +63,11 @@
                 <pagination />
             </div>
         </div>
-        <div class="detail" v-else>
-            <Deatail />
-        </div>
     </div>
 </template>
 
 <script>
     import pagination from '@com/el-pagination'
-    import Deatail from './teamDetail'
     export default {
         name: "index",
         data() {
@@ -88,7 +98,6 @@
         },
         components:{
             pagination,
-            Deatail
         },
         methods:{
             Godetail(data){

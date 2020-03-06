@@ -10,21 +10,23 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start();
   if (hasToken) {
     if (to.path === "/login") {
-      next({ path: "/" });
+      next();
       NProgress.done();
     } else {
-      if (off) {
-        let routedata = localStorage.getItem("routedata");
-        let routerList;
-        if (routedata) {
-          routerList = JSON.parse(routedata);
-        }
-
-        off = false;
-        next({ ...to, replace: true });
-      } else {
-        next();
-      }
+      console.log(123);
+      next();
+      // if (off) {
+      //   let routedata = localStorage.getItem("routedata");
+      //   let routerList;
+      //   if (routedata) {
+      //     routerList = JSON.parse(routedata);
+      //   }
+      //
+      //   off = false;
+      //   next({ ...to, replace: true });
+      // } else {
+      //   next();
+      // }
     }
   } else {
     if (to.path.indexOf("/login") !== -1) {

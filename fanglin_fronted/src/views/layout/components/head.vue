@@ -14,7 +14,9 @@
                   </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="a">我的信息</el-dropdown-item>
-                        <el-dropdown-item command="b">退出登录</el-dropdown-item>
+                        <el-dropdown-item command="b" >
+                            <span @click="logout">退出登录</span>
+                        </el-dropdown-item>
 
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -46,14 +48,9 @@
         methods: {
             logout() {
                 console.log(123);
-                //删除token
-                //重置路由
-                localStorage.removeItem("token");
-                localStorage.removeItem("levList");
-                localStorage.removeItem("buttonPems");
                 setTimeout(() => {
-                    // Route.push("/login");
-                    window.location.reload();
+                    this.$router.push("/login");
+                    // window.location.reload();
                 }, 1000);
             },
 
@@ -63,7 +60,7 @@
 </script>
 <style lang="less" scoped>
     .index {
-        background: #242f41;
+        background: #2f3638;
         height: 80px;
         display: flex;
         align-items: center;

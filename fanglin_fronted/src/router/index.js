@@ -18,14 +18,14 @@ const routes = [
     {
         path: "/",
         redirect: "/index",
-    }, {
+    },
+    {
         path: "/index",
         name: "index",
         component: Layout,
         children:routeArray
     },
 ]
-
 const router = new Router({
     mode: "history",
     base: process.env.BASE_URL,
