@@ -46,6 +46,7 @@
             //递归增加路由路经
             resolvePath(routePath) {
                 return path.resolve(this.basePath, routePath);
+                console.log(path);
             }
         }
     };

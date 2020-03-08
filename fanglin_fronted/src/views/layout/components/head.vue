@@ -26,6 +26,7 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     export default {
         data() {
             return {
@@ -47,7 +48,7 @@
         },
         methods: {
             logout() {
-                console.log(123);
+                this.$store.dispatch("tagView/removeViews")
                 setTimeout(() => {
                     this.$router.push("/login");
                     // window.location.reload();

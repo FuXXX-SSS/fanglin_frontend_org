@@ -9,7 +9,7 @@
                     active-text-color="#FF9F08"
                     :router="true"
                     style="flex: 1"
-                    :default-openeds="openeds"
+                    :default-active="$route.path"
             >
 
                 <sidebarItem
@@ -58,7 +58,7 @@
 
 <style lang="less" scoped>
     .side-bar{
-        width:13%;
+        width:250px;
         height: 100vh;
         background: #282d2f;
         display: flex;

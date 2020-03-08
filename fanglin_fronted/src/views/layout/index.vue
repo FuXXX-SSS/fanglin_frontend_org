@@ -1,11 +1,19 @@
 <template>
     <div>
-        <HeadBar />
-        <SlideBar />
+        <HeadBar/>
+        <SlideBar/>
         <div class="rightPanel">
-            <keep-alive >
-                <router-view />
-            </keep-alive>
+            <TagView />
+                <transition
+                        name="fade"
+                        mode="out-in"
+                >
+                    <keep-alive>
+
+                    <router-view/>
+                    </keep-alive>
+
+                </transition>
         </div>
     </div>
 </template>
@@ -13,22 +21,48 @@
 <script>
     import HeadBar from './components/head'
     import SlideBar from './components/slideBar'
+    import TagView from './components/tagView'
+
     export default {
         name: "index",
-        components:{
+        data() {
+            return {}
+        },
+        components: {
             HeadBar,
-            SlideBar
-        }
+            SlideBar,
+            TagView
+        },
+        methods: {
+        },
+
     }
 </script>
 
 <style scoped>
-    .rightPanel{
+    .rightPanel {
         background: #f0f2f5;
         padding: 25px 35px;
         box-sizing: border-box;
         height: calc(100vh - 80px);
         overflow-y: auto;
         margin-left: 240px;
+    }
+
+    .fade-enter {
+        opacity: 0;
+    }
+
+    .fade-leave {
+        opacity: 1;
+    }
+
+    .fade-enter-active {
+        transition: opacity .25s;
+    }
+
+    .fade-leave-active {
+        opacity: 0;
+        transition: opacity .25s;
     }
 </style>
