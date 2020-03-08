@@ -19,7 +19,9 @@
                 ></sidebarItem>
             </el-menu>
         </el-scrollbar>
-
+        <div class="addToIndex addToIndexEd">
+            <br>
+        </div>
     </div>
 </template>
 

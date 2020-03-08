@@ -5,7 +5,7 @@
         <div class="rightPanel">
             <TagView />
                 <transition
-                        name="fade"
+                        name="fade-transform"
                         mode="out-in"
                 >
                     <keep-alive>
@@ -41,28 +41,38 @@
 
 <style scoped>
     .rightPanel {
-        background: #f0f2f5;
+        background: #e6e6e6;
         padding: 25px 35px;
         box-sizing: border-box;
         height: calc(100vh - 80px);
         overflow-y: auto;
         margin-left: 240px;
     }
-
-    .fade-enter {
-        opacity: 0;
+    /* fade */
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity 0.28s;
     }
 
-    .fade-leave {
-        opacity: 1;
-    }
-
-    .fade-enter-active {
-        transition: opacity .25s;
-    }
-
+    .fade-enter,
     .fade-leave-active {
         opacity: 0;
-        transition: opacity .25s;
     }
+
+    /* fade-transform */
+    .fade-transform-leave-active,
+    .fade-transform-enter-active {
+        transition: all .5s;
+    }
+
+    .fade-transform-enter {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    .fade-transform-leave-to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
 </style>

@@ -22,6 +22,7 @@ module.exports = {
         "@": resolve("src"),
         "@view": resolve("src/views"),
         "@com": resolve("src/components"),
+        "@http": resolve("src/http/modules"),
       }
     }
   }
