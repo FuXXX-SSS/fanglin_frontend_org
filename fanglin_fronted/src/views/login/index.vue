@@ -8,6 +8,16 @@
                           prefix-icon="el-icon-user-solid"></el-input>
                 <el-input v-model="password" placeholder="请输入登录密码" type="password" class="password" clearable
                           prefix-icon="el-icon-s-goods"></el-input>
+                <div class="switch">
+                    <el-switch
+                            v-model="value1"
+                            active-text="TB机构"
+                            inactive-text="TB运营"
+                            @change="switchChange"
+                        >
+
+                    </el-switch>
+                </div>
                 <el-button class="but" @click="onIndex" :loading="isLoading" :disabled="isdisabled">{{login}}
                 </el-button>
             </div>
@@ -27,6 +37,7 @@
                 login: '登录',
                 isLoading: false,
                 isdisabled: false,
+                value1: false,
             };
         },
         methods: {
@@ -45,12 +56,17 @@
                     this.isdisabled = false
                     this.login = '登录'
                 }
-               let _this = this
+                sessionStorage.setItem("token", 123);
+                sessionStorage.setItem("loginSwitch", this.value1);
+                let _this = this
                 setTimeout(() => {
                     _this.$router.push({
                         name: 'index'
                     }, 1500)
                 })
+            },
+            switchChange(){
+                this.$store.dispatch("Switch/switchChange",this.value1)
             }
         },
 
@@ -119,6 +135,10 @@
                 letter-spacing: 13px;
             }
         }
+        .switch{
+            text-align: center;
+            margin-top: 30px;
+        }
     }
 
     .box /deep/ .el-input__icon {
@@ -139,5 +159,10 @@
 
     .box /deep/ .el-input__prefix {
         left: 17px;
+    }
+    .box /deep/ .el-switch__label{
+        color: #fff;
+    }  .box /deep/ .el-switch__label.is-active{
+        color: #409EFF;
     }
 </style>

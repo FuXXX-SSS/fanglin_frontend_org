@@ -28,8 +28,8 @@
 <script>
 
     import sidebarItem from "./slideBarItem";
-    import {RouteData} from "@/utils/routesList";
-
+    import {RouteData,RouteData2} from "@/utils/routesList";
+    import {mapState} from 'vuex'
     export default {
         name: "sidebar",
         data() {
@@ -47,13 +47,16 @@
                 }
                 return path;
             },
-
+            ...mapState({
+                routeSwitch: state => state.Switch.switch
+            })
         },
+
         components: {
             sidebarItem
         },
         created() {
-            this.routerList=RouteData
+            this.routeSwitch?this.routerList=RouteData2:this.routerList=RouteData
         }
     };
 </script>

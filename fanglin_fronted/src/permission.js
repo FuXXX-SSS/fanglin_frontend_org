@@ -5,8 +5,7 @@ import "nprogress/nprogress.css";
 NProgress.configure({showSpinner: false}); // NProgress Configuration
 let off = true;
 router.beforeEach(async (to, from, next) => {
-    // const hasToken = localStorage.getItem("token");
-    const hasToken = 123;
+    const hasToken = sessionStorage.getItem("token");
     NProgress.start();
     if (hasToken) {
         if (to.path === "/login") {

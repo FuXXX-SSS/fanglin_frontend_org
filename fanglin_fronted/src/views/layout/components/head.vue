@@ -49,6 +49,8 @@
         methods: {
             logout() {
                 this.$store.dispatch("tagView/removeViews")
+                this.$store.dispatch("Switch/switchChange",false)
+
                 setTimeout(() => {
                     this.$router.push("/login");
                     // window.location.reload();

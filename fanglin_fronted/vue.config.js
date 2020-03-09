@@ -23,6 +23,8 @@ module.exports = {
         "@view": resolve("src/views"),
         "@com": resolve("src/components"),
         "@http": resolve("src/http/modules"),
+        "@opera": resolve("src/views/Operation"),
+        "@mecha": resolve("src/views/Mecha"),
       }
     }
   }
