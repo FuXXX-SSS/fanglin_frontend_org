@@ -2,35 +2,57 @@
     <div>
         <div class="main" v-if="isShow">
             <div class="my-block">
-                <div class="sub-title">文章管理</div>
-                <el-button type="warning" class="form_btn">新增</el-button>
+                <el-form
+                        :inline="true"
+                        :model="formData"
+                        size="small"
+                        class="demo-form-inline"
+                >
+                    <el-form-item label="客户姓名">
+                        <el-input v-model="formData.name"></el-input>
+                    </el-form-item>
+                    <el-form-item class="options">
+                        <el-button @click="formData = {}
+            " size="medium">重 置
+                        </el-button>
+                        <el-button type="primary" size="medium">查 询</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div class="my-block">
 
                 <el-table :data="tableData.records" border>
-
-                    <el-table-column type="index" label="序号" width="50" />
-                    <el-table-column prop="name" label="文章标题" />
-                    <el-table-column prop="date" label="发布机构" />
-                    <el-table-column prop="address" label="作者" />
-                    <el-table-column prop="name" label="发布时间" />
-                    <el-table-column prop="name" label="摘要" />
-                    <el-table-column prop="name" label="关键字" />
-                    <el-table-column prop="name" label="状态" />
+                    <el-table-column type="index" label="序号" width="50"/>
+                    <el-table-column prop="name" label="用户头像"/>
+                    <el-table-column prop="date" label="昵称"/>
+                    <el-table-column prop="address" label="性别"/>
+                    <el-table-column prop="name" label="城市"/>
+                    <el-table-column prop="name" label="认证"/>
+                    <el-table-column prop="name" label="加入时间"/>
+                    <el-table-column prop="name" label="邀请人数"/>
+                    <el-table-column prop="name" label="服务时长"/>
+                    <el-table-column prop="name" label="服务次数"/>
+                    <el-table-column prop="name" label="评分"/>
+                    <el-table-column prop="name" label="状态"/>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <el-button
                                     @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >查看日志</el-button
+                            >查看日志
+                            </el-button
                             >
                         </template>
                     </el-table-column>
                 </el-table>
-                <pagination />
+                <pagination/>
             </div>
         </div>
+
+
         <div class="detail" v-else>
-            <Deatail />
+            <Deatail/>
         </div>
     </div>
 </template>
@@ -38,13 +60,14 @@
 <script>
     import pagination from '@com/el-pagination'
     import Deatail from './teamDetail'
+
     export default {
         name: "index",
         data() {
             return {
-                isShow:true,
+                isShow: true,
                 formData: {},
-                tableData:{
+                tableData: {
                     records: [
                         {
                             date: '2016-05-02',
@@ -66,14 +89,16 @@
                 }
             }
         },
-        components:{
+        components: {
             pagination,
             Deatail
         },
-        methods:{
-            Godetail(data){
-                console.log(123);
+
+        methods: {
+            Godetail(data) {
+                console.log(data);
                 this.isShow=false
+
             }
         }
     }

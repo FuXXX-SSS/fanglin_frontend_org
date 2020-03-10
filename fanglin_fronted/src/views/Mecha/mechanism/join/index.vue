@@ -2,18 +2,36 @@
     <div>
         <div class="main" v-if="isShow">
             <div class="my-block">
-                <div class="sub-title">文章管理</div>
-                <el-button type="warning" class="form_btn">新增</el-button>
-
+                <el-form
+                        :inline="true"
+                        :model="formData"
+                        size="small"
+                        class="demo-form-inline"
+                >
+                    <el-form-item label="客户姓名">
+                        <el-input v-model="formData.name"></el-input>
+                    </el-form-item>
+                    <el-form-item class="options">
+                        <el-button @click="formData = {}
+            " size="medium">重 置
+                        </el-button>
+                        <el-button type="primary" size="medium">查 询</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div class="my-block">
                 <el-table :data="tableData.records" border>
-
                     <el-table-column type="index" label="序号" width="50" />
-                    <el-table-column prop="name" label="文章标题" />
-                    <el-table-column prop="date" label="发布机构" />
-                    <el-table-column prop="address" label="作者" />
-                    <el-table-column prop="name" label="发布时间" />
-                    <el-table-column prop="name" label="摘要" />
-                    <el-table-column prop="name" label="关键字" />
+                    <el-table-column prop="name" label="用户头像" />
+                    <el-table-column prop="date" label="名称" />
+                    <el-table-column prop="address" label="创始人" />
+                    <el-table-column prop="name" label="管理员" />
+                    <el-table-column prop="name" label="手机号" />
+                    <el-table-column prop="name" label="成员" />
+                    <el-table-column prop="name" label="成立时间" />
+                    <el-table-column prop="name" label="服务时长" />
+                    <el-table-column prop="name" label="服务次数" />
+                    <el-table-column prop="name" label="评分" />
                     <el-table-column prop="name" label="状态" />
                     <el-table-column label="操作">
                         <template slot-scope="scope">

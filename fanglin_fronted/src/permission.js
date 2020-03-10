@@ -13,7 +13,7 @@ router.beforeEach(async (to, from, next) => {
             NProgress.done();
         } else {
           if (to.path === '/index') {
-              next(`/index/userManagement/volunteer`);
+              next(`/index/mecha/volunteer`);
             }
             next();
             // if (off) {

@@ -9,6 +9,7 @@ import "./permission";
 import './style/index.less'
 import * as tool from "./utils/tool.js";
 import * as filters from "./utils/tool.js";
+
 Vue.prototype.$tools = tool
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key]);

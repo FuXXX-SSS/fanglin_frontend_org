@@ -1,4 +1,4 @@
-
+import vuex from 'vuex'
 const RouteData =[
     {
         path: "/userManagement",
@@ -176,31 +176,31 @@ const RouteData =[
 ]
 const RouteData2 =[
     {
-        path: "/userManagement",
-        name: "userManagement",
+        path: "/mecha",
+        name: "mecha",
         meta: {title: "机构管理", icon: "el-icon-platform-eleme", show: true},
         routeName: "basic",
         checked: true,
         children:[
             {
-                path: "/index/userManagement/volunteer",
+                path: "/index/mecha/volunteer",
                 component: () =>
-                    import ("@mecha/userManagement/volunteer"),
-                routeName: "user",
+                    import ("@mecha/mechanism/volunteer"),
+                routeName: "mechanism",
                 checked: false,
                 meta: {title: "成员管理", icon: "el-icon-eleme", show: true},
             }, {
-                path: "/index/userManagement/team",
+                path: "/index/mecha/join",
                 component: () =>
-                    import ("@mecha/userManagement/team"),
-                routeName: "team",
+                    import ("@mecha/mechanism/join"),
+                routeName: "join",
                 checked: false,
                 meta: {title: "加入申请", icon: "el-icon-delete-solid", show: true},
             }, {
-                path: "/index/userManagement/institu",
+                path: "/index/mecha/assets",
                 component: () =>
-                    import ("@mecha/userManagement/institu"),
-                routeName: "institu",
+                    import ("@mecha/mechanism/assets"),
+                routeName: "assets",
                 checked: false,
                 meta: {title: "资产管理", icon: "el-icon-delete", show: true},
             },
@@ -343,7 +343,7 @@ const RouteData2 =[
 
 ]
 let routeArray=[]
-RouteData.forEach(item=>{
+RouteData2.forEach(item=>{
     routeArray.push(...item.children)
 })
 export  {routeArray,RouteData,RouteData2}

@@ -49,13 +49,13 @@
                 this.isLoading = true
                 this.isdisabled = true
                 this.login = '登录中'
-                let res = await login(data)
-                if (res && res.code === 0) {
-                    this.$tools.$mes('aaa', 'success')
-                    this.isLoading = false
-                    this.isdisabled = false
-                    this.login = '登录'
-                }
+                // let res = await login(data)
+                // if (res && res.code === 0) {
+                //     this.$tools.$mes('aaa', 'success')
+                //     this.isLoading = false
+                //     this.isdisabled = false
+                //     this.login = '登录'
+                // }
                 sessionStorage.setItem("token", 123);
                 sessionStorage.setItem("loginSwitch", this.value1);
                 let _this = this
