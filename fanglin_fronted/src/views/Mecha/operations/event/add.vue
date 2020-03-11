@@ -1,35 +1,29 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">活动详情</div>
+            <div class="sub-title">发布活动</div>
             <el-row :gutter="20">
 
-                <el-col :span="24" class="el-right">
+                <el-col :span="12" >
                     <el-form
-                            :inline="true"
+                            :inline="false"
                             :model="formData"
                             size="small"
                             class="demo-form-inline"
+                            label-width="100px"
+
                     >
                         <el-form-item label="活动名称 : ">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="开始时间：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="时长：">
-                            <div>用户名称</div>
+                            <el-input v-model="formData.value"></el-input>
+
                         </el-form-item>
                         <el-form-item label="联系电话：">
-                            <div>用户名称</div>
+                            <el-input v-model="formData.value"></el-input>
+
                         </el-form-item>
-                        <el-form-item label="活动价值：">
-                            <div>用户名称</div>
+                       <el-form-item label="服务时长：">
+                            <el-input v-model="formData.value"></el-input>
                         </el-form-item>
-                        <el-form-item label="所属项目：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <br>
 
                         <el-form-item label="人员要求：">
                             <div>用户名称</div>
@@ -37,14 +31,8 @@
                         <el-form-item label="活动状态：">
                             <div>用户名称</div>
                         </el-form-item>
-                        <el-form-item label="发布人：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="地点：" style="margin-right: 10px">
-                            <el-input v-model="formData.value"></el-input>
-                        </el-form-item>
                         <el-form-item>
-                            <i class="el-icon-s-opportunity" style="font-size: 18px;color: #0099ff;cursor: pointer"></i>
+
                         </el-form-item>
                         <br>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
@@ -54,22 +42,7 @@
 
                 </el-col>
             </el-row>
-        </div>
-        <div class="my-block">
-            <div class="sub-title">实施情况</div>
-            <el-form
-                    :inline="true"
-                    :model="formData"
-                    size="small"
-                    class="demo-form-inline"
-            >
-                <el-form-item label="报名人数：">
-                    <div>用户名称</div>
-                </el-form-item>
-                <el-form-item label="签退人数：">
-                    <div>用户名称</div>
-                </el-form-item>
-            </el-form>
+            <Quill />
 
         </div>
         <detailBottom/>
@@ -78,6 +51,7 @@
 
 <script>
     import detailBottom from '@com/detailBottom'
+    import Quill from '@com/quill-editor'
 
     export default {
         name: "teamDetail",
@@ -100,20 +74,45 @@
                             name: '王小虎',
                             address: '上海市普陀区金沙江路 1519 弄'
                         },]
-                }
+                },
+                pickerOptions: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
 
             }
         },
         components: {
-            detailBottom
+            detailBottom,
+            Quill
         }
     }
 </script>
 
 <style scoped>
-    .el-form-item {
-        margin-right: 30px;
-    }
     .el-image{
         width: 300px;
         height: 150px;

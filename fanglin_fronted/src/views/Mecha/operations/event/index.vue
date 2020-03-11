@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="main" v-if="isShow">
+        <div class="main" v-if="isShow===1">
             <div class="my-block">
                 <div class="sub-title">活动列表</div>
                 <el-form
@@ -27,7 +27,7 @@
                 </el-form>
             </div>
             <div class="my-block">
-                <el-button type="warning" class="form_btn">新增</el-button>
+                <el-button type="warning" class="form_btn" @click="add">新增</el-button>
                 <el-table :data="tableData.records" border>
                     <el-table-column type="index" label="序号" width="50" />
                     <el-table-column prop="name" label="发布时间" />
@@ -56,8 +56,11 @@
                 <pagination />
             </div>
         </div>
-        <div class="detail" v-else>
+        <div class="detail" v-if="isShow===2">
             <Deatail />
+        </div>
+        <div class="detail" v-if="isShow===3">
+            <Add />
         </div>
     </div>
 </template>
@@ -65,11 +68,13 @@
 <script>
     import pagination from '@com/el-pagination'
     import Deatail from './teamDetail'
+    import Add from './add'
+
+    import {mapState} from "vuex";
     export default {
         name: "index",
         data() {
             return {
-                isShow:true,
                 formData: {},
                 tableData:{
                     records: [
@@ -95,13 +100,22 @@
         },
         components:{
             pagination,
+            Add,
             Deatail
+        },
+        computed:{
+            ...mapState({
+                isShow:state => state.mecha_asset.AssetisShow
+            })
         },
         methods:{
             Godetail(data){
                 console.log(123);
                 this.isShow=false
-            }
+            },
+            add(){
+                this.$store.dispatch('mecha_asset/setAsset',3)
+            },
         }
     }
 </script>

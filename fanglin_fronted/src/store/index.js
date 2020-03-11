@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import tagView from './tagview'
-import Switch from './Switch'
-const modulesFiles = require.context('./', true, /\.js$/)
+const modulesFiles = require.context('./modules', true, /\.js$/)
 const modules = modulesFiles.keys().reduce((modules, modulePath) => {
     const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1')
     const value = modulesFiles(modulePath)
@@ -15,5 +13,5 @@ export default new Vuex.Store({
     state: {},
     mutations: {},
     actions: {},
-    modules: {tagView,Switch}
+    modules
 })

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import { quillEditor } from "vue-quill-editor"; //调用编辑器
+    import { quillEditor } from "vue-quill-editor";
     import "quill/dist/quill.core.css";
     import "quill/dist/quill.snow.css";
     import "quill/dist/quill.bubble.css";
