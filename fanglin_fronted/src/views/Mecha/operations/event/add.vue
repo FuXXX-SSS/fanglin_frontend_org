@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">发布活动</div>
+            <div class="sub-title">发布项目</div>
             <el-row :gutter="20">
 
                 <el-col :span="12" >
@@ -13,7 +13,7 @@
                             label-width="100px"
 
                     >
-                        <el-form-item label="活动名称 : ">
+                        <el-form-item label="项目名称 : ">
                             <el-input v-model="formData.value"></el-input>
 
                         </el-form-item>
@@ -21,15 +21,12 @@
                             <el-input v-model="formData.value"></el-input>
 
                         </el-form-item>
-                       <el-form-item label="服务时长：">
+                       <el-form-item label="募资目标：">
                             <el-input v-model="formData.value"></el-input>
                         </el-form-item>
 
-                        <el-form-item label="人员要求：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="活动状态：">
-                            <div>用户名称</div>
+                        <el-form-item label="回馈标准：">
+                            <el-input v-model="formData.value"></el-input>
                         </el-form-item>
                         <el-form-item>
 
@@ -45,7 +42,21 @@
             <Quill />
 
         </div>
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+
+                <el-col :span="6">
+                    <el-button  type="warning">保存</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button  type="success">关闭/开启</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="info" @click="back">返回</el-button>
+                </el-col>
+            </el-row>
+        </div>
+
     </div>
 </template>
 
@@ -106,9 +117,13 @@
             }
         },
         components: {
-            detailBottom,
             Quill
-        }
+        },
+        methods:{
+            back(){
+                this.$store.dispatch('mecha_asset/setEvent',1)
+            },
+        },
     }
 </script>
 

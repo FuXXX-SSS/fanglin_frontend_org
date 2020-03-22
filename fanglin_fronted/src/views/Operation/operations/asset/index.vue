@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="main" v-if="isShow===1">
+        <div class="main" v-if="isShow===2">
             <div class="my-block">
                 <div class="sub-title">汇率列表</div>
                 <el-form
@@ -27,7 +27,8 @@
                 </el-form>
             </div>
             <div class="my-block">
-                <el-button type="warning" class="form_btn" @click="isShow===3">sss新增</el-button>
+                <el-button type="warning" class="form_btn" @click="add">新增</el-button>
+                <el-button type="info" class="form_btn" @click="back">返回</el-button>
                 <el-table :data="tableData.records" border>
                     <el-table-column type="index" label="序号" width="50" />
                     <el-table-column prop="name" label="本方" />
@@ -35,21 +36,11 @@
                     <el-table-column prop="address" label="交易单位" />
                     <el-table-column prop="name" label="汇率" />
                     <el-table-column prop="name" label="状态" />
-                    <el-table-column label="操作">
-                        <template slot-scope="scope">
-                            <el-button
-                                    @click="Godetail(scope.row)"
-                                    type="text"
-                                    size="small"
-                            >查看日志</el-button
-                            >
-                        </template>
-                    </el-table-column>
                 </el-table>
                 <pagination />
             </div>
         </div>
-        <div class="detail" v-if="isShow===2">
+        <div class="detail" v-if="isShow===1">
             <Deatail />
         </div>
         <div class="detail" v-if="isShow===3">
@@ -62,11 +53,11 @@
     import pagination from '@com/el-pagination'
     import Deatail from './teamDetail'
     import Add from './add'
+    import {mapState} from 'vuex'
     export default {
         name: "index",
         data() {
             return {
-                isShow:1,
                 formData: {},
                 tableData:{
                     records: [
@@ -95,11 +86,24 @@
             Add,
             Deatail
         },
+        computed:{
+          ...mapState({
+              isShow:state => state.mecha_asset.AssetisShow
+          })
+        },
         methods:{
             Godetail(data){
                 console.log(123);
                 this.isShow=2
-            }
+            },
+            add(){
+                this.$store.dispatch('mecha_asset/setAsset',3)
+            },back(){
+                this.$store.dispatch('mecha_asset/setAsset',1)
+            },
+        },
+        created() {
+            console.log(this.isShow);
         }
     }
 </script>

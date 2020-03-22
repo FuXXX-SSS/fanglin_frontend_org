@@ -3,7 +3,7 @@ const RouteData =[
     {
         path: "/userManagement",
         name: "userManagement",
-        meta: {title: "用户管理", icon: "el-icon-platform-eleme", show: true},
+        meta: {title: "用户管理", icon: "el-icon-s-custom", show: true},
         routeName: "basic",
         checked: true,
         children:[
@@ -178,7 +178,7 @@ const RouteData2 =[
     {
         path: "/mecha",
         name: "mecha",
-        meta: {title: "机构管理", icon: "el-icon-platform-eleme", show: true},
+        meta: {title: "机构管理", icon: "el-icon-user", show: true},
         routeName: "basic",
         checked: true,
         children:[
@@ -189,14 +189,16 @@ const RouteData2 =[
                 routeName: "mechanism",
                 checked: false,
                 meta: {title: "成员管理", icon: "el-icon-eleme", show: true},
-            }, {
+            },
+            {
                 path: "/index/mecha/join",
                 component: () =>
                     import ("@mecha/mechanism/join"),
                 routeName: "join",
                 checked: false,
                 meta: {title: "加入申请", icon: "el-icon-delete-solid", show: true},
-            }, {
+            },
+            {
                 path: "/index/mecha/assets",
                 component: () =>
                     import ("@mecha/mechanism/assets"),

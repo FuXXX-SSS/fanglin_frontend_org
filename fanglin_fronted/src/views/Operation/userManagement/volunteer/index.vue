@@ -8,8 +8,8 @@
                         size="small"
                         class="demo-form-inline"
                 >
-                    <el-form-item label="客户姓名">
-                        <el-input v-model="formData.name"></el-input>
+                    <el-form-item label="关键字查询">
+                        <el-input v-model="formData.name" placeholder="请输入关键字查询"></el-input>
                     </el-form-item>
                     <el-form-item class="options">
                         <el-button @click="formData = {}
@@ -34,17 +34,17 @@
                     <el-table-column prop="name" label="服务次数"/>
                     <el-table-column prop="name" label="评分"/>
                     <el-table-column prop="name" label="状态"/>
-                    <el-table-column label="操作">
-                        <template slot-scope="scope">
-                            <el-button
-                                    @click="Godetail(scope.row)"
-                                    type="text"
-                                    size="small"
-                            >查看日志
-                            </el-button
-                            >
-                        </template>
-                    </el-table-column>
+                        <el-table-column label="操作">
+                            <template slot-scope="scope">
+                                <el-button
+                                        @click="Godetail(scope.row)"
+                                        type="text"
+                                        size="small"
+                                >查看详情
+                                </el-button
+                                >
+                            </template>
+                        </el-table-column>
                 </el-table>
                 <pagination/>
             </div>
@@ -52,7 +52,7 @@
 
 
         <div class="detail" v-else>
-            <Deatail/>
+            <Deatail @Godetail="Godetail"/>
         </div>
     </div>
 </template>
@@ -60,6 +60,7 @@
 <script>
     import pagination from '@com/el-pagination'
     import Deatail from './teamDetail'
+    import {userList} from '@http/user'
 
     export default {
         name: "index",
@@ -97,9 +98,19 @@
         methods: {
             Godetail(data) {
                 console.log(data);
-                this.isShow=false
-
+                this.isShow = !this.isShow
+            },
+            async init() {
+                let obj ={
+                    pageSize:10,
+                    pageNum:1,
+                    cert:true,
+                    keyword:'',
+                }
+                let res = await userList(obj)
             }
+        },
+        created() {
         }
     }
 </script>

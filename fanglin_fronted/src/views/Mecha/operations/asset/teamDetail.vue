@@ -57,27 +57,41 @@
         </div>
         <div class="my-block">
             <div class="sub-title">实施情况</div>
-            <el-form
-                    :inline="true"
-                    :model="formData"
-                    size="small"
-                    class="demo-form-inline"
-            >
-                <el-form-item label="报名人数：">
-                    <div>用户名称</div>
-                </el-form-item>
-                <el-form-item label="签退人数：">
-                    <div>用户名称</div>
-                </el-form-item>
-            </el-form>
+            <el-table :data="tableData.records" border>
+                <el-table-column type="index" label="序号" width="50" />
+                <el-table-column prop="name" label="申请人" />
+                <el-table-column prop="date" label="性别" />
+                <el-table-column prop="date" label="年龄" />
+                <el-table-column prop="date" label="服务时长" />
+                <el-table-column prop="date" label="服务次数" />
+                <el-table-column prop="date" label="评价" />
+                <el-table-column prop="date" label="实名认证" />
+                <el-table-column prop="date" label="专长" />
+                <el-table-column prop="date" label="申请时间" />
+            </el-table>
+            <pagination />
 
         </div>
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+                <el-col :span="6">
+                    <el-button type="success">确定人选</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="warning">推荐</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="primary" @click="back">返回</el-button>
+                </el-col>
+            </el-row>
+        </div>
+
     </div>
 </template>
 
 <script>
     import detailBottom from '@com/detailBottom'
+    import pagination from '@com/el-pagination'
 
     export default {
         name: "teamDetail",
@@ -105,8 +119,14 @@
             }
         },
         components: {
-            detailBottom
-        }
+            pagination,
+
+        },
+        methods:{
+            back(){
+                this.$store.dispatch('mecha_asset/setAsset',1)
+            },
+        },
     }
 </script>
 

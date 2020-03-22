@@ -1,71 +1,71 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">机构信息</div>
+            <div class="sub-title">新增兑换(现金)</div>
             <el-row :gutter="20">
 
-                <el-col :span="12">
+                <el-col :span="12" >
                     <el-form
                             :inline="false"
                             :model="formData"
                             size="small"
                             class="demo-form-inline"
-                            label-width="130px"
+                            label-width="100px"
 
                     >
-                        <el-form-item label="机构名称 : ">
+                        <el-form-item label="现金名称 : ">
                             <el-input v-model="formData.value"></el-input>
-                        </el-form-item>
-                        <el-form-item label="机构地点 : ">
-                            <el-input v-model="formData.value"></el-input>
-                        </el-form-item>
-                        <el-form-item label="机构公告：">
-                            <el-input
-                                    type="textarea"
-                                    :autosize="{ minRows: 2, maxRows: 4}"
-                                    placeholder="请输入内容"
-                                    v-model="formData.textarea2">
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item label="机构介绍：">
-                            <el-input
-                                    type="textarea"
-                                    :autosize="{ minRows: 2, maxRows: 4}"
-                                    placeholder="请输入内容"
-                                    v-model="formData.textarea2">
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item label="机构banner：" style="margin-right: 10px">
-                            <el-upload
-                                    class="avatar-uploader"
-                                    action="https://jsonplaceholder.typicode.com/posts/"
-                                    :show-file-list="false"
-                                    :on-success="handleAvatarSuccess"
-                                    :before-upload="beforeAvatarUpload">
-                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
-                        </el-form-item>
 
-                        <el-form-item label="机构头像：" style="margin-right: 10px">
-                            <el-image :src="src"></el-image>
                         </el-form-item>
-                        <el-form-item label="机构二维码：" style="margin-right: 10px">
+                        <el-form-item label="供应单位：">
+                            <el-input v-model="formData.value"></el-input>
+
+                        </el-form-item>
+                        <el-form-item label="状态：">
+                            <el-select v-model="formData.accType">
+                                <el-option label="上架" value="1"></el-option>
+                                <el-option label="下架" value="2"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="入库数量：">
+                            <el-input v-model="formData.value"></el-input>
+                        </el-form-item>
+                        <el-form-item label="兑换标准：">
+                            <el-input v-model="formData.value"></el-input>
+                        </el-form-item>
+                        <el-form-item label="购买价格：">
+                            <el-input v-model="formData.value"></el-input>
+                        </el-form-item>
+                        <el-form-item label="购买回馈：">
+                            <el-input v-model="formData.value"></el-input>
+                        </el-form-item>
+                        <el-form-item label="所属项目：">
+                            <el-input
+                                    type="textarea"
+                                    :autosize="{ minRows: 2, maxRows: 4}"
+                                    placeholder="请输入内容"
+                                    v-model="formData.textarea2">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="缩略图：" style="margin-right: 10px">
                             <el-image :src="src"></el-image>
                         </el-form-item>
                     </el-form>
 
                 </el-col>
             </el-row>
+            <Quill />
 
         </div>
         <div class="my-block">
             <el-row type="flex" class="row-bg" justify="space-around">
 
                 <el-col :span="6">
-                    <el-button type="warning">保存</el-button>
+                    <el-button  type="warning">保存</el-button>
                 </el-col>
-               
+                <el-col :span="6">
+                    <el-button type="info" @click="back">取消</el-button>
+                </el-col>
             </el-row>
         </div>
 
@@ -73,6 +73,8 @@
 </template>
 
 <script>
+    import detailBottom from '@com/detailBottom'
+    import Quill from '@com/quill-editor'
 
     export default {
         name: "teamDetail",
@@ -126,55 +128,20 @@
 
             }
         },
-        components: {},
-        methods: {
-            handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
+        components: {
+            Quill
+        },
+        methods:{
+            back(){
+                this.$store.dispatch('mecha_asset/setPhyscial',1)
             },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
-            }
-        }
+        },
     }
 </script>
 
 <style scoped>
-    .el-image {
+    .el-image{
         width: 300px;
         height: 150px;
-    }
-</style>
-<style>
-    .avatar-uploader .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-    .avatar-uploader .el-upload:hover {
-        border-color: #409EFF;
-    }
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 178px;
-        height: 178px;
-        line-height: 178px;
-        text-align: center;
-    }
-    .avatar {
-        width: 178px;
-        height: 178px;
-        display: block;
     }
 </style>

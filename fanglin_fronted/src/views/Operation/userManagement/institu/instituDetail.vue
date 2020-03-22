@@ -3,7 +3,7 @@
         <div class="my-block">
             <div class="titleDetail">机构详情</div>
             <el-row :gutter="20">
-                <el-col :span="4" class="el-left">
+                <el-col :span="4" class="el-left" style="align-items: flex-start;">
                     <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
                 </el-col>
                 <el-col :span="20" class="el-right">
@@ -80,7 +80,14 @@
                 </el-col>
             </el-row>
         </div>
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+                <el-col :span="6">   <el-button type="warning" @click="back">关闭/开通</el-button></el-col>
+                <el-col :span="6">   <el-button type="info">转账</el-button></el-col>
+                <el-col :span="6">   <el-button type="success">推荐</el-button></el-col>
+                <el-col :span="6">   <el-button type="primary" @click="back">返回</el-button></el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -113,7 +120,10 @@
             }
         },
         components: {
-            detailBottom
+        },
+        methods:{ back(){
+                this.$emit('Godetail')
+            }
         }
     }
 </script>

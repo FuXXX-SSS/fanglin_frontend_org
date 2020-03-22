@@ -55,44 +55,47 @@
         </div>
         <div class="my-block">
             <div class="titleDetail">资质认证</div>
-            <div class="imgList">
-                <div class="block">
-                    <el-image :src="src"></el-image>
-                    <span class="demonstration">默认</span>
-                </div>
-                <div class="block">
-                    <el-image :src="src"></el-image>
-                    <span class="demonstration">默认</span>
-                </div>
-                <div class="block">
-                    <el-image :src="src"></el-image>
-                    <span class="demonstration">默认</span>
-                </div>
-                <div class="block">
-                    <el-image :src="src"></el-image>
-                    <span class="demonstration">默认</span>
-                </div>
-            </div>
+            <el-table :data="tableData.records" border>
+                <el-table-column type="index" label="序号" width="50"/>
+                <el-table-column prop="name" label="证件图片"/>
+                <el-table-column prop="date" label="证书名称"/>
+                <el-table-column prop="address" label="培训时长"/>
+                <el-table-column prop="name" label="状态"/>
+
+                <el-table-column prop="name" label="认证社区"/>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button
+                                @click="Godetail(scope.row)"
+                                type="text"
+                                size="small"
+                        >取消认证
+                        </el-button
+                        >
+                    </template>
+                </el-table-column>
+
+            </el-table>
+
+            <pagination/>
         </div>
         <div class="my-block">
-            <div class="titleDetail">加入团队</div>
-            <el-row :gutter="20">
+            <el-row type="flex" class="row-bg" justify="space-around">
                 <el-col :span="6">
-                    <div class="block">
-                        <el-image :src="src"></el-image>
-                        <span class="demonstration">默认</span>
-                    </div>
+                    <el-button type="success" @click="back">移出</el-button>
                 </el-col>
-                <el-col :span="6" :offset="6">
-                    <div class="block">
-                        <el-image :src="src"></el-image>
-                        <span class="demonstration">默认</span>
-                    </div>
+                <el-col :span="6">
+                    <el-button type="info">转账</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="warning">推荐</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="primary" @click="back">返回</el-button>
                 </el-col>
             </el-row>
         </div>
 
-        <detailBottom/>
     </div>
 </template>
 
@@ -125,7 +128,11 @@
             }
         },
         components: {
-            detailBottom
+        },
+        methods: {
+            back() {
+                this.$emit('Godetail')
+            }
         }
     }
 </script>

@@ -63,7 +63,12 @@
             </el-form>
 
         </div>
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+                <el-col :span="6">   <el-button type="danger" @click="back">开启</el-button></el-col>
+                <el-col :span="6">   <el-button type="primary" >推荐</el-button></el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -96,7 +101,11 @@
             }
         },
         components: {
-            detailBottom
+        },
+        methods:{
+            back(){
+                this.$emit('Godetail')
+            }
         }
     }
 </script>

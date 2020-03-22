@@ -26,6 +26,12 @@ const service = axios.create({
 service.interceptors.request.use(
     config => {
         startLoading();
+        let userInfo = JSON.parse(
+            sessionStorage.getItem("userInfo")
+        );
+        if (userInfo) {
+            config.headers["Authorization"] = userInfo.token;
+        }
         return config;
     },
     error => {
@@ -43,7 +49,7 @@ service.interceptors.response.use(
         if (res instanceof Blob) {
             return res;
         }
-        if (res.code !== 0) {
+        if (res.code !== 1000) {
             Message({
                 message: res.msg || "Error",
                 type: "error",

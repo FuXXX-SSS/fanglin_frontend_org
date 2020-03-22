@@ -6,7 +6,7 @@ function resolve(dir) {
 }
 module.exports = {
   // 基本路径
-  publicPath: process.env.NODE_ENV == 'production' ? '/mgt/' : '/',
+  publicPath: './',
   outputDir: 'mgt',
   devServer: {
     port: 3000,

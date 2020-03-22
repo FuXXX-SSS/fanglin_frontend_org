@@ -1,74 +1,83 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">活动详情</div>
+            <div class="sub-title">兑换品详情</div>
             <el-row :gutter="20">
 
-                <el-col :span="24" class="el-right">
+                <el-col :span="12" >
                     <el-form
-                            :inline="true"
+                            :inline="false"
                             :model="formData"
                             size="small"
                             class="demo-form-inline"
-                    >
-                        <el-form-item label="项目名称：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="发布时间：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="联系电话：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="募资金额：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="回馈标准：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="项目状态：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <br>
+                            label-width="100px"
 
+                    >
+                        <el-form-item label="物品名称 : ">
+                            <div>用户名称</div>
+
+                        </el-form-item>
+                        <el-form-item label="供应单位：">
+                            <div>用户名称</div>
+
+                        </el-form-item>
+                        <el-form-item label="状态：">
+                            <el-select v-model="formData.accType">
+                                <el-option label="上架" value="1"></el-option>
+                                <el-option label="下架" value="2"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="入库数量：">
+                            <el-input v-model="formData.value"></el-input>
+                        </el-form-item>
+                        <el-form-item label="兑换标准：">
+                            <el-input v-model="formData.value"></el-input>
+                        </el-form-item>
+                        <el-form-item label="购买价格：">
+                            <el-input v-model="formData.value"></el-input>
+                        </el-form-item>
+                        <el-form-item label="购买回馈：">
+                            <el-input v-model="formData.value"></el-input>
+                        </el-form-item>
+                        <el-form-item label="所属项目：">
+                            <el-input
+                                    type="textarea"
+                                    :autosize="{ minRows: 2, maxRows: 4}"
+                                    placeholder="请输入内容"
+                                    v-model="formData.textarea2">
+                            </el-input>
+                        </el-form-item>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
                             <el-image :src="src"></el-image>
                         </el-form-item>
-
                     </el-form>
 
                 </el-col>
             </el-row>
-        </div>
-        <div class="my-block">
-            <div class="sub-title">执行情况</div>
-            <el-form
-                    :inline="true"
-                    :model="formData"
-                    size="small"
-                    class="demo-form-inline"
-            >
-                <el-form-item label="募集金额：">
-                    <div>用户名称</div>
-                </el-form-item>
-                <el-form-item label="捐赠人数：">
-                    <div>用户名称</div>
-                </el-form-item>    <el-form-item label="活动次数：">
-                    <div>用户名称</div>
-                </el-form-item> <el-form-item label="活动人数：">
-                    <div>用户名称</div>
-                </el-form-item> <el-form-item label="服务时长：">
-                    <div>用户名称</div>
-                </el-form-item>
-            </el-form>
+            <Quill />
 
         </div>
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+
+                <el-col :span="6">
+                    <el-button  type="warning">保存</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="success">推荐</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="info" @click="back">取消</el-button>
+                </el-col>
+            </el-row>
+        </div>
+
     </div>
 </template>
 
 <script>
     import detailBottom from '@com/detailBottom'
+    import Quill from '@com/quill-editor'
 
     export default {
         name: "teamDetail",
@@ -91,18 +100,49 @@
                             name: '王小虎',
                             address: '上海市普陀区金沙江路 1519 弄'
                         },]
-                }
+                },
+                pickerOptions: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
 
             }
         },
         components: {
-            detailBottom
-        }
+            Quill
+        },
+        methods:{
+            back(){
+                this.$store.dispatch('mecha_asset/setProject',1)
+            },
+        },
     }
 </script>
 
 <style scoped>
-
     .el-image{
         width: 300px;
         height: 150px;

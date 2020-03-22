@@ -4,20 +4,23 @@
         <div class="logo">
             <div class="logo1">
                 <h3>芳邻管理后台</h3>
-                <el-input v-model="username" placeholder="请输入手机号/用户名" class="username" clearable
-                          prefix-icon="el-icon-user-solid"></el-input>
-                <el-input v-model="password" placeholder="请输入登录密码" type="password" class="password" clearable
-                          prefix-icon="el-icon-s-goods"></el-input>
-                <div class="switch">
-                    <el-switch
-                            v-model="value1"
-                            active-text="TB机构"
-                            inactive-text="TB运营"
-                            @change="switchChange"
-                        >
+                <el-form :model="loginData" status-icon :rules="rules" ref="loginFrom">
+                    <el-form-item prop="username">
 
-                    </el-switch>
-                </div>
+                        <el-input v-model="loginData.username"
+                                  placeholder="请输入手机号/用户名"
+                                  class="username"
+                        ></el-input>
+                    </el-form-item>
+                    <el-form-item prop="password">
+
+                        <el-input v-model="loginData.password"
+                                  placeholder="请输入登录密码"
+                                  type="password"
+                        ></el-input>
+                    </el-form-item>
+                </el-form>
+
                 <el-button class="but" @click="onIndex" :loading="isLoading" :disabled="isdisabled">{{login}}
                 </el-button>
             </div>
@@ -26,47 +29,118 @@
 </template>
 
 <script>
-    import {login} from '@http'
+    import {menuInfo, privilege} from '@http/managerUser'
 
     export default {
         components: {},
         data() {
             return {
-                username: "",
-                password: "",
+                loginData: {
+                    username: "",
+                    password: "",
+                },
                 login: '登录',
                 isLoading: false,
                 isdisabled: false,
                 value1: false,
+                rules: {
+                    username: {
+                        trigger: "blur",
+                        required: true,
+                        message: "用户名不能为空"
+                    },
+                    password: {
+                        trigger: "blur",
+                        required: true,
+                        message: "密码不能为空"
+                    }
+                }
             };
         },
         methods: {
             async onIndex() {
-                var data = {
-                    accNo: 'admin',
-                    pwd: 123456
-                };
-                this.isLoading = true
-                this.isdisabled = true
-                this.login = '登录中'
-                // let res = await login(data)
-                // if (res && res.code === 0) {
-                //     this.$tools.$mes('aaa', 'success')
+                let _this = this
+                _this.$refs.loginFrom.validate(valid => {
+                    if (valid) {
+                        this.$tools.$mes('登录成功', 'success')
+                        this.isLoading = false
+                        this.login = '登录'
+                        // let res  = menuInfo()
+                        // console.log(res);
+                        sessionStorage.setItem("token",'123');
+                        _this.$router.push({
+                        // path: this.$route.query.redirect || "/index"
+                        path: "/index"
+                    });
+                    //     _this.$store.dispatch("user/getLogin", this.loginData)
+                    //         .then(() => {
+                    //             return new Promise((resolve, reject) => {
+                    //                 menuInfo(1)
+                    //                     .then(res => {
+                    //                         console.log(res);
+                    //                         if (res && res.code === 1000) {
+                    //                             this.$tools.$mes('登录成功', 'success')
+                    //                             this.isLoading = false
+                    //                             this.login = '登录'
+                    //                             // let res  = menuInfo()
+                    //                             // console.log(res);
+                    //                         }
+                    //                         _this.$router.push({
+                    //                             // path: this.$route.query.redirect || "/index"
+                    //                             path: "/index"
+                    //                         });
+                    //                     })
+                    //                     .catch(err => reject(err));
+                    //
+                    //             });
+                    //
+                    //         })
+                    //         .catch(err => {
+                    //             console.log(err);
+                    //         });
+                    // } else {
+                    //     return false;
+                    }
+                });
+
+
+                setTimeout(() => {
+                    // _this.$router.push({
+                    //     name: 'index'
+                    // }, 1500)
+                })
+                // var userInfo = {
+                //     account: 'admin',
+                //     password: 'e456776aa7ce341c7e60a624a0a7b8e8',
+                //     type: 0,
+                // };
+                // this.isLoading = true
+                // this.isdisabled = true
+                // this.login = '登录中'
+                // let res = await login(userInfo)
+                // if (res && res.code === 1000) {
+                //     this.$tools.$mes('登录成功', 'success')
                 //     this.isLoading = false
                 //     this.isdisabled = false
                 //     this.login = '登录'
+                //     // let res  = menuInfo()
+                //     // console.log(res);
                 // }
-                sessionStorage.setItem("token", 123);
-                sessionStorage.setItem("loginSwitch", this.value1);
-                let _this = this
-                setTimeout(() => {
-                    _this.$router.push({
-                        name: 'index'
-                    }, 1500)
-                })
+                // const {data}  =res
+                // console.log(data);
+                // sessionStorage.setItem(
+                //     "userAccessInfo",
+                //     JSON.stringify(data)
+                // );
+                // let _this = this
+                // setTimeout(() => {
+                //     _this.$router.push({
+                //         name: 'index'
+                //     }, 1500)
+                // })
             },
-            switchChange(){
-                this.$store.dispatch("Switch/switchChange",this.value1)
+            switchChange() {
+                this.$store.dispatch("Switch/switchChange", this.value1)
             }
         },
 
@@ -135,7 +209,8 @@
                 letter-spacing: 13px;
             }
         }
-        .switch{
+
+        .switch {
             text-align: center;
             margin-top: 30px;
         }
@@ -160,9 +235,12 @@
     .box /deep/ .el-input__prefix {
         left: 17px;
     }
-    .box /deep/ .el-switch__label{
+
+    .box /deep/ .el-switch__label {
         color: #fff;
-    }  .box /deep/ .el-switch__label.is-active{
+    }
+
+    .box /deep/ .el-switch__label.is-active {
         color: #409EFF;
     }
 </style>

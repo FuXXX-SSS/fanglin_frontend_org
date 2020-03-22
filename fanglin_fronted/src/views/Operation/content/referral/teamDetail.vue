@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">文章详情</div>
+            <div class="sub-title">推荐</div>
             <el-row :gutter="20">
 
                 <el-col :span="24" class="el-right">
@@ -52,7 +52,12 @@
                 </el-col>
             </el-row>
         </div>
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+                <el-col :span="6">   <el-button type="warning">保存</el-button></el-col>
+                <el-col :span="6">   <el-button type="info" @click="back">删除</el-button></el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -86,7 +91,6 @@
             }
         },
         components: {
-            detailBottom
         },
         methods: {
             handleAvatarSuccess(res, file) {
@@ -103,6 +107,9 @@
                     this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
+            },
+            back(){
+                this.$emit('Godetail')
             }
         }
     }

@@ -45,7 +45,20 @@
 
             </el-row>
         </div>
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+                <el-col :span="6">
+                    <el-button type="info">保存</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="warning">推荐</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="primary" @click="back">取消</el-button>
+                </el-col>
+            </el-row>
+        </div>
+
     </div>
 </template>
 
@@ -78,8 +91,12 @@
             }
         },
         components: {
-            detailBottom,
             Qutil
+        },
+        methods: {
+            back() {
+                this.$emit('Godetail')
+            }
         }
     }
 </script>

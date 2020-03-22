@@ -4,59 +4,73 @@
             <div class="sub-title">实物详情</div>
             <el-row :gutter="20">
 
-                <el-col :span="24" class="el-right">
+                <el-col :span="12" >
                     <el-form
-                            :inline="true"
+                            :inline="false"
                             :model="formData"
                             size="small"
                             class="demo-form-inline"
+                            label-width="100px"
                     >
-                        <el-form-item label="物品名称：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="兑换标准：">
-                            <div>用户名称</div>
+                        <el-form-item label="现金名称：">
+                            <el-input v-model="formData.value"></el-input>
+
                         </el-form-item>
 
                         <el-form-item label="供应单位：">
-                            <div>用户名称</div>
+                            <el-input v-model="formData.value"></el-input>
+
                         </el-form-item>
                         <el-form-item label="入库数量：">
-                            <div>用户名称</div>
+                            <el-input v-model="formData.value"></el-input>
+                        </el-form-item>
+                        <el-form-item label="兑换标准：">
+                            <el-input v-model="formData.value"></el-input>
                         </el-form-item>
                         <el-form-item label="状态：">
                             <el-radio v-model="formData.radio" label="1">备选项</el-radio>
                             <el-radio v-model="formData.radio" label="2">备选项</el-radio>
                         </el-form-item>
-                        <br>
-
-                        <el-form-item label="摘要：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <br>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
                             <el-image :src="src"></el-image>
                         </el-form-item>
-
-                        <br>
-                        <el-form-item label="物品说明：">
-                            <div>用户名称</div>
-                            <el-image :src="src"></el-image>
+                        <el-form-item label="摘要：">
+                            <el-input
+                                    type="textarea"
+                                    :autosize="{ minRows: 2, maxRows: 4}"
+                                    placeholder="请输入内容"
+                                    v-model="formData.textarea2">
+                            </el-input>
 
                         </el-form-item>
-
-
                     </el-form>
 
                 </el-col>
             </el-row>
+            <Quill />
+
         </div>
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+
+                <el-col :span="6">
+                    <el-button  type="warning">保存</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="success">推荐</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="info" @click="back">取消</el-button>
+                </el-col>
+            </el-row>
+        </div>
+
     </div>
 </template>
 
 <script>
     import detailBottom from '@com/detailBottom'
+    import Quill from '@com/quill-editor'
 
     export default {
         name: "teamDetail",
@@ -84,8 +98,13 @@
             }
         },
         components: {
-            detailBottom
-        }
+            Quill
+        },
+        methods:{
+            back(){
+                this.$store.dispatch('mecha_asset/setPhyscial',1)
+            },
+        },
     }
 </script>
 

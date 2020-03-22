@@ -62,7 +62,14 @@
                 <el-table-column prop="address" label="现金资产" />
             </el-table>
         </div>
-        <detailBottom />
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+                <el-col :span="6">   <el-button type="warning" @click="back">关闭</el-button></el-col>
+                <el-col :span="6">   <el-button type="info">转账</el-button></el-col>
+                <el-col :span="6">   <el-button type="warning">推荐</el-button></el-col>
+                <el-col :span="6">   <el-button type="primary" @click="back">返回</el-button></el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -93,7 +100,10 @@
             }
         },
         components:{
-            detailBottom
+        },
+        methods:{ back(){
+                this.$emit('Godetail')
+            }
         }
     }
 </script>

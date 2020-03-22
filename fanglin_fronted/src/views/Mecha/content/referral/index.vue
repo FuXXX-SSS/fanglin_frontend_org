@@ -4,6 +4,26 @@
             <div class="my-block">
                 <div class="sub-title">推荐管理</div>
 
+                <el-form
+                        :inline="true"
+                        :model="formData"
+                        size="small"
+                        class="demo-form-inline"
+                >
+                    <el-form-item label="关键字查询">
+                        <el-input v-model="formData.name" placeholder="请输入关键字查询"></el-input>
+                    </el-form-item>
+                    <el-form-item class="options">
+                        <el-button @click="formData = {}
+            " size="medium">重 置
+                        </el-button>
+                        <el-button type="primary" size="medium">查 询</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+
+            <div class="my-block">
+
                 <el-table :data="tableData.records" border>
                     <el-table-column type="index" label="序号" width="50" />
                     <el-table-column prop="name" label="推荐时间" />
@@ -19,7 +39,7 @@
                                     @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >查看日志</el-button
+                            >推荐</el-button
                             >
                         </template>
                     </el-table-column>
@@ -28,7 +48,7 @@
             </div>
         </div>
         <div class="detail" v-else>
-            <Deatail />
+            <Deatail @Godetail="Godetail"/>
         </div>
     </div>
 </template>
@@ -69,9 +89,9 @@
             Deatail
         },
         methods:{
-            Godetail(data){
-                console.log(123);
-                this.isShow=false
+            Godetail(data) {
+                console.log(data);
+                this.isShow = !this.isShow
             }
         }
     }

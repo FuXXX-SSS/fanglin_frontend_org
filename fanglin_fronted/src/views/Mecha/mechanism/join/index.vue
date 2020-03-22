@@ -8,8 +8,14 @@
                         size="small"
                         class="demo-form-inline"
                 >
-                    <el-form-item label="客户姓名">
-                        <el-input v-model="formData.name"></el-input>
+                    <el-form-item label="关键字查询">
+                        <el-input v-model="formData.name" placeholder="请输入关键字查询"></el-input>
+                    </el-form-item>
+                    <el-form-item label="认证">
+                        <el-select v-model="formData.accType">
+                            <el-option label="已认证" value="1"></el-option>
+                            <el-option label="未认证" value="2"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item class="options">
                         <el-button @click="formData = {}
@@ -39,7 +45,12 @@
                                     @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >查看日志</el-button
+                            >同意</el-button
+                            >   <el-button
+                                    @click="Godetail(scope.row)"
+                                    type="text"
+                                    size="small"
+                            >拒绝</el-button
                             >
                         </template>
                     </el-table-column>
@@ -91,7 +102,6 @@
         methods:{
             Godetail(data){
                 console.log(123);
-                this.isShow=false
             }
         }
     }

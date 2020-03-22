@@ -54,7 +54,7 @@
                                     @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >查看日志</el-button
+                            >详情</el-button
                             >
                         </template>
                     </el-table-column>

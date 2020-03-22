@@ -2,15 +2,18 @@
     <div>
         <div class="main" v-if="isShow===1">
             <div class="my-block">
-                <div class="sub-title">活动列表</div>
+                <div class="sub-title" style="margin-bottom: 40px">
+                    <div style="display: inline-block">项目管理</div>
+                    <el-button type="danger" style="float: right" @click="add()">新增</el-button>
+                </div>
                 <el-form
                         :inline="true"
                         :model="formData"
                         size="small"
                         class="demo-form-inline"
                 >
-                    <el-form-item label="客户姓名">
-                        <el-input v-model="formData.name"></el-input>
+                    <el-form-item label="关键字查询">
+                        <el-input v-model="formData.name" placeholder="请输入关键字查询"></el-input>
                     </el-form-item>
                     <el-form-item label="状态">
                         <el-select v-model="formData.accType">
@@ -27,7 +30,6 @@
                 </el-form>
             </div>
             <div class="my-block">
-                <el-button type="warning" class="form_btn" @click="add">新增</el-button>
                 <el-table :data="tableData.records" border>
                     <el-table-column type="index" label="序号" width="50" />
                     <el-table-column prop="name" label="发布时间" />
@@ -48,7 +50,7 @@
                                     @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >查看日志</el-button
+                            >项目详情</el-button
                             >
                         </template>
                     </el-table-column>
@@ -105,16 +107,16 @@
         },
         computed:{
             ...mapState({
-                isShow:state => state.mecha_asset.AssetisShow
+                isShow:state => state.mecha_asset.EventisShow
             })
         },
         methods:{
             Godetail(data){
                 console.log(123);
-                this.isShow=false
+                this.$store.dispatch('mecha_asset/setEvent',2)
             },
             add(){
-                this.$store.dispatch('mecha_asset/setAsset',3)
+                this.$store.dispatch('mecha_asset/setEvent',3)
             },
         }
     }

@@ -56,7 +56,7 @@
             sidebarItem
         },
         created() {
-            this.routeSwitch?this.routerList=RouteData2:this.routerList=RouteData
+            this.routerList=RouteData2
         }
     };
 </script>

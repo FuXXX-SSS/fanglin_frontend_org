@@ -75,24 +75,58 @@
             </div>
         </div>
         <div class="my-block">
-            <div class="titleDetail">加入团队</div>
             <el-row :gutter="20">
-                <el-col :span="6">
+                <el-col :span="12" class="detail">
+                    <div class="titleDetail">加入团队</div>
+                    <el-col :span="12">
+
                     <div class="block">
                         <el-image :src="src"></el-image>
                         <span class="demonstration">默认</span>
                     </div>
-                </el-col>
-                <el-col :span="6" :offset="6">
+                    </el-col>    <el-col :span="12">
+
                     <div class="block">
                         <el-image :src="src"></el-image>
                         <span class="demonstration">默认</span>
                     </div>
+                    </el-col>
+                </el-col>   <el-col :span="12">
+                    <div class="titleDetail">加入机构</div>
+                    <el-col :span="12">
+
+                    <div class="block">
+                        <el-image :src="src"></el-image>
+                        <span class="demonstration">默认</span>
+                    </div>
+                    </el-col>    <el-col :span="12">
+
+                    <div class="block">
+                        <el-image :src="src"></el-image>
+                        <span class="demonstration">默认</span>
+                    </div>
+                    </el-col>
                 </el-col>
+
             </el-row>
         </div>
 
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+                <el-col :span="6">
+                    <el-button type="success" @click="back">关闭</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="info">转账</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="warning">推荐</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="primary" @click="back">返回</el-button>
+                </el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -124,8 +158,11 @@
 
             }
         },
-        components: {
-            detailBottom
+        components: {},
+        methods: {
+            back() {
+                this.$emit('Godetail')
+            }
         }
     }
 </script>
@@ -136,10 +173,15 @@
     }
 
     .el-image {
-        width: 300px;
+        width: 346px;
         height: 150px;
     }
-
+    .detail{
+       /deep/ .el-image {
+            width: 100%;
+            height: 150px;
+        }
+    }
     .imgList {
         display: inline-block;
 
@@ -153,7 +195,8 @@
             }
         }
     }
-    .demonstration{
+
+    .demonstration {
         display: block;
         text-align: center;
     }

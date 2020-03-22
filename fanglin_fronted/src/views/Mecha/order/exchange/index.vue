@@ -54,17 +54,6 @@
                     <el-table-column prop="name" label="联系电话"/>
                     <el-table-column prop="name" label="收货地址"/>
                     <el-table-column prop="name" label="状态"/>
-                    <el-table-column label="操作">
-                        <template slot-scope="scope">
-                            <el-button
-                                    @click="Godetail(scope.row)"
-                                    type="text"
-                                    size="small"
-                            >查看日志
-                            </el-button
-                            >
-                        </template>
-                    </el-table-column>
                 </el-table>
                 <pagination/>
             </div>

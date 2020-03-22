@@ -27,7 +27,6 @@
                 </el-form>
             </div>
             <div class="my-block">
-                <el-button type="warning" class="form_btn">新增</el-button>
                 <el-table :data="tableData.records" border>
                     <el-table-column type="index" label="序号" width="50" />
                     <el-table-column prop="name" label="发布时间" />
@@ -48,7 +47,7 @@
                                     @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >查看日志</el-button
+                            >详情</el-button
                             >
                         </template>
                     </el-table-column>
@@ -57,7 +56,7 @@
             </div>
         </div>
         <div class="detail" v-else>
-            <Deatail />
+            <Deatail @Godetail="Godetail"/>
         </div>
     </div>
 </template>
@@ -100,7 +99,7 @@
         methods:{
             Godetail(data){
                 console.log(123);
-                this.isShow=false
+                this.isShow=!this.isShow
             }
         }
     }

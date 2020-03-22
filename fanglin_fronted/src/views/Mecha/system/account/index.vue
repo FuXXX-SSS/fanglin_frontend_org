@@ -12,30 +12,19 @@
                 <el-table-column prop="address" label="联系电话"/>
                 <el-table-column prop="name" label="权限"/>
                 <el-table-column prop="name" label="状态"/>
-                <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button
-                                @click="Godetail(scope.row)"
-                                type="text"
-                                size="small"
-                        >查看日志
-                        </el-button
-                        >
-                    </template>
-                </el-table-column>
             </el-table>
             <pagination/>
 
         </div>
         <div class="my-block" v-else>
-            <div class="sub-title">新增服务类型</div>
+            <div class="sub-title">新增账户</div>
             <el-form
                     :inline="true"
                     :model="formData"
                     size="small"
                     class="demo-form-inline"
             >
-                <el-form-item label="服务名称">
+                <el-form-item label="账户名称">
                     <el-input v-model="formData.name"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
@@ -55,7 +44,7 @@
                 </el-form-item>
                 <br>
 
-                <el-form-item label="状态">
+                <el-form-item label="权限">
                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">用户管理
                     </el-checkbox>
                     <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
@@ -66,8 +55,18 @@
                     <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
                         <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
                     </el-checkbox-group>
+                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">运营管理
+                    </el-checkbox>
+                    <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+                        <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+                    </el-checkbox-group>
+                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">订单管理
+                    </el-checkbox>
+                    <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+                        <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
-                <el-form-item class="options">
+                <el-form-item class="options" style="display: block ">
                     <el-button @click="formData = {}
             " size="medium">保存
                     </el-button>

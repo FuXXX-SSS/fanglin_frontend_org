@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="detail" v-if="isShow">
-            <div class="my-block" >
+            <div class="my-block">
                 <div class="sub-title">服务详情</div>
                 <el-row :gutter="20">
 
@@ -47,32 +47,32 @@
                     <el-col :span="12" class="el-right">
                         <div class="time-address">
                             <div class="co-fl">
-                                <p>签到时间</p>
+                                <p>签到时间 ：</p>
                                 <p>1019-19-19 64-4654-49894</p>
                             </div>
                             <div class="co-fl">
-                                <p>签到时间</p>
+                                <p>签到地点 ：</p>
                                 <p>1019-19-19 64-4654-49894</p>
                             </div>
                         </div>
                         <div class="map">
-                            <el-image :src="src"></el-image>
+                            <Map />
 
                         </div>
                     </el-col>
                     <el-col :span="12" class="el-right">
                         <div class="time-address">
                             <div class="co-fl">
-                                <p>签到时间</p>
-                                <p>1019-19-19 64-4654-49894</p>
+                                <p>签到时间 ：</p>
+                                <p>1019-19-19 64-4654-SSSSS</p>
                             </div>
                             <div class="co-fl">
-                                <p>签到时间</p>
+                                <p>签到地点 ：</p>
                                 <p>1019-19-19 64-4654-49894</p>
                             </div>
                         </div>
                         <div class="map">
-                            <el-image :src="src"></el-image>
+                            <Map2 />
                         </div>
                     </el-col>
 
@@ -114,19 +114,22 @@
                     </el-form-item>
 
 
-
                 </el-form>
 
             </div>
             <div class="my-block">
                 <el-row type="flex" class="row-bg" justify="space-around">
-                    <el-col :span="6">   <el-button type="warning" @click="isShow=false">处理争议</el-button></el-col>
-                    <el-col :span="6">   <el-button type="info">返回</el-button></el-col>
+                    <el-col :span="6">
+                        <el-button type="warning" @click="isShow=false">处理争议</el-button>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-button type="info" @click="back">返回</el-button>
+                    </el-col>
                 </el-row>
             </div>
         </div>
         <div class="deal" v-else>
-            <div class="my-block" >
+            <div class="my-block">
                 <el-form
                         :inline="false"
                         :model="formData"
@@ -134,7 +137,11 @@
                         class="demo-form-inline"
                 >
                     <el-form-item label="申请人 : ">
-                        <div>用户名称</div>
+
+                        <el-avatar
+                                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                        <span style="display: inline-block" class="name">用户名称</span>
+
                     </el-form-item>
                     <el-form-item label="说明：">
                         <div>用户名称</div>
@@ -148,7 +155,7 @@
                         </div>
                     </el-form-item>
                     <el-form-item label="处理结果： ">
-                        <div  style="display: flex">
+                        <div style="display: flex">
                             <el-input
                                     type="textarea"
                                     :autosize="{ minRows: 6, maxRows: 8}"
@@ -164,8 +171,12 @@
             </div>
             <div class="my-block">
                 <el-row type="flex" class="row-bg" justify="space-around">
-                    <el-col :span="6">   <el-button type="warning" @click="isShow=true">提交处理结果</el-button></el-col>
-                    <el-col :span="6">   <el-button type="info" @click="isShow=true">返回</el-button></el-col>
+                    <el-col :span="6">
+                        <el-button type="warning" @click="isShow=true">提交处理结果</el-button>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-button type="info" @click="isShow=true">返回</el-button>
+                    </el-col>
                 </el-row>
             </div>
 
@@ -174,12 +185,14 @@
 </template>
 
 <script>
+    import Map from '@com/map-QQ'
+    import Map2 from '@com/map-QQ/index2'
 
     export default {
         name: "teamDetail",
         data() {
             return {
-                isShow:true,
+                isShow: true,
                 formData: {},
                 src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
                 tableData: {
@@ -203,6 +216,13 @@
             }
         },
         components: {
+            Map,
+            Map2
+        },
+        methods:{
+            back() {
+                this.$emit('Godetail')
+            }
         }
     }
 </script>
@@ -238,15 +258,26 @@
             height: 150px;
         }
     }
-    .title{
+
+    .title {
         padding: 0px 10px;
-        .left,.right{
+
+        .left, .right {
             display: inline-block;
             margin-right: 20px;
             float: left;
             margin-top: 30px;
         }
-        .right{
+
+        .right {
         }
+    }
+    .name{
+        display: inline-block;
+        position: absolute;
+        margin-top: 3px;
+    }
+    .el-avatar--circle{
+        margin-top: -3px;
     }
 </style>

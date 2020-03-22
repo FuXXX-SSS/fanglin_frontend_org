@@ -2,27 +2,32 @@
     <div>
         <div class="main" v-if="isShow">
             <div class="my-block">
-                <div class="sub-title">文章管理</div>
-                <el-button type="warning" class="form_btn">新增</el-button>
-
+                <div class="sub-title" style="margin-bottom: 40px">
+                    <div style="display: inline-block">文章管理</div>
+                    <el-button type="danger" style="float: right" @click="Godetail()">新增</el-button>
+                </div>
                 <el-table :data="tableData.records" border>
 
                     <el-table-column type="index" label="序号" width="50" />
                     <el-table-column prop="name" label="文章标题" />
-                    <el-table-column prop="date" label="发布机构" />
-                    <el-table-column prop="address" label="作者" />
+                    <el-table-column prop="date" label="发布者" />
                     <el-table-column prop="name" label="发布时间" />
                     <el-table-column prop="name" label="摘要" />
                     <el-table-column prop="name" label="关键字" />
                     <el-table-column prop="name" label="状态" />
+                    <el-table-column prop="name" label="置顶" />
                     <el-table-column label="操作">
-                        <template slot-scope="scope">
+                        <template >
                             <el-button
-                                    @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >查看日志</el-button
-                            >
+                            >删除</el-button>  <el-button
+                                    type="text"
+                                    size="small"
+                            >开启</el-button>  <el-button
+                                    type="text"
+                                    size="small"
+                            >推荐</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -30,7 +35,7 @@
             </div>
         </div>
         <div class="detail" v-else>
-            <Deatail />
+            <Deatail @Godetail="Godetail"/>
         </div>
     </div>
 </template>
@@ -73,7 +78,8 @@
         methods:{
             Godetail(data){
                 console.log(123);
-                this.isShow=false
+                this.isShow = !this.isShow
+
             }
         }
     }

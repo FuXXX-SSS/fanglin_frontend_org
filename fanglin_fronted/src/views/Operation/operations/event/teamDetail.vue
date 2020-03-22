@@ -41,7 +41,8 @@
                             <div>用户名称</div>
                         </el-form-item>
                         <el-form-item label="地点：" style="margin-right: 10px">
-                            <el-input v-model="formData.value"></el-input>
+                            <div>用户名称</div>
+
                         </el-form-item>
                         <el-form-item>
                             <i class="el-icon-s-opportunity" style="font-size: 18px;color: #0099ff;cursor: pointer"></i>
@@ -72,7 +73,12 @@
             </el-form>
 
         </div>
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+                <el-col :span="6">   <el-button type="danger" @click="back">关闭</el-button></el-col>
+                <el-col :span="6">   <el-button type="primary" >推荐</el-button></el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -105,7 +111,11 @@
             }
         },
         components: {
-            detailBottom
+        },
+        methods:{
+            back(){
+                this.$emit('Godetail')
+            }
         }
     }
 </script>

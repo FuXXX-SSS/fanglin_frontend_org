@@ -18,7 +18,7 @@
                                 @click="Godetail(scope.row)"
                                 type="text"
                                 size="small"
-                        >查看日志
+                        >编辑
                         </el-button
                         >
                     </template>

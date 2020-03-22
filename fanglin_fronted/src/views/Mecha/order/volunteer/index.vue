@@ -54,7 +54,7 @@
                                     @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >查看日志</el-button
+                            >详情</el-button
                             >
                         </template>
                     </el-table-column>
@@ -63,7 +63,7 @@
             </div>
         </div>
         <div class="detail" v-else>
-            <Deatail />
+            <Deatail @Godetail="Godetail"/>
         </div>
     </div>
 </template>
@@ -106,7 +106,8 @@
         methods:{
             Godetail(data){
                 console.log(123);
-                this.isShow=false
+                this.isShow = !this.isShow
+
             }
         },
     }

@@ -10,6 +10,8 @@
                             :model="formData"
                             size="small"
                             class="demo-form-inline"
+                            label-width="100px"
+
                     >
                         <el-form-item label="活动名称 : ">
                             <div>用户名称</div>
@@ -26,14 +28,15 @@
                         <el-form-item label="活动价值：">
                             <div>用户名称</div>
                         </el-form-item>
+
                         <el-form-item label="所属项目：">
+                            <div>用户名称</div>
+                        </el-form-item>
+                        <el-form-item label="人员要求：">
                             <div>用户名称</div>
                         </el-form-item>
                         <br>
 
-                        <el-form-item label="人员要求：">
-                            <div>用户名称</div>
-                        </el-form-item>
                         <el-form-item label="活动状态：">
                             <div>用户名称</div>
                         </el-form-item>
@@ -41,7 +44,7 @@
                             <div>用户名称</div>
                         </el-form-item>
                         <el-form-item label="地点：" style="margin-right: 10px">
-                            <el-input v-model="formData.value"></el-input>
+                            <div>用户名称</div>
                         </el-form-item>
                         <el-form-item>
                             <i class="el-icon-s-opportunity" style="font-size: 18px;color: #0099ff;cursor: pointer"></i>
@@ -53,31 +56,29 @@
                     </el-form>
 
                 </el-col>
+                <Qutil/>
+
             </el-row>
         </div>
         <div class="my-block">
-            <div class="sub-title">实施情况</div>
-            <el-form
-                    :inline="true"
-                    :model="formData"
-                    size="small"
-                    class="demo-form-inline"
-            >
-                <el-form-item label="报名人数：">
-                    <div>用户名称</div>
-                </el-form-item>
-                <el-form-item label="签退人数：">
-                    <div>用户名称</div>
-                </el-form-item>
-            </el-form>
-
+            <el-row type="flex" class="row-bg" justify="space-around">
+                <el-col :span="6">
+                    <el-button type="success">保存</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="warning">编辑</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="primary" @click="back">返回</el-button>
+                </el-col>
+            </el-row>
         </div>
-        <detailBottom/>
+
     </div>
 </template>
 
 <script>
-    import detailBottom from '@com/detailBottom'
+    import Qutil from '@com/quill-editor'
 
     export default {
         name: "teamDetail",
@@ -105,8 +106,13 @@
             }
         },
         components: {
-            detailBottom
-        }
+            Qutil
+        },
+        methods: {
+            back() {
+                this.$store.dispatch('mecha_asset/setEvent', 1)
+            },
+        },
     }
 </script>
 
@@ -114,7 +120,8 @@
     .el-form-item {
         margin-right: 30px;
     }
-    .el-image{
+
+    .el-image {
         width: 300px;
         height: 150px;
     }

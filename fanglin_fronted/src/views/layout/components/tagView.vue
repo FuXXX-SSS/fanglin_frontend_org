@@ -63,7 +63,6 @@
                 return route.path === this.$route.path;
             },
             beforeunloadFn(e) {
-                console.log(e);
             },
             handleClose(view) {
                 this.$store.dispatch("tagView/delVisitedView", view).then(res => {
@@ -105,8 +104,6 @@
         height: 35px;
         font-size: 14px;
         padding: 0 19px;
-        color: #0099CC;
-        background: transparent;
         text-align: center;
         display: inline-block;
         -webkit-transition-duration: 0.4s; /* Safari */
@@ -154,4 +151,5 @@
         border-radius: 10px;
         background: #e6e6e6;
     }
+
 </style>

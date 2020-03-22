@@ -8,8 +8,8 @@
                         size="small"
                         class="demo-form-inline"
                 >
-                    <el-form-item label="客户姓名">
-                        <el-input v-model="formData.name"></el-input>
+                    <el-form-item label="关键字查询">
+                        <el-input v-model="formData.name" placeholder="请输入关键字查询"></el-input>
                     </el-form-item>
                     <el-form-item class="options">
                         <el-button @click="formData = {}
@@ -39,7 +39,7 @@
                                     @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >查看日志</el-button
+                            >查看详情</el-button
                             >
                         </template>
                     </el-table-column>
@@ -48,7 +48,7 @@
             </div>
         </div>
         <div class="detail" v-else>
-            <Deatail />
+            <Deatail @Godetail="Godetail"/>
         </div>
     </div>
 </template>
@@ -91,7 +91,7 @@
         methods:{
             Godetail(data){
                 console.log(123);
-                this.isShow=false
+                this.isShow=!this.isShow
             }
         }
     }

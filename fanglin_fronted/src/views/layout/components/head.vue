@@ -4,7 +4,7 @@
         <div class="index">
             <div class="context">
                 <img src="@/assets/LOGO.jpg" alt="">
-                <p>芳邻时间银行管理后台</p>
+                <p>芳邻时间银行机构管理后台</p>
             </div>
             <div class="rightcontext">
                 <div class="item">用户：123123</div>

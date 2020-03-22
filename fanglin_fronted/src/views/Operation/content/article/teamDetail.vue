@@ -23,9 +23,6 @@
                         <el-form-item label="关键字 : ">
                             <div>用户名称</div>
                         </el-form-item>
-                        <el-form-item label="关键字 : ">
-                            <div>用户名称</div>
-                        </el-form-item>
                         <br>
 
                         <el-form-item label="缩略图：" style="margin-right: 10px">
@@ -36,7 +33,7 @@
                             <div>用户名称</div>
                         </el-form-item>
                         <br>
-                        <el-form-item label="摘要 : " >
+                        <el-form-item label="正文 : " >
                             <span >少量的邪恶足以抵消全部高贵的品质, 害得人声名狼藉</span>
                         </el-form-item>
                     </el-form>
@@ -44,7 +41,13 @@
                 </el-col>
             </el-row>
         </div>
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+                <el-col :span="6">   <el-button type="warning" @click="back">关闭/开启</el-button></el-col>
+                <el-col :span="6">   <el-button type="info">推荐</el-button></el-col>
+                <el-col :span="6">   <el-button type="primary" @click="back">返回</el-button></el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -77,7 +80,11 @@
             }
         },
         components: {
-            detailBottom
+        },
+        methods:{
+            back(){
+                this.$emit('Godetail')
+            }
         }
     }
 </script>

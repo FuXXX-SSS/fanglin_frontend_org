@@ -110,7 +110,17 @@
             </el-form>
 
         </div>
-        <detailBottom/>
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="space-around">
+
+                <el-col :span="6">
+                    <el-button type="提交">推荐</el-button>
+                </el-col>
+                <el-col :span="6">
+                    <el-button type="primary" @click="back">返回</el-button>
+                </el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -170,8 +180,12 @@
             }
         },
         components: {
-            detailBottom
-        }
+        },
+        methods:{
+            back(){
+                this.$store.dispatch('mecha_asset/setAsset',1)
+            },
+        },
     }
 </script>
 

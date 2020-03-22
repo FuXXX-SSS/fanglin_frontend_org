@@ -1,2 +1,2 @@
-const baseUrl = 'https://msalesdev.sunac.com.cn/admin/api';
+const baseUrl = 'https://flsj.hooook.com/fanglin';
 export default baseUrl;
