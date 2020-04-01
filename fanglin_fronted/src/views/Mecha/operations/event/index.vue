@@ -33,16 +33,14 @@
                 <el-table :data="tableData.records" border>
                     <el-table-column type="index" label="序号" width="50" />
                     <el-table-column prop="name" label="发布时间" />
-                    <el-table-column prop="date" label="活动名称" />
-                    <el-table-column prop="address" label="发布者" />
+                    <el-table-column prop="date" label="项目名称" />
                     <el-table-column prop="name" label="联系电话" />
-                    <el-table-column prop="name" label="任务地点" />
-                    <el-table-column prop="name" label="开始时间" />
-                    <el-table-column prop="name" label="时长" />
-                    <el-table-column prop="name" label="价值/人" />
-                    <el-table-column prop="name" label="价值/人" />
-                    <el-table-column prop="name" label="人员" />
-                    <el-table-column prop="name" label="报名" />
+                    <el-table-column prop="name" label="募资目标" />
+                    <el-table-column prop="name" label="回馈方式" />
+                    <el-table-column prop="name" label="募集金额" />
+                    <el-table-column prop="name" label="活动次数" />
+                    <el-table-column prop="name" label="活动人数" />
+                    <el-table-column prop="name" label="服务时长" />
                     <el-table-column prop="name" label="状态" />
                     <el-table-column label="操作">
                         <template slot-scope="scope">

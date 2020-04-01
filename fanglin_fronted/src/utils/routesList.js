@@ -260,7 +260,7 @@ const RouteData2 =[
                     import ("@mecha/operations/project"),
                 routeName: "project",
                 checked: false,
-                meta: {title: "实物管理", icon: "icon-basic", show: true},
+                meta: {title: "物资管理", icon: "icon-basic", show: true},
             }, {
                 path: "/index/operations/physical",
                 component: () =>

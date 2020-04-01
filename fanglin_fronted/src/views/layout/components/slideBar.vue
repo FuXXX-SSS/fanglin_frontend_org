@@ -60,10 +60,9 @@
         }
     };
 </script>
-
 <style lang="less" scoped>
     .side-bar{
-        width:250px;
+        width:200px;
         height: 100vh;
         background: #282d2f;
         display: flex;

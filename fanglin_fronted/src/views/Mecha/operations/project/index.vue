@@ -1,11 +1,11 @@
 <template>
     <div>
-            <div class="main" v-if="isShow===1">
-                <div class="my-block">
-                    <div class="sub-title" style="margin-bottom: 40px">
-                        <div style="display: inline-block">实物管理</div>
-                        <el-button type="danger" style="float: right" @click="add()">新增</el-button>
-                    </div>
+        <div class="main" v-if="isShow===1">
+            <div class="my-block">
+                <div class="sub-title" style="margin-bottom: 40px">
+                    <div style="display: inline-block">物资管理</div>
+                    <el-button type="danger" style="float: right" @click="add()">新增</el-button>
+                </div>
                 <el-form
                         :inline="true"
                         :model="formData"

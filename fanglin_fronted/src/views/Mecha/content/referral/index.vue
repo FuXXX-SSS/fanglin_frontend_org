@@ -27,22 +27,21 @@
                 <el-table :data="tableData.records" border>
                     <el-table-column type="index" label="序号" width="50" />
                     <el-table-column prop="name" label="推荐时间" />
-                    <el-table-column prop="date" label="推荐机构" />
                     <el-table-column prop="address" label="推荐标题" />
                     <el-table-column prop="name" label="原标题" />
                     <el-table-column prop="name" label="类型" />
                     <el-table-column prop="name" label="推荐栏目" />
                     <el-table-column prop="name" label="推荐链接" />
-                    <el-table-column label="操作">
-                        <template slot-scope="scope">
-                            <el-button
-                                    @click="Godetail(scope.row)"
-                                    type="text"
-                                    size="small"
-                            >推荐</el-button
-                            >
-                        </template>
-                    </el-table-column>
+<!--                    <el-table-column label="操作">-->
+<!--                        <template slot-scope="scope">-->
+<!--                            <el-button-->
+<!--                                    @click="Godetail(scope.row)"-->
+<!--                                    type="text"-->
+<!--                                    size="small"-->
+<!--                            >推荐</el-button-->
+<!--                            >-->
+<!--                        </template>-->
+<!--                    </el-table-column>-->
                 </el-table>
                 <pagination />
             </div>

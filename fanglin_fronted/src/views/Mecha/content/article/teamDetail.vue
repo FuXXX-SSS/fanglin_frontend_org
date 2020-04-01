@@ -46,15 +46,15 @@
             </el-row>
         </div>
         <div class="my-block">
-            <el-row type="flex" class="row-bg" justify="space-around">
-                <el-col :span="6">
-                    <el-button type="info">保存</el-button>
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-col :span="3">
+                    <el-button type="warning">保存</el-button>
                 </el-col>
-                <el-col :span="6">
-                    <el-button type="warning">推荐</el-button>
+                <el-col :span="3">
+                    <el-button type="primary">推荐</el-button>
                 </el-col>
-                <el-col :span="6">
-                    <el-button type="primary" @click="back">取消</el-button>
+                <el-col :span="3">
+                    <el-button type="info" @click="back">取消</el-button>
                 </el-col>
             </el-row>
         </div>

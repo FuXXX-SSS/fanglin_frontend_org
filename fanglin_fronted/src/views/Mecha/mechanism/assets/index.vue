@@ -2,6 +2,10 @@
     <div>
         <div class="main" v-if="isShow">
             <div class="my-block">
+                <div class="sub-title" style="margin-bottom: 40px">
+                    <div style="display: inline-block">资产管理</div>
+                    <el-button type="primary" size="danger" @click="Godetail()" style="float: right">账单</el-button>
+                </div>
                 <el-form
                         :inline="true"
                         :model="formData"
@@ -16,34 +20,35 @@
                                            class="cobyOrderSn"
                                            data-clipboard-action="copy"
                                            :data-clipboard-text="formData.name"
-                                >复  制</el-button>
+                                >复 制
+                                </el-button>
                             </template>
                         </el-input>
 
                     </el-form-item>
                     <el-form-item class="options">
-                        <el-button type="primary" size="medium" @click="Godetail()">新增</el-button>
                     </el-form-item>
                 </el-form>
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
-                    <el-table-column type="index" label="序号" width="50" />
-                    <el-table-column prop="name" label="资产名称" />
-                    <el-table-column prop="date" label="活动资产数量" />
-                    <el-table-column prop="address" label="锁定资产数量" />
+                    <el-table-column type="index" label="序号" width="50"/>
+                    <el-table-column prop="name" label="资产名称"/>
+                    <el-table-column prop="date" label="活动资产数量"/>
+                    <el-table-column prop="address" label="锁定资产数量"/>
                     <el-table-column label="操作">
-                        <template >
+                        <template>
                             <el-button
 
                                     type="text"
                                     size="small"
-                            >转账</el-button
+                            >转账
+                            </el-button
                             >
                         </template>
                     </el-table-column>
                 </el-table>
-                <pagination />
+                <pagination/>
             </div>
         </div>
         <div class="detail" v-else>
@@ -55,16 +60,17 @@
 <script>
     import pagination from '@com/el-pagination'
     import Deatail from './instituDetail'
-    import Clipboard  from 'clipboard';
+    import Clipboard from 'clipboard';
+
     export default {
         name: "index",
         data() {
             return {
-                isShow:true,
+                isShow: true,
                 formData: {
-                    name:'as5d546asd645asd546d56s4a654sda564'
+                    name: 'as5d546asd645asd546d56s4a654sda564'
                 },
-                tableData:{
+                tableData: {
                     records: [
                         {
                             date: '2016-05-02',
@@ -86,15 +92,15 @@
                 }
             }
         },
-        components:{
+        components: {
             pagination,
             Deatail
         },
-        methods:{
-            Godetail(data){
+        methods: {
+            Godetail(data) {
                 this.isShow = !this.isShow
             },
-            clip(){
+            clip() {
                 let _this = this;
                 let clipboard = new Clipboard('.cobyOrderSn', {
                     text: function () {
@@ -102,11 +108,11 @@
                     }
                 })
                 clipboard.on('success', e => {
-                    this.$tools.$mes( '复制成功', 'success')
+                    this.$tools.$mes('复制成功', 'success')
                     clipboard.destroy()
                 })
                 clipboard.on('error', e => {
-                    this.$tools.$mes( '复制失败', 'error')
+                    this.$tools.$mes('复制失败', 'error')
                     clipboard.destroy()
                 })
 

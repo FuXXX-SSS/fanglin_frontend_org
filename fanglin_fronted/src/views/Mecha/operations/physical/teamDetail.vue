@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">实物详情</div>
+            <div class="sub-title">现金详情</div>
             <el-row :gutter="20">
 
                 <el-col :span="12" >
@@ -22,10 +22,16 @@
 
                         </el-form-item>
                         <el-form-item label="入库数量：">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
                         <el-form-item label="兑换标准：">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
                         <el-form-item label="状态：">
                             <el-radio v-model="formData.radio" label="1">备选项</el-radio>
@@ -51,15 +57,15 @@
 
         </div>
         <div class="my-block">
-            <el-row type="flex" class="row-bg" justify="space-around">
+            <el-row type="flex" class="row-bg" justify="center">
 
-                <el-col :span="6">
+                <el-col :span="3">
                     <el-button  type="warning">保存</el-button>
                 </el-col>
-                <el-col :span="6">
-                    <el-button type="success">推荐</el-button>
+                <el-col :span="3">
+                    <el-button type="primary">推荐</el-button>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="3">
                     <el-button type="info" @click="back">取消</el-button>
                 </el-col>
             </el-row>

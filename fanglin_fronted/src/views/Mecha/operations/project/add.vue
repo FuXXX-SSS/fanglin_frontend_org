@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">新增物品(现金)</div>
+            <div class="sub-title">新增物资</div>
             <el-row :gutter="20">
 
-                <el-col :span="12" >
+                <el-col :span="12">
                     <el-form
                             :inline="false"
                             :model="formData"
@@ -13,7 +13,7 @@
                             label-width="100px"
 
                     >
-                        <el-form-item label="物品名称 : ">
+                        <el-form-item label="物资名称 : ">
                             <el-input v-model="formData.value"></el-input>
 
                         </el-form-item>
@@ -22,22 +22,34 @@
 
                         </el-form-item>
                         <el-form-item label="状态：">
-                            <el-select v-model="formData.accType">
-                                <el-option label="上架" value="1"></el-option>
-                                <el-option label="下架" value="2"></el-option>
-                            </el-select>
+                            <el-radio-group v-model="formData.resource">
+                                <el-radio label="上架"></el-radio>
+                                <el-radio label="下架"></el-radio>
+                            </el-radio-group>
                         </el-form-item>
                         <el-form-item label="入库数量：">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
                         <el-form-item label="兑换标准：">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
                         <el-form-item label="购买价格：">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
                         <el-form-item label="购买回馈：">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
                         <el-form-item label="所属项目：">
                             <el-input
@@ -54,16 +66,16 @@
 
                 </el-col>
             </el-row>
-            <Quill />
+            <Quill/>
 
         </div>
         <div class="my-block">
-            <el-row type="flex" class="row-bg" justify="space-around">
+            <el-row type="flex" class="row-bg" justify="center">
 
-                <el-col :span="6">
-                    <el-button  type="warning">保存</el-button>
+                <el-col :span="3">
+                    <el-button type="warning">保存</el-button>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="3">
                     <el-button type="info" @click="back">取消</el-button>
                 </el-col>
             </el-row>
@@ -131,16 +143,16 @@
         components: {
             Quill
         },
-        methods:{
-            back(){
-                this.$store.dispatch('mecha_asset/setProject',1)
+        methods: {
+            back() {
+                this.$store.dispatch('mecha_asset/setProject', 1)
             },
         },
     }
 </script>
 
 <style scoped>
-    .el-image{
+    .el-image {
         width: 300px;
         height: 150px;
     }

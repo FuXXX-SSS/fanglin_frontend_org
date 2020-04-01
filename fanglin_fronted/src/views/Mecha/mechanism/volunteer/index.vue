@@ -2,6 +2,7 @@
     <div>
         <div class="main" v-if="isShow">
             <div class="my-block">
+                <div class="sub-title">成员管理列表</div>
                 <el-form
                         :inline="true"
                         :model="formData"

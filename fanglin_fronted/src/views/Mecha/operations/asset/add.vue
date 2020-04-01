@@ -4,13 +4,13 @@
             <div class="sub-title">发布活动</div>
             <el-row :gutter="20">
 
-                <el-col :span="12" >
+                <el-col :span="12">
                     <el-form
                             :inline="false"
                             :model="formData"
                             size="small"
                             class="demo-form-inline"
-                            label-width="100px"
+                            label-width="110px"
 
                     >
                         <el-form-item label="活动名称 : ">
@@ -27,33 +27,48 @@
                                 <el-option label="关闭" value="2"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="时间：">
+                        <el-form-item label="开始时间：">
                             <el-date-picker
                                     v-model="formData.value2"
-                                    type="datetimerange"
-                                    :picker-options="pickerOptions"
-                                    range-separator="至"
-                                    start-placeholder="开始日期"
-                                    end-placeholder="结束日期"
+                                    type="date"
+                                    placeholder="选择日期"
                                     align="right">
                             </el-date-picker>
-                        </el-form-item>      <el-form-item label="服务时长：">
-                            <el-input v-model="formData.value"></el-input>
-                        </el-form-item> <el-form-item label="重复：">
-                        <el-radio v-model="formData.radio" label="1">备选项</el-radio>
-                        <el-radio v-model="formData.radio" label="2">备选项</el-radio>
-                        <el-radio v-model="formData.radio" label="3">备选项</el-radio>
-                        <el-radio v-model="formData.radio" label="4">备选项</el-radio>
-                        <el-radio v-model="formData.radio" label="5">备选项</el-radio>
+                        </el-form-item>
+
+                        <el-form-item label="服务时长：">
+                            <el-input-number v-model="formData.num"  :min="0.5" :step="0.5"  size="medium"></el-input-number>
+                        </el-form-item>
+                        <el-form-item label="重复：">
+                            <el-radio v-model="formData.radio" label="1">备选项</el-radio>
+                            <el-radio v-model="formData.radio" label="2">备选项</el-radio>
+                            <el-radio v-model="formData.radio" label="3">备选项</el-radio>
+                            <el-radio v-model="formData.radio" label="4">备选项</el-radio>
+                            <el-radio v-model="formData.radio" label="5">备选项</el-radio>
+                            <el-form-item label="重复截至日期：" style="margin-top: 30px">
+                                <el-date-picker
+                                        v-model="formData.value2"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        align="right">
+                                </el-date-picker>
+                            </el-form-item>
                         </el-form-item>
                         <el-form-item label="年龄：">
-                            <el-progress :text-inside="true" :stroke-width="20" :percentage="50" status="exception"></el-progress>
+                            <vue-slider v-model="value_2" :tooltip="'always'"
+                                        :tooltip-placement="['bottom', 'bottom']"></vue-slider>
                         </el-form-item>
 
                         <br>
 
                         <el-form-item label="人员要求：">
-                            <div>用户名称</div>
+                            <el-tag
+                                    v-for="tag in tags"
+                                    :key="tag.name"
+                                    closable
+                                    :type="tag.type">
+                                {{tag.name}}
+                            </el-tag>
                         </el-form-item>
                         <el-form-item label="活动状态：">
                             <div>用户名称</div>
@@ -68,9 +83,10 @@
                             <el-radio v-model="formData.radio" label="2">备选项</el-radio>
                             <el-radio v-model="formData.radio" label="3">备选项</el-radio>
                         </el-form-item>
-                        <el-form-item label="地点：" >
+                        <el-form-item label="地点：">
                             <el-input v-model="formData.value">
-                                <i slot="suffix" class="el-input__icon el-icon-s-opportunity" style="font-size: 18px;color: #0099ff;cursor: pointer"></i>
+                                <i slot="suffix" class="el-input__icon el-icon-s-opportunity"
+                                   style="font-size: 18px;color: #0099ff;cursor: pointer"></i>
                             </el-input>
                         </el-form-item>
                         <el-form-item>
@@ -80,7 +96,7 @@
                         <el-form-item label="缩略图：" style="margin-right: 10px">
                             <el-image :src="src"></el-image>
                         </el-form-item>
-                        <el-form-item label="所属项目：">
+                        <el-form-item label="活动介绍：">
                             <el-input
                                     type="textarea"
                                     :autosize="{ minRows: 2, maxRows: 4}"
@@ -93,31 +109,31 @@
                 </el-col>
             </el-row>
         </div>
-        <div class="my-block">
-            <div class="sub-title">实施情况</div>
-            <el-form
-                    :inline="true"
-                    :model="formData"
-                    size="small"
-                    class="demo-form-inline"
-            >
-                <el-form-item label="报名人数：">
-                    <div>用户名称</div>
-                </el-form-item>
-                <el-form-item label="签退人数：">
-                    <div>用户名称</div>
-                </el-form-item>
-            </el-form>
+        <!--        <div class="my-block">-->
+        <!--            <div class="sub-title">实施情况</div>-->
+        <!--            <el-form-->
+        <!--                    :inline="true"-->
+        <!--                    :model="formData"-->
+        <!--                    size="small"-->
+        <!--                    class="demo-form-inline"-->
+        <!--            >-->
+        <!--                <el-form-item label="报名人数：">-->
+        <!--                    <div>用户名称</div>-->
+        <!--                </el-form-item>-->
+        <!--                <el-form-item label="签退人数：">-->
+        <!--                    <div>用户名称</div>-->
+        <!--                </el-form-item>-->
+        <!--            </el-form>-->
 
-        </div>
+        <!--        </div>-->
         <div class="my-block">
-            <el-row type="flex" class="row-bg" justify="space-around">
+            <el-row type="flex" class="row-bg" justify="center">
 
-                <el-col :span="6">
-                    <el-button type="提交">推荐</el-button>
+                <el-col :span="3">
+                    <el-button type="warning">提交</el-button>
                 </el-col>
-                <el-col :span="6">
-                    <el-button type="primary" @click="back">返回</el-button>
+                <el-col :span="3">
+                    <el-button type="info" @click="back">返回</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -126,11 +142,21 @@
 
 <script>
     import detailBottom from '@com/detailBottom'
+    import VueSlider from 'vue-slider-component'
+
+    import 'vue-slider-component/theme/default.css'
 
     export default {
         name: "teamDetail",
         data() {
             return {
+                value_2: [0, 150],
+                tags: [
+                    {name: '人数', type: ''},
+                    {name: '年龄', type: 'success'},
+                    {name: '性别', type: 'info'},
+                    {name: '实名认证', type: 'warning'},
+                ],
                 formData: {},
                 src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
                 tableData: {
@@ -179,18 +205,17 @@
 
             }
         },
-        components: {
-        },
-        methods:{
-            back(){
-                this.$store.dispatch('mecha_asset/setAsset',1)
+        components: {VueSlider},
+        methods: {
+            back() {
+                this.$store.dispatch('mecha_asset/setAsset', 1)
             },
         },
     }
 </script>
 
 <style scoped>
-    .el-image{
+    .el-image {
         width: 300px;
         height: 150px;
     }

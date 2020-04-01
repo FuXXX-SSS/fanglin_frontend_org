@@ -80,18 +80,18 @@
             <pagination/>
         </div>
         <div class="my-block">
-            <el-row type="flex" class="row-bg" justify="space-around">
-                <el-col :span="6">
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-col :span="3">
                     <el-button type="success" @click="back">移出</el-button>
                 </el-col>
-                <el-col :span="6">
-                    <el-button type="info">转账</el-button>
+                <el-col :span="3">
+                    <el-button type="primary">转账</el-button>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="3">
                     <el-button type="warning">推荐</el-button>
                 </el-col>
-                <el-col :span="6">
-                    <el-button type="primary" @click="back">返回</el-button>
+                <el-col :span="3">
+                    <el-button type="info" @click="back">返回</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -139,13 +139,22 @@
 
 <style scoped lang="less">
     .el-form-item {
-        margin-right: 30px;
+        margin-right: 50px;
+    }
+    .el-avatar{
+        width:130px;
+        height: 130px;
+    }
+    .el-image {
+        text-align: center;
     }
 
-    .el-image {
-        width: 300px;
-        height: 150px;
+    .detail {
+        /deep/ .el-image {
+            height: 150px;
+        }
     }
+
 
     .imgList {
         display: inline-block;

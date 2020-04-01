@@ -52,7 +52,7 @@
 
 
         <div class="detail" v-else>
-            <Deatail/>
+            <Deatail @Godetail="Godetail"/>
         </div>
     </div>
 </template>
@@ -97,7 +97,7 @@
         methods: {
             Godetail(data) {
                 console.log(data);
-                this.isShow=false
+                this.isShow=!this.isShow
 
             }
         }

@@ -24,10 +24,10 @@
                             <el-form-item label="状态： ">
                                 <div>用户名称</div>
                             </el-form-item>
+                            <br>
                             <el-form-item label="服务方：">
                                 <div>用户名称</div>
                             </el-form-item>
-                            <br>
                             <el-form-item label="开始时间：">
                                 <div>用户名称</div>
                             </el-form-item>
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                         <div class="map">
-                            <Map />
+                            <Map/>
 
                         </div>
                     </el-col>
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <div class="map">
-                            <Map2 />
+                            <Map2/>
                         </div>
                     </el-col>
 
@@ -118,11 +118,11 @@
 
             </div>
             <div class="my-block">
-                <el-row type="flex" class="row-bg" justify="space-around">
-                    <el-col :span="6">
-                        <el-button type="warning" @click="isShow=false">处理争议</el-button>
+                <el-row type="flex" class="row-bg" justify="center">
+                    <el-col :span="3">
+                        <el-button type="warning" @click="isShow=false">发起争议</el-button>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="3">
                         <el-button type="info" @click="back">返回</el-button>
                     </el-col>
                 </el-row>
@@ -131,30 +131,25 @@
         <div class="deal" v-else>
             <div class="my-block">
                 <el-form
-                        :inline="false"
+                        :inline="true"
                         :model="formData"
                         size="small"
                         class="demo-form-inline"
                 >
-                    <el-form-item label="申请人 : ">
-
-                        <el-avatar
-                                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-                        <span style="display: inline-block" class="name">用户名称</span>
-
-                    </el-form-item>
-                    <el-form-item label="说明：">
+                    <el-form-item label="服务编号：">
                         <div>用户名称</div>
                     </el-form-item>
-                    <el-form-item label="凭证：">
-                        <div class="imgList">
-                            <el-image :src="src"></el-image>
-                            <el-image :src="src"></el-image>
-                            <el-image :src="src"></el-image>
-                            <el-image :src="src"></el-image>
-                        </div>
+                    <el-form-item label="活动名称：">
+                        <div>用户名称</div>
                     </el-form-item>
-                    <el-form-item label="处理结果： ">
+                    <el-form-item label="服务方：">
+                        <div>用户名称</div>
+                    </el-form-item>
+                    <el-form-item label="开始时间：">
+                        <div>用户名称</div>
+                    </el-form-item>
+                    <br>
+                    <el-form-item label="争议诉求： ">
                         <div style="display: flex">
                             <el-input
                                     type="textarea"
@@ -164,17 +159,27 @@
                             >
                             </el-input>
                         </div>
-
-
+                    </el-form-item>
+                    <br>
+                    <el-form-item label="上传证明文件： ">
+                        <el-upload
+                                class="avatar-uploader"
+                                action="https://jsonplaceholder.typicode.com/posts/"
+                                :show-file-list="false"
+                                :on-success="handleAvatarSuccess"
+                                :before-upload="beforeAvatarUpload">
+                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </el-upload>
                     </el-form-item>
                 </el-form>
             </div>
             <div class="my-block">
-                <el-row type="flex" class="row-bg" justify="space-around">
-                    <el-col :span="6">
-                        <el-button type="warning" @click="isShow=true">提交处理结果</el-button>
+                <el-row type="flex" class="row-bg" justify="center">
+                    <el-col :span="3">
+                        <el-button type="danger" @click="isShow=true">确定</el-button>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="3">
                         <el-button type="info" @click="isShow=true">返回</el-button>
                     </el-col>
                 </el-row>
@@ -194,6 +199,7 @@
             return {
                 isShow: true,
                 formData: {},
+                imageUrl: '',
                 src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
                 tableData: {
                     records: [
@@ -219,9 +225,24 @@
             Map,
             Map2
         },
-        methods:{
+        methods: {
             back() {
                 this.$emit('Godetail')
+            },
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
             }
         }
     }
@@ -243,6 +264,9 @@
 
             p {
                 display: inline-block;
+                &:nth-child(2){
+                    color: #8e9aac;
+                }
             }
         }
     }
@@ -272,12 +296,42 @@
         .right {
         }
     }
-    .name{
+
+    .name {
         display: inline-block;
         position: absolute;
         margin-top: 3px;
     }
-    .el-avatar--circle{
+
+    .el-avatar--circle {
         margin-top: -3px;
+    }
+</style>
+<style>
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
     }
 </style>

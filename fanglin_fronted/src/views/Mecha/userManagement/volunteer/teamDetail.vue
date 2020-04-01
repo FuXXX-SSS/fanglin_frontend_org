@@ -92,12 +92,26 @@
             </el-row>
         </div>
 
-        <detailBottom/>
+        <div class="my-block block_bot btnClist">
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-col :span="3">
+                    <el-button type="danger" >移sss出</el-button>
+                </el-col>  <el-col :span="3">
+                    <el-button type="success" >转账</el-button>
+                </el-col>
+                <el-col :span="3">
+                    <el-button type="primary">推荐</el-button>
+                </el-col>
+                <el-col :span="3">
+                    <el-button type="info" @click="back">返回</el-button>
+                </el-col>
+            </el-row>
+        </div>
+
     </div>
 </template>
 
 <script>
-    import detailBottom from '@com/detailBottom'
 
     export default {
         name: "teamDetail",
@@ -125,7 +139,11 @@
             }
         },
         components: {
-            detailBottom
+        },
+        methods:{
+            back() {
+                this.$emit('Godetail')
+            },
         }
     }
 </script>

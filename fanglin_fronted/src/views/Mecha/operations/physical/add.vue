@@ -28,16 +28,28 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="入库数量：">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
                         <el-form-item label="兑换标准：">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
                         <el-form-item label="购买价格：">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
                         <el-form-item label="购买回馈：">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;"></el-input>
+                            <el-input v-model="formData.value" style="    width: 25%;
+    float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
                         <el-form-item label="所属项目：">
                             <el-input
@@ -58,12 +70,12 @@
 
         </div>
         <div class="my-block">
-            <el-row type="flex" class="row-bg" justify="space-around">
+            <el-row type="flex" class="row-bg" justify="center">
 
-                <el-col :span="6">
+                <el-col :span="3">
                     <el-button  type="warning">保存</el-button>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="3">
                     <el-button type="info" @click="back">取消</el-button>
                 </el-col>
             </el-row>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">活动详情</div>
+            <div class="sub-title">项目详情</div>
             <el-row :gutter="20">
 
                 <el-col :span="24" class="el-right">

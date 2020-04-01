@@ -2,7 +2,8 @@
     <div>
         <div class="main" v-if="isShow">
             <div class="my-block">
-                <el-form
+                <div class="sub-title">加入申请列表</div>
+                 <el-form
                         :inline="true"
                         :model="formData"
                         size="small"

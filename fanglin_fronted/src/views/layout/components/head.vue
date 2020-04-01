@@ -87,7 +87,7 @@
         .context{
             flex: 1;
             img{
-                width:250px;
+                width: 200px;
                 height: 80px;
                 float:left;
             }

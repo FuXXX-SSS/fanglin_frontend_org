@@ -66,15 +66,17 @@
                         <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <el-form-item class="options" style="display: block ">
-                    <el-button @click="formData = {}
-            " size="medium">保存
-                    </el-button>
-                    <el-button type="primary" size="medium" @click="isShow=true">取消</el-button>
-                </el-form-item>
-
             </el-form>
+            <el-row type="flex" class="row-bg" justify="center" >
+                <el-col :span="3">
+                    <el-button @click="formData = {} " size="medium" type="danger">保存
+                    </el-button>
+                </el-col>
+                <el-col :span="3">
+                    <el-button type="info" size="medium" @click="isShow=true">取消</el-button>
 
+                </el-col>
+            </el-row>
         </div>
     </div>
 </template>

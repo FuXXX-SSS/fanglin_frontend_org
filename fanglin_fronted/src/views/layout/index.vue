@@ -42,11 +42,11 @@
 <style scoped>
     .rightPanel {
         background: #e6e6e6;
-        padding: 25px 35px;
+        padding: 10px 14px;
         box-sizing: border-box;
         height: calc(100vh - 80px);
         overflow-y: auto;
-        margin-left: 240px;
+        margin-left: 200px;
     }
     /* fade */
     .fade-enter-active,

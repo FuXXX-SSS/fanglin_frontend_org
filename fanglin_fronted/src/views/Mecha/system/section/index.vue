@@ -60,12 +60,12 @@
 
         </div>
         <div class="my-block">
-            <el-row type="flex" class="row-bg" justify="space-around">
+            <el-row type="flex" class="row-bg" justify="center">
 
-                <el-col :span="6">
-                    <el-button type="warning">保存</el-button>
+                <el-col :span="3">
+                    <el-button type="danger" size="medium">保存</el-button>
                 </el-col>
-               
+
             </el-row>
         </div>
 

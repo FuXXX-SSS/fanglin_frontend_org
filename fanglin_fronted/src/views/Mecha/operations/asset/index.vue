@@ -31,31 +31,36 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
-                    <el-table-column type="index" label="序号" width="50" />
-                    <el-table-column prop="name" label="本方" />
-                    <el-table-column prop="date" label="外方" />
-                    <el-table-column prop="address" label="交易单位" />
-                    <el-table-column prop="name" label="汇率" />
-                    <el-table-column prop="name" label="状态" />
+                    <el-table-column prop="name" label="发布时间"/>
+                    <el-table-column prop="date" label="活动名称"/>
+                    <el-table-column prop="address" label="联系电话"/>
+                    <el-table-column prop="name" label="任务地点"/>
+                    <el-table-column prop="name" label="开始时间"/>
+                    <el-table-column prop="name" label="时长"/>
+                    <el-table-column prop="name" label="价值/人"/>
+                    <el-table-column prop="name" label="人员"/>
+                    <el-table-column prop="name" label="报名"/>
+                    <el-table-column prop="name" label="状态"/>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <el-button
                                     @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >详情</el-button
+                            >详情
+                            </el-button
                             >
                         </template>
                     </el-table-column>
                 </el-table>
-                <pagination />
+                <pagination/>
             </div>
         </div>
         <div class="detail" v-if="isShow===2">
-            <Deatail />
+            <Deatail/>
         </div>
         <div class="detail" v-if="isShow===3">
-            <Add />
+            <Add/>
         </div>
     </div>
 </template>
@@ -65,12 +70,13 @@
     import Deatail from './teamDetail'
     import Add from './add'
     import {mapState} from 'vuex'
+
     export default {
         name: "index",
         data() {
             return {
                 formData: {},
-                tableData:{
+                tableData: {
                     records: [
                         {
                             date: '2016-05-02',
@@ -92,23 +98,23 @@
                 }
             }
         },
-        computed:{
-          ...mapState({
-              isShow:state => state.mecha_asset.AssetisShow
-          })
+        computed: {
+            ...mapState({
+                isShow: state => state.mecha_asset.AssetisShow
+            })
         },
-        components:{
+        components: {
             pagination,
             Add,
             Deatail
         },
-        methods:{
-            Godetail(data){
+        methods: {
+            Godetail(data) {
                 console.log(123);
-                this.$store.dispatch('mecha_asset/setAsset',2)
+                this.$store.dispatch('mecha_asset/setAsset', 2)
             },
-            add(){
-                this.$store.dispatch('mecha_asset/setAsset',3)
+            add() {
+                this.$store.dispatch('mecha_asset/setAsset', 3)
             },
         },
 
