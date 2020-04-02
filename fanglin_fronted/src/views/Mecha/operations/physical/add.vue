@@ -4,7 +4,7 @@
             <div class="sub-title">新增兑换(现金)</div>
             <el-row :gutter="20">
 
-                <el-col :span="12" >
+                <el-col :span="12">
                     <el-form
                             :inline="false"
                             :model="formData"
@@ -36,22 +36,9 @@
                         <el-form-item label="兑换标准：">
                             <el-input v-model="formData.value" style="    width: 25%;
     float: left;"></el-input>
-                            <el-input v-model="formData.value" style="    width: 25%;
-    float: left;margin-left: 10px" placeholder="单位"></el-input>
+                            <span style="margin-left: 14px;">元/芳邻点</span>
                         </el-form-item>
-                        <el-form-item label="购买价格：">
-                            <el-input v-model="formData.value" style="    width: 25%;
-    float: left;"></el-input>
-                            <el-input v-model="formData.value" style="    width: 25%;
-    float: left;margin-left: 10px" placeholder="单位"></el-input>
-                        </el-form-item>
-                        <el-form-item label="购买回馈：">
-                            <el-input v-model="formData.value" style="    width: 25%;
-    float: left;"></el-input>
-                            <el-input v-model="formData.value" style="    width: 25%;
-    float: left;margin-left: 10px" placeholder="单位"></el-input>
-                        </el-form-item>
-                        <el-form-item label="所属项目：">
+                        <el-form-item label="摘要：">
                             <el-input
                                     type="textarea"
                                     :autosize="{ minRows: 2, maxRows: 4}"
@@ -66,14 +53,14 @@
 
                 </el-col>
             </el-row>
-            <Quill />
+            <Quill/>
 
         </div>
         <div class="my-block">
             <el-row type="flex" class="row-bg" justify="center">
 
                 <el-col :span="3">
-                    <el-button  type="warning">保存</el-button>
+                    <el-button type="warning">保存</el-button>
                 </el-col>
                 <el-col :span="3">
                     <el-button type="info" @click="back">取消</el-button>
@@ -143,16 +130,16 @@
         components: {
             Quill
         },
-        methods:{
-            back(){
-                this.$store.dispatch('mecha_asset/setPhyscial',1)
+        methods: {
+            back() {
+                this.$store.dispatch('mecha_asset/setPhyscial', 1)
             },
         },
     }
 </script>
 
 <style scoped>
-    .el-image{
+    .el-image {
         width: 300px;
         height: 150px;
     }

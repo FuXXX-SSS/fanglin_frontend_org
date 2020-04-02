@@ -1,6 +1,7 @@
 import router from "./router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import store from '@/store'
 
 NProgress.configure({showSpinner: false}); // NProgress Configuration
 let off = true;
@@ -16,6 +17,10 @@ router.beforeEach(async (to, from, next) => {
               next(`/index/mecha/volunteer`);
             }
             next();
+            store.dispatch('mecha_asset/setAsset', 1)
+            store.dispatch('mecha_asset/setEvent', 1)
+            store.dispatch('mecha_asset/setProject', 1)
+            store.dispatch('mecha_asset/setPhyscial', 1)
             // if (off) {
             //   let routedata = localStorage.getItem("routedata");
             //   let routerList;

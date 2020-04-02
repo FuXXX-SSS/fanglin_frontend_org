@@ -4,7 +4,7 @@
             <div class="sub-title">配置管理</div>
             <el-row :gutter="20">
 
-                <el-col :span="20">
+                <el-col :span="24">
                     <el-form
                             :inline="true"
                             :model="formData"
@@ -15,7 +15,7 @@
                         <el-form-item label="资产名称：">
                             <el-input v-model="formData.value"></el-input>
                         </el-form-item>
-
+                        <br>
                         <el-form-item label="订单结算比例：">
                             <el-form-item label="服务：" class="elform">
                                 <el-input v-model="formData.value"></el-input>
@@ -27,22 +27,23 @@
                                 <el-input v-model="formData.value"></el-input>
                             </el-form-item>
                         </el-form-item>
-
-
+                        <br>
                         <el-form-item label="服务系数：">
                             <el-form-item label="家政：" class="elform">
-                                <el-input-number v-model="formData.num" :min="0.5" :step="0.5"
+                                <el-input-number v-model="formData.num1" :min="0.5" :step="1"
                                                  size="small"></el-input-number>
                             </el-form-item>
                             <el-form-item label="教育：" class="elform">
-                                <el-input-number v-model="formData.num" :min="0.5" :step="0.5"
+                                <el-input-number v-model="formData.num2" :min="0.5" :step="1"
                                                  size="small"></el-input-number>
                             </el-form-item>
                             <el-form-item label="艺术：" class="elform">
-                                <el-input-number v-model="formData.num" :min="0.5" :step="0.5"
+                                <el-input-number v-model="formData.num3" :min="0.5" :step="1"
                                                  size="small"></el-input-number>
                             </el-form-item>
                         </el-form-item>
+                        <br>
+
                         <el-form-item label="加入方式：">
                             <el-radio v-model="formData.radio" label="1">自由加入</el-radio>
                             <el-radio v-model="formData.radio" label="2">审核加入</el-radio>
@@ -60,15 +61,12 @@
                         <br>
 
                         <el-form-item label="汇率：">
-                            <el-input v-model="formData.value"></el-input>
+                            <div>汇率</div>
                         </el-form-item>
                     </el-form>
 
                 </el-col>
             </el-row>
-
-        </div>
-        <div class="my-block">
             <el-row type="flex" class="row-bg" justify="center">
 
                 <el-col :span="3">
@@ -76,6 +74,7 @@
                 </el-col>
             </el-row>
         </div>
+
 
     </div>
 </template>
@@ -88,7 +87,11 @@
         name: "teamDetail",
         data() {
             return {
-                formData: {num: 10},
+                formData: {
+                    num1: 10,
+                    num2: 10,
+                    num3: 10,
+                },
                 src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
                 tableData: {
                     records: [
@@ -164,5 +167,9 @@
             color: #8e9aac;
         }
 
+    }
+
+    .my-block .el-form-item {
+        margin-right: 28px;
     }
 </style>

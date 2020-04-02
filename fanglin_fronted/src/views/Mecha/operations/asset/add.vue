@@ -15,7 +15,6 @@
                     >
                         <el-form-item label="活动名称 : ">
                             <el-input v-model="formData.value"></el-input>
-
                         </el-form-item>
                         <el-form-item label="联系电话：">
                             <el-input v-model="formData.value"></el-input>
@@ -37,7 +36,9 @@
                         </el-form-item>
 
                         <el-form-item label="服务时长：">
-                            <el-input-number v-model="formData.num"  :min="0.5" :step="0.5"  size="medium"></el-input-number>
+                            <el-input-number v-model="formData.num" :min="0.5" :step="0.5"
+                                             size="medium"></el-input-number>
+                            小时
                         </el-form-item>
                         <el-form-item label="重复：">
                             <el-radio v-model="formData.radio" label="1">备选项</el-radio>

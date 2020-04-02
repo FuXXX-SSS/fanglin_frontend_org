@@ -142,6 +142,7 @@
                     <el-form-item label="活动名称：">
                         <div>用户名称</div>
                     </el-form-item>
+                    <br>
                     <el-form-item label="服务方：">
                         <div>用户名称</div>
                     </el-form-item>

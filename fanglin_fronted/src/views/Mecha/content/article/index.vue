@@ -33,6 +33,12 @@
                                     size="small"
                             >推荐
                             </el-button>
+                            <el-button
+                                    type="text"
+                                    size="small"
+                                    @click="Godetail()"
+                            >编辑
+                            </el-button>
 
                         </template>
                     </el-table-column>

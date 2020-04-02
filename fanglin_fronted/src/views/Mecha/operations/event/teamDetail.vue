@@ -4,72 +4,135 @@
             <div class="sub-title">项目详情</div>
             <el-row :gutter="20">
 
-                <el-col :span="24" class="el-right">
+                <el-col :span="8">
                     <el-form
                             :inline="true"
                             :model="formData"
                             size="small"
                             class="demo-form-inline"
-                            label-width="100px"
-
                     >
-                        <el-form-item label="活动名称 : ">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="开始时间：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="时长：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="联系电话：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="活动价值：">
-                            <div>用户名称</div>
+                        <el-form-item label="项目名称 : ">
+                            <div>{{formData.name}}</div>
+
                         </el-form-item>
 
-                        <el-form-item label="所属项目：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="人员要求：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <br>
-
-                        <el-form-item label="活动状态：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="发布人：">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="地点：" style="margin-right: 10px">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item>
-                            <i class="el-icon-s-opportunity" style="font-size: 18px;color: #0099ff;cursor: pointer"></i>
-                        </el-form-item>
                         <br>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
-                            <el-image :src="src"></el-image>
+                            <el-image :src="formData.image"></el-image>
                         </el-form-item>
                     </el-form>
 
                 </el-col>
-                <Qutil/>
+                <el-col :span="16">
+                    <el-form
+                            :inline="true"
+                            :model="formData"
+                            size="small"
+                            class="demo-form-inline"
+                    >
+                        <el-form-item label="发布时间：">
+                            <div>{{formData.beginTime}}</div>
+
+                        </el-form-item>
+                        <el-form-item label="联系电话：">
+                            <div>{{formData.phone}}</div>
+                        </el-form-item>
+
+                        <el-form-item label="募资目标：">
+                            <div>{{formData.value}}</div>
+
+                        </el-form-item>
+                        <br>
+
+                        <el-form-item label="回馈标准：" >
+                            <div>{{formData.position}}</div>
+                        </el-form-item>
+                        <el-form-item label="项目状态：" >
+                            <div>{{formData.position}}</div>
+                        </el-form-item>
+
+                        <el-form-item label="所属项目：">
+                            <div>{{formData.projectName}}</div>
+                        </el-form-item>
+                        <br>
+
+                        <el-form-item label="人员要求：">
+                            <div>{{formData.userNum}}
+                                {{formData.gender===1?'男':formData.gender===0?'女':'未知'}}
+                                {{formData.idCert?'实名认证':'未实名认证'}}
+                                <p
+                                        v-for="(item,index) in formData.serviceCategoryList"
+                                        :key="index+'1'"
+                                        style="display: inline-block;margin: 0;margin-right: 10px"
+                                >
+                                    {{item.name}}
+                                </p>
+                            </div>
+
+                        </el-form-item>
+                    </el-form>
+                </el-col>
 
             </el-row>
+
         </div>
         <div class="my-block">
-            <el-row type="flex" class="row-bg" justify="space-around">
-                <el-col :span="6">
+            <el-row :gutter="20">
+
+                <el-col :span="20">
+                    <el-form
+                            :inline="true"
+                            :model="formData"
+                            size="small"
+                            class="demo-form-inline"
+                    >
+                        <el-form-item label="项目进展 : ">
+                            <div>{{formData.name}}</div>
+                        </el-form-item>
+                        <el-form-item label="募集金额 : ">
+                            <div>{{formData.name}}</div>
+                        </el-form-item>
+                        <el-form-item label="捐赠人数 : ">
+                            <div>{{formData.name}}</div>
+                        </el-form-item>
+                        <el-form-item label="回馈 : ">
+                            <div>{{formData.name}}</div>
+                        </el-form-item>
+                        <br>
+                        <el-form-item label="执行情况 : ">
+                            <div>{{formData.name}}</div>
+                        </el-form-item>
+                        <el-form-item label="活动次数 : ">
+                            <div>{{formData.name}}</div>
+                        </el-form-item>
+                        <el-form-item label="活动人次 : ">
+                            <div>{{formData.name}}</div>
+                        </el-form-item>
+                        <el-form-item label="服务时长 : ">
+                            <div>{{formData.name}}</div>
+                        </el-form-item>
+                        <el-form-item label="执行说明 : ">
+                            <Qutil/>
+                        </el-form-item>
+
+                    </el-form>
+
+                </el-col>
+            </el-row>
+
+        </div>
+
+
+        <div class="my-block">
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-col :span="3">
                     <el-button type="success">保存</el-button>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="3">
                     <el-button type="warning">编辑</el-button>
                 </el-col>
-                <el-col :span="6">
-                    <el-button type="primary" @click="back">返回</el-button>
+                <el-col :span="3">
+                    <el-button type="info" @click="back">返回</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -118,7 +181,6 @@
 
 <style scoped>
     .el-form-item {
-        margin-right: 30px;
     }
 
     .el-image {

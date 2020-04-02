@@ -30,8 +30,7 @@
                         <el-form-item label="兑换标准：">
                             <el-input v-model="formData.value" style="    width: 25%;
     float: left;"></el-input>
-                            <el-input v-model="formData.value" style="    width: 25%;
-    float: left;margin-left: 10px" placeholder="单位"></el-input>
+                            <span style="margin-left: 14px;">元/芳邻点</span>
                         </el-form-item>
                         <el-form-item label="状态：">
                             <el-radio v-model="formData.radio" label="1">备选项</el-radio>

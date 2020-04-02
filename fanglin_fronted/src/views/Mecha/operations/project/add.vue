@@ -35,21 +35,17 @@
                         </el-form-item>
                         <el-form-item label="兑换标准：">
                             <el-input v-model="formData.value" style="    width: 25%;
-    float: left;"></el-input>
-                            <el-input v-model="formData.value" style="    width: 25%;
-    float: left;margin-left: 10px" placeholder="单位"></el-input>
+    float: left;"></el-input><span style="margin-left: 14px;">芳邻点/单位</span>
                         </el-form-item>
                         <el-form-item label="购买价格：">
                             <el-input v-model="formData.value" style="    width: 25%;
     float: left;"></el-input>
-                            <el-input v-model="formData.value" style="    width: 25%;
-    float: left;margin-left: 10px" placeholder="单位"></el-input>
+                            <span style="margin-left: 14px;">元/单位</span>
                         </el-form-item>
                         <el-form-item label="购买回馈：">
                             <el-input v-model="formData.value" style="    width: 25%;
     float: left;"></el-input>
-                            <el-input v-model="formData.value" style="    width: 25%;
-    float: left;margin-left: 10px" placeholder="单位"></el-input>
+                            <span style="margin-left: 14px;">芳邻点/单位</span>
                         </el-form-item>
                         <el-form-item label="所属项目：">
                             <el-input

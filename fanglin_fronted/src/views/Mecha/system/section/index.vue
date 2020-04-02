@@ -57,9 +57,6 @@
 
                 </el-col>
             </el-row>
-
-        </div>
-        <div class="my-block">
             <el-row type="flex" class="row-bg" justify="center">
 
                 <el-col :span="3">
