@@ -54,6 +54,7 @@
         <div class="detail" v-else>
             <Deatail @Godetail="Godetail"/>
         </div>
+
     </div>
 </template>
 

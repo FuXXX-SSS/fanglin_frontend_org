@@ -135,6 +135,8 @@
                         :model="formData"
                         size="small"
                         class="demo-form-inline"
+                        label-width="83px"
+                        label-position="right"
                 >
                     <el-form-item label="服务编号：">
                         <div>用户名称</div>
@@ -265,7 +267,8 @@
 
             p {
                 display: inline-block;
-                &:nth-child(2){
+
+                &:nth-child(2) {
                     color: #8e9aac;
                 }
             }

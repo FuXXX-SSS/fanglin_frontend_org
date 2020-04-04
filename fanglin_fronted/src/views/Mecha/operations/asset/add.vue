@@ -4,7 +4,7 @@
             <div class="sub-title">发布活动</div>
             <el-row :gutter="20">
 
-                <el-col :span="12">
+                <el-col :span="14">
                     <el-form
                             :inline="false"
                             :model="formData"
@@ -36,9 +36,13 @@
                         </el-form-item>
 
                         <el-form-item label="服务时长：">
-                            <el-input-number v-model="formData.num" :min="0.5" :step="0.5"
+                            <el-input-number v-model.number="num"
+                                             :min="0.5"
+                                             :step="0.5"
+                                             step-strictly
+                                             @change="change"
                                              size="medium"></el-input-number>
-                            小时
+                            <p style="display: inline-block;margin: 0;margin-left:10px!important;">服务时长以半小时为单位</p>
                         </el-form-item>
                         <el-form-item label="重复：">
                             <el-radio v-model="formData.radio" label="1">备选项</el-radio>
@@ -46,7 +50,7 @@
                             <el-radio v-model="formData.radio" label="3">备选项</el-radio>
                             <el-radio v-model="formData.radio" label="4">备选项</el-radio>
                             <el-radio v-model="formData.radio" label="5">备选项</el-radio>
-                            <el-form-item label="重复截至日期：" style="margin-top: 30px">
+                            <el-form-item label="重复截止日期：" style="margin-top: 30px">
                                 <el-date-picker
                                         v-model="formData.value2"
                                         type="date"
@@ -159,6 +163,7 @@
                     {name: '实名认证', type: 'warning'},
                 ],
                 formData: {},
+                num: '',
                 src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
                 tableData: {
                     records: [
@@ -211,7 +216,18 @@
             back() {
                 this.$store.dispatch('mecha_asset/setAsset', 1)
             },
+            change(currentValue, oldValue) {
+                console.log(currentValue);
+                console.log(oldValue);
+                console.log((Math.round(currentValue * 100) / 100));
+            },
         },
+        // watch: {
+        //     num(val) {
+        //         this.num = Math.round(val)
+        //         this.num=parseFloat(this.num)+0.5
+        //     }
+        // }
     }
 </script>
 

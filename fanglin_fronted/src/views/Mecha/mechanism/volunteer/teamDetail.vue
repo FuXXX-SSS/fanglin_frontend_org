@@ -142,8 +142,8 @@
         margin-right: 50px;
     }
     .el-avatar{
-        width:130px;
-        height: 130px;
+        width:132px;
+        height: 132px;
     }
     .el-image {
         text-align: center;

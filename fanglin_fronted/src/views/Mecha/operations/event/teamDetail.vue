@@ -44,10 +44,10 @@
                         </el-form-item>
                         <br>
 
-                        <el-form-item label="回馈标准：" >
+                        <el-form-item label="回馈标准：">
                             <div>{{formData.position}}</div>
                         </el-form-item>
-                        <el-form-item label="项目状态：" >
+                        <el-form-item label="项目状态：">
                             <div>{{formData.position}}</div>
                         </el-form-item>
 
@@ -77,6 +77,8 @@
 
         </div>
         <div class="my-block">
+            <div class="sub-title">进展&执行</div>
+
             <el-row :gutter="20">
 
                 <el-col :span="20">
@@ -86,9 +88,7 @@
                             size="small"
                             class="demo-form-inline"
                     >
-                        <el-form-item label="项目进展 : ">
-                            <div>{{formData.name}}</div>
-                        </el-form-item>
+
                         <el-form-item label="募集金额 : ">
                             <div>{{formData.name}}</div>
                         </el-form-item>
@@ -99,9 +99,7 @@
                             <div>{{formData.name}}</div>
                         </el-form-item>
                         <br>
-                        <el-form-item label="执行情况 : ">
-                            <div>{{formData.name}}</div>
-                        </el-form-item>
+
                         <el-form-item label="活动次数 : ">
                             <div>{{formData.name}}</div>
                         </el-form-item>
