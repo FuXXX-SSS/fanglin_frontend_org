@@ -1,10 +1,11 @@
 import axios from "axios";
-import { Message, Loading } from "element-ui";
-import Router, { resetRouter } from "@/router";
+import {Message, Loading} from "element-ui";
+import Router, {resetRouter} from "@/router";
 import baseURL from "./baseUrl";
 
 let loading;
 let duration = 2 * 1000;
+
 function startLoading() {
     loading = Loading.service({
         lock: true,
@@ -12,9 +13,11 @@ function startLoading() {
         background: "rgba(0,0,0,.4)"
     });
 }
+
 function stopLoading() {
     loading.close();
 }
+
 // create an axios instance
 const service = axios.create({
     baseURL,
@@ -26,11 +29,8 @@ const service = axios.create({
 service.interceptors.request.use(
     config => {
         startLoading();
-        let userInfo = JSON.parse(
-            sessionStorage.getItem("userInfo")
-        );
-        if (userInfo) {
-            config.headers["Authorization"] = userInfo.token;
+        if ((sessionStorage.getItem("userInfo"))) {
+            config.headers["Authorization"] = JSON.parse(sessionStorage.getItem("userInfo")).token;
         }
         return config;
     },
@@ -56,8 +56,15 @@ service.interceptors.response.use(
                 duration
             });
             return false;
+        } else if (res.data === null) {
+            res.data = {}
+            res.data.list = null
+            res.data.total = null
+            res.data.pageNum = null
+            res.data.pageSize = null
+            return res
         } else {
-            return res;
+            return res
         }
     },
     error => {
@@ -68,14 +75,12 @@ service.interceptors.response.use(
         if (res && res.status === 500) {
             message = "服务器异常";
         } else {
-            message = "连接超时";
+            Message({
+                message: res.data.msg,
+                type: "error",
+                duration
+            });
         }
-        Message({
-            message,
-            type: "error",
-            duration
-        });
-
         return Promise.reject(error);
     }
 );

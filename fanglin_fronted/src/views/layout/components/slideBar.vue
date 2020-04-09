@@ -9,19 +9,17 @@
                     active-text-color="#FF9F08"
                     :router="true"
                     style="flex: 1"
-                    :default-active="$route.path"
+                    :default-active="this.$route.path"
             >
 
                 <sidebarItem
                         :item="item"
                         v-for="item in routerList"
                         :key="item.path"
+                        :router="true"
                 ></sidebarItem>
             </el-menu>
         </el-scrollbar>
-        <div class="addToIndex addToIndexEd">
-            <br>
-        </div>
     </div>
 </template>
 
@@ -48,7 +46,7 @@
                 return path;
             },
             ...mapState({
-                routeSwitch: state => state.Switch.switch
+                routeSwitch: state => state.Switch.switch,
             })
         },
 
@@ -56,10 +54,11 @@
             sidebarItem
         },
         created() {
-            this.routerList=RouteData2
+            this.routerList=JSON.parse(sessionStorage.getItem("routeData"))
         }
     };
 </script>
+
 <style lang="less" scoped>
     .side-bar{
         width:200px;

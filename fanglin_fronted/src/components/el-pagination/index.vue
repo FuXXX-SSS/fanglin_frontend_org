@@ -3,39 +3,46 @@
         <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page.sync="currentPage3"
-                :page-sizes="[100, 200, 300, 400]"
-                :page-size="100"
-                layout="sizes,prev, pager, next, jumper"
-                :total="1000">
+                layout="total,sizes,prev, pager, next, jumper"
+                :page-sizes="[5, 10, 20, 40]"
+                :total="total">
         </el-pagination>
     </div>
 </template>
 
 <script>
     export default {
+        props: {
+            total: {
+                type: Number
+            }
+        },
         name: "index",
         methods: {
             handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+                this.page.page_limit = val;
+                this.$emit('pageChange', this.page)
             },
             handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+                this.page.page_index = val;
+                this.$emit('pageChange', this.page)
             }
         },
         data() {
             return {
-                currentPage1: 5,
-                currentPage2: 5,
-                currentPage3: 5,
-                currentPage4: 4
+                page: {
+                    page_index: 1,
+                    page_limit: 10
+                }
             };
+        },
+        created() {
         }
     }
 </script>
 
 <style scoped>
-    .page-block{
+    .page-block {
         text-align: right;
         margin-top: 40px;
     }

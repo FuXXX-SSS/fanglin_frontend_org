@@ -1,25 +1,22 @@
 <template>
     <div>
-
         <div class="index">
             <div class="context">
                 <img src="@/assets/LOGO.jpg" alt="">
                 <p>芳邻时间银行机构管理后台</p>
             </div>
             <div class="rightcontext">
-                <div class="item">用户：123123</div>
-                <el-dropdown >
-                  <span class="el-dropdown-link">
-                    退出登录<i class="el-icon-arrow-down el-icon--right"></i>
+                <div class="item">用户：{{userName}}</div>
+                  <span class="el-dropdown-link" @click="logout">
+                    退出登录
                   </span>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="a">我的信息</el-dropdown-item>
-                        <el-dropdown-item command="b" >
-                            <span @click="logout">退出登录</span>
-                        </el-dropdown-item>
+                    <!--                    <el-dropdown-menu slot="dropdown">-->
+                    <!--                        <el-dropdown-item command="a">我的信息</el-dropdown-item>-->
+                    <!--                        <el-dropdown-item command="b">-->
+                    <!--                            <span >退出登录</span>-->
+                    <!--                        </el-dropdown-item>-->
 
-                    </el-dropdown-menu>
-                </el-dropdown>
+                    <!--                    </el-dropdown-menu>-->
             </div>
         </div>
     </div>
@@ -27,10 +24,13 @@
 
 <script>
     import {mapState} from 'vuex'
+    import {logout} from '@http/managerUser'
+
     export default {
         data() {
             return {
                 dialogPs: false,
+                userName: '',
                 rules: {
                     pwd: {
                         trigger: "blur",
@@ -47,18 +47,23 @@
             };
         },
         methods: {
-            logout() {
+            async logout() {
                 this.$store.dispatch("tagView/removeViews")
-                this.$store.dispatch("Switch/switchChange",false)
+                this.$store.dispatch("Switch/switchChange", false)
+                let res = await logout()
+                if (res && res.code === 1000) {
+                    sessionStorage.clear()
+                    this.$tools.$mes('退出登录', 'success')
+                    setTimeout(() => {
+                        this.$router.push("/login");
+                    }, 1000);
+                }
 
-                setTimeout(() => {
-                    this.$router.push("/login");
-                    // window.location.reload();
-                }, 1000);
             },
-
         },
-
+        created() {
+            this.userName = JSON.parse(sessionStorage.getItem("userInfo")).userName
+        }
     };
 </script>
 <style lang="less" scoped>
@@ -71,30 +76,34 @@
         width: 100%;
         font-size: 14px;
         color: #fff;
-        .rightcontext{
-            width: 17%;
-            .item{
+
+        .rightcontext {
+            margin-right: 30px;
+            .item {
                 margin-right: 30px;
                 float: left;
             }
         }
 
-        .el-dropdown{
+        .el-dropdown {
             margin-right: 30px;
             cursor: pointer;
             color: #fff;
         }
-        .context{
+
+        .context {
             flex: 1;
-            img{
+
+            img {
                 width: 200px;
                 height: 80px;
-                float:left;
+                float: left;
             }
-            p{
+
+            p {
                 font-size: 20px;
                 font-weight: bold;
-                float:left;
+                float: left;
                 line-height: 40px;
                 color: #fff;
                 margin-left: 15px;
@@ -102,4 +111,8 @@
         }
     }
 
+    .el-dropdown-link:hover {
+        color: #3a8ee6;
+        transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+    }
 </style>

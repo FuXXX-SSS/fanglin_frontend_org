@@ -1,20 +1,18 @@
 <template>
     <div class="menu-wrapper">
-        <template v-if="!item.children">
+        <template v-if="item.leaf">
             <template slot="title">
-                <i :class="item.meta.icon" v-if="item.meta.icon"></i>
-                <span>{{ item.meta && item.meta.title }}</span>
+                <i :class="item.icon" v-if="item.icon"></i>
+                <span>{{ item.name && item.name }}</span>
             </template>
-            <el-menu-item :index="resolvePath(item.path)">{{
-                item.meta.title
-                }}</el-menu-item>
+            <el-menu-item :index="resolvePath(item.path)" @click="menuItem(item)" :basePath="resolvePath(item && item.path)">{{item.name}}</el-menu-item>
         </template>
 
         <template v-else>
-            <el-submenu :index="item.name">
+            <el-submenu :index="item.id+''">
                 <template slot="title">
-                    <i :class="item.meta.icon" v-if="item.meta.icon"></i>
-                    <span>{{ item.meta && item.meta.title }}</span>
+                    <i :class="item.icon" v-if="item.icon"></i>
+                    <span>{{ item.name && item.name }}</span>
                 </template>
                 {{item.mata}}
                 <sidebarItem
@@ -47,7 +45,12 @@
             resolvePath(routePath) {
                 return path.resolve(this.basePath, routePath);
                 console.log(path);
+            },
+            menuItem(menuItem){
+
             }
+        },
+        created() {
         }
     };
 </script>

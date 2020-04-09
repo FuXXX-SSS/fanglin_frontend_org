@@ -3,7 +3,7 @@
         <div class="main" v-if="isShow">
             <div class="my-block">
                 <div class="sub-title">加入申请列表</div>
-                 <el-form
+                <el-form
                         :inline="true"
                         :model="formData"
                         size="small"
@@ -28,39 +28,68 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
-                    <el-table-column type="index" label="序号" width="50" />
-                    <el-table-column prop="name" label="用户头像" />
-                    <el-table-column prop="date" label="名称" />
-                    <el-table-column prop="address" label="创始人" />
-                    <el-table-column prop="name" label="管理员" />
-                    <el-table-column prop="name" label="手机号" />
-                    <el-table-column prop="name" label="成员" />
-                    <el-table-column prop="name" label="成立时间" />
-                    <el-table-column prop="name" label="服务时长" />
-                    <el-table-column prop="name" label="服务次数" />
-                    <el-table-column prop="name" label="评分" />
-                    <el-table-column prop="name" label="状态" />
+                    <el-table-column prop="date" label="申请时间"/>
+                    <el-table-column prop="name" label="用户头像">
+                        <template slot-scope="scope">
+                            <img :src="scope.row.avatar" min-width="70" height="70"/>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="nickname" label="昵称"/>
+                    <el-table-column prop="gender" label="性别">
+                        <template slot-scope="scope">
+                            {{ scope.row.gender === 1 ? "男" : scope.row.gender == 2 ? '女':'未知' }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="phone" label="手机号"/>
+                    <el-table-column prop="cert" label="是否认证">
+                        <template slot-scope="scope">
+                            {{ scope.row.cert ? "是" :'否' }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="擅长" prop="serviceCategories">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.serviceCategories!==null" style="display: inline-block">
+                                <div v-for="(item,index) in scope.row.serviceCategories" :key="index+1"
+                                     style="display: inline-block;margin-right: 10px">
+                                    {{item.name}}
+                                </div>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="serviceDuration" label="服务时长"/>
+                    <el-table-column prop="serviceTime" label="服务次数"/>
+                    <el-table-column prop="score" label="评分"/>
+                    <el-table-column prop="userStatus" label="状态" width="150px">
+                        <template slot-scope="scope">
+                            {{ scope.row.userStatus===1 ? "开通" :'关闭' }}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <el-button
-                                    @click="Godetail(scope.row)"
+                                    @click="check(scope.row,1)"
                                     type="text"
                                     size="small"
-                            >同意</el-button
-                            >   <el-button
-                                    @click="Godetail(scope.row)"
+                            >同意
+                            </el-button
+                            >
+                            <el-button
+                                    @click="check(scope.row,2)"
                                     type="text"
                                     size="small"
-                            >拒绝</el-button
+                            >拒绝
+                            </el-button
                             >
                         </template>
                     </el-table-column>
                 </el-table>
-                <pagination />
+                <pagination :total="total" @pageChange="pageChange"/>
+
             </div>
         </div>
         <div class="detail" v-else>
-            <Deatail />
+            <Deatail @Godetail="Godetail" :userInfo="userInfo"/>
+
         </div>
     </div>
 </template>
@@ -68,42 +97,60 @@
 <script>
     import pagination from '@com/el-pagination'
     import Deatail from './teamDetail'
+    import {userList, userCheckGet} from '@http/user'
+
     export default {
         name: "index",
         data() {
             return {
-                isShow:true,
-                formData: {},
-                tableData:{
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        }, {
-                            date: '2016-05-03',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1516 弄'
-                        }]
-                }
+                isShow: true,
+                formData: {pageNum: 1, pageSize: 10},
+                tableData: {records: []},
+                pageData: {},
+                userInfo: {},
+                total: 0,
             }
         },
-        components:{
+        components: {
             pagination,
             Deatail
         },
-        methods:{
-            Godetail(data){
+        methods: {
+            Godetail(data) {
                 console.log(123);
+            },
+            async init() {
+                let obj = {
+                    pageSize: this.formData.pageSize,
+                    pageNum: this.formData.pageNum,
+                    keyword: this.formData.keyword,
+                    type: 0
+                }
+                let res = await userList(obj)
+                let {total, list} = res.data
+                this.tableData.records = list
+                this.total = total
+            },
+            pageChange(item) {
+                this.formData.pageNum = item.page_index;
+                this.formData.pageSize = item.page_limit;
+                this.init()
+            },
+            async check(data, type) {
+                let obj = {
+                    userId: data.userId,
+                    type: type
+                }
+                let res = await userCheckGet(obj)
+                console.log(res);
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('操作成功', 'success')
+                    this.init()
+                }
             }
+        },
+        created() {
+            this.init()
         }
     }
 </script>

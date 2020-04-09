@@ -4,7 +4,7 @@
             <div class="titleDetail">成员详情</div>
             <el-row :gutter="20">
                 <el-col :span="4" class="el-left">
-                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                    <el-avatar :src="formData.avatar"></el-avatar>
                 </el-col>
                 <el-col :span="20" class="el-right">
                     <el-form
@@ -13,40 +13,45 @@
                             size="small"
                             class="demo-form-inline"
                     >
-                        <el-form-item label="创始人 : ">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="管理员 : ">
-                            <div>用户名称</div>
+                        <el-form-item label="姓名 : ">
+                            <div>{{formData.nickname}}</div>
                         </el-form-item>
                         <el-form-item label="手机号码 : ">
-                            <div>用户名称</div>
+                            <div class="detail_cont">{{formData.phone}}</div>
                         </el-form-item>
-                        <el-form-item label="成立时间 : ">
-                            <div>用户名称</div>
+                        <el-form-item label="性别 : ">
+                            <div class="detail_cont">{{formData.gender===1?'男':formData.gender===0?'女':'未知'}}</div>
                         </el-form-item>
-                        <el-form-item label="加入方式 : ">
-                            <div>用户名称</div>
+                        <el-form-item label="注册时间 : ">
+                            <div>{{formData.joinTime}}</div>
                         </el-form-item>
-                        <br>
+                        <el-form-item label="所在城市 : ">
+                            <div>{{formData.city}}</div>
+                        </el-form-item>
+                        <el-form-item label="邀请人数 : ">
+                            <div>{{formData.inviteNum}}</div>
+                        </el-form-item>
                         <el-form-item label="服务时长 : ">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="服务次数 : ">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="服务评分 : ">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="团队成员 : ">
-                            <div>用户名称</div>
-                        </el-form-item>
-                        <el-form-item label="擅长 : ">
-                            <div>用户名称</div>
+                            <div>{{formData.serviceDuration}}</div>
                         </el-form-item>
                         <br>
-                        <el-form-item label="简介 : ">
-                            <div>用户名称</div>
+                        <el-form-item label="服务次数 : ">
+                            <div>{{formData.serviceTime}}</div>
+                        </el-form-item>
+                        <el-form-item label="评分 : ">
+                            <div>{{formData.score}}</div>
+                        </el-form-item>
+                        <el-form-item label="实名认证 : ">
+                            <div>{{formData.cert===1?'是':'否'}}</div>
+                        </el-form-item>
+                        <el-form-item label="专长 : ">
+                            <div v-for="(item,index) in formData.serviceCategories" :key="index+1"
+                                 style="display: inline-block">{{item.name}}
+                            </div>
+                        </el-form-item>
+                        <br>
+                        <el-form-item label="签名 : ">
+                            <div>{{formData.sign}}</div>
                         </el-form-item>
                     </el-form>
 
@@ -57,27 +62,33 @@
             <div class="titleDetail">资质认证</div>
             <el-table :data="tableData.records" border>
                 <el-table-column type="index" label="序号" width="50"/>
-                <el-table-column prop="name" label="证件图片"/>
-                <el-table-column prop="date" label="证书名称"/>
-                <el-table-column prop="address" label="培训时长"/>
-                <el-table-column prop="name" label="状态"/>
+                <el-table-column prop="name" label="证件图片">
+                    <template slot-scope="scope">
+                        <img :src="scope.row.certImg" min-width="70" height="70"/>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="certName" label="证书名称"/>
+                <el-table-column prop="trainDuration" label="培训时长"/>
+                <el-table-column prop="name" label="状态">
+                    <template slot-scope="scope">
+                        {{ scope.row.certStatus===1 ? "已认证" :'未认证' }}
+                    </template>
+                </el-table-column>
 
-                <el-table-column prop="name" label="认证社区"/>
+                <el-table-column prop="instName" label="认证社区"/>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button
-                                @click="Godetail(scope.row)"
+                                @click="quaClick(scope.row)"
                                 type="text"
                                 size="small"
-                        >取消认证
+                        > {{ scope.row.certStatus===1 ? "取消认证" :'认证' }}
                         </el-button
                         >
                     </template>
                 </el-table-column>
 
             </el-table>
-
-            <pagination/>
         </div>
         <div class="my-block">
             <el-row type="flex" class="row-bg" justify="center">
@@ -100,39 +111,68 @@
 </template>
 
 <script>
-    import detailBottom from '@com/detailBottom'
+    import {userDetail, userQuaCertPost, userJoinInfo, userQuaInfo} from '@http/user'
+
 
     export default {
+        props: {
+            userInfo: {
+                type: Object,
+            }
+        },
         name: "teamDetail",
         data() {
             return {
-                formData: {},
                 src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
                 tableData: {
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        },]
-                }
-
+                    records: []
+                },
+                formData: {},
+                jointGroupList: [],
+                jointInstList: [],
+                quanInfoList: [],
+                dialogVisible: false,
+                projectStatus: '',
+                walletURL: {}
             }
-        },
-        components: {
         },
         methods: {
             back() {
                 this.$emit('Godetail')
+            },
+            async init() {
+                let res = await userDetail(this.userInfo.userId)
+                this.formData = res.data
+                this.projectStatus = res.data.userStatus
+                this.projectStatus === 1 ? this.projectStatus = true : this.projectStatus = false
+            },
+            async userQuaInfo() {
+                let res = await userQuaInfo(this.userInfo.userId)
+                console.log(res);
+                if (res.data.list !== null) {
+                    this.tableData.records = res.data
+                } else {
+                    this.tableData.records = []
+                }
+            },
+            async quaClick(data) {
+                console.log(data);
+                let obj = {
+                    certStatus: data.certStatus,
+                    quaId: data.instId,
+                    trainDuration: data.trainDuration,
+                }
+                console.log(obj);
+                let res = await userQuaCertPost(obj)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('修改成功', 'success')
+                    this.userQuaInfo()
+                }
             }
+        },
+        created() {
+            this.init()
+            this.userQuaInfo()
         }
     }
 </script>
@@ -141,10 +181,12 @@
     .el-form-item {
         margin-right: 50px;
     }
-    .el-avatar{
-        width:132px;
+
+    .el-avatar {
+        width: 132px;
         height: 132px;
     }
+
     .el-image {
         text-align: center;
     }
@@ -169,7 +211,8 @@
             }
         }
     }
-    .demonstration{
+
+    .demonstration {
         display: block;
         text-align: center;
     }

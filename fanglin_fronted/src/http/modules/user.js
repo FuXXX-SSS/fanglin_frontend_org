@@ -3,13 +3,13 @@ import _axios from "../index";
 // 查询成员列表
 export const userList= data =>
     _axios({
-        url: `/bms/user/list/${data}`,
+        url: `/bms/user/list`,
         method: "get",
-        data: data
+        params: data
     });
 
 // 查询成员详情
-export const userDetail = (data = {}) =>
+export const userDetail= data =>
     _axios({
         url: `/bms/user/detail/${data}`,
         method: "get",
@@ -17,7 +17,7 @@ export const userDetail = (data = {}) =>
     });
 
 // 获取成员加入的团队和机构信息
-export const userJoinInfo = (data = {}) =>
+export const userJoinInfo = data =>
     _axios({
         url: `/bms/user/joinInfo/${data}`,
         method: "get",
@@ -25,20 +25,14 @@ export const userJoinInfo = (data = {}) =>
     });
 
 // 查询成员资质信息
-export const userQuaInfo = (data = {}) =>
+export const userQuaInfo = data =>
     _axios({
         url: `/bms/user/quaInfo/${data}`,
         method: "get",
         data: data
     });
 
-// 资质认证接口
-export const userQuaCertGet = (data = {}) =>
-    _axios({
-        url: `/bms/user/quaCert`,
-        method: "get",
-        data: data
-    });
+
 
 // 资质认证接口
 export const userQuaCertPost = data =>
@@ -49,10 +43,10 @@ export const userQuaCertPost = data =>
     });
 
 // 审核加入机构的成员
-export const userCheckGet = (data = {}) =>
+export const userCheckGet = data =>
     _axios({
         url: `/bms/user/check`,
-        method: "get",
+        method: "post",
         data: data
     });
 

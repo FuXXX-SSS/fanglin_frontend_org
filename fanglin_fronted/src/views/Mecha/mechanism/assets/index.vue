@@ -13,13 +13,13 @@
                         class="demo-form-inline"
                 >
                     <el-form-item label="钱包地址：">
-                        <el-input v-model="formData.name" disabled>
+                        <el-input v-model="formData.walletURL" disabled>
                             <template slot="append">
                                 <el-button type="primary"
                                            @click="clip"
                                            class="cobyOrderSn"
                                            data-clipboard-action="copy"
-                                           :data-clipboard-text="formData.name"
+                                           :data-clipboard-text="formData.walletURL"
                                 >复 制
                                 </el-button>
                             </template>
@@ -32,14 +32,13 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
-                    <el-table-column type="index" label="序号" width="50"/>
-                    <el-table-column prop="name" label="资产名称"/>
-                    <el-table-column prop="date" label="活动资产数量"/>
-                    <el-table-column prop="address" label="锁定资产数量"/>
+                    <el-table-column prop="assetsUnitName" label="资产名称"/>
+                    <el-table-column prop="amount" label="活动资产数量"/>
+                    <el-table-column prop="lockAmount" label="锁定资产数量"/>
                     <el-table-column label="操作">
-                        <template>
+                        <template slot-scope="scope">
                             <el-button
-
+                                    @click="diaLog(scope.row)"
                                     type="text"
                                     size="small"
                             >转账
@@ -48,58 +47,54 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <pagination/>
             </div>
+            <DiaLog :dialogVisible="dialogVisible" @diaLog="diaLog" :form="walletURL" />
+
         </div>
         <div class="detail" v-else>
             <Deatail @Godetail="Godetail"/>
         </div>
-
     </div>
 </template>
 
 <script>
-    import pagination from '@com/el-pagination'
     import Deatail from './instituDetail'
     import Clipboard from 'clipboard';
-
+    import {totalInfo} from '@http/assets'
+    import DiaLog from '@com/dia-log'
     export default {
         name: "index",
         data() {
             return {
                 isShow: true,
-                formData: {
-                    name: 'as5d546asd645asd546d56s4a654sda564'
-                },
-                tableData: {
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        }, {
-                            date: '2016-05-03',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1516 弄'
-                        }]
-                }
+                formData: {pageNum: 1, pageSize: 10,name: 'as5d546asd645asd546d56s4a654sda564'},
+                tableData: {records: []},
+                pageData: {},
+                userInfo: {},
+                total: 0,
+                dialogVisible: false,
+                walletURL: {}
             }
         },
         components: {
-            pagination,
-            Deatail
+            Deatail,
+            DiaLog
         },
         methods: {
             Godetail(data) {
                 this.isShow = !this.isShow
+            },
+            async init() {
+                let obj = {
+                    pageSize: this.formData.pageSize,
+                    pageNum: this.formData.pageNum,
+                    keyword: this.formData.keyword,
+                    type: 0
+                }
+                let res = await totalInfo(obj)
+                let {walletURL} = res.data
+                this.tableData.records.push(res.data)
+                this.formData.walletURL = res.data.walletURL
             },
             clip() {
                 let _this = this;
@@ -117,8 +112,16 @@
                     clipboard.destroy()
                 })
 
-            }
-        }
+            },
+            async diaLog() {
+                this.dialogVisible = !this.dialogVisible
+                console.log(this.dialogVisible);
+            },
+        },
+        created() {
+            this.init()
+        },
+
     }
 </script>
 
