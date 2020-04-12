@@ -24,3 +24,13 @@ export const applyList= data =>
         method: "get",
         data: data
     });
+
+
+
+// 确定活动人选
+export const select= data =>
+    _axios({
+        url: `/bms/activity/select/user`,
+        method: "post",
+        data: data
+    });

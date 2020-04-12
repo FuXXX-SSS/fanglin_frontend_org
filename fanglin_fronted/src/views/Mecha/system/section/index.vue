@@ -14,17 +14,17 @@
 
                     >
                         <el-form-item label="机构名称 : ">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.name"></el-input>
                         </el-form-item>
                         <el-form-item label="机构地点 : ">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.address"></el-input>
                         </el-form-item>
                         <el-form-item label="机构公告：">
                             <el-input
                                     type="textarea"
                                     :autosize="{ minRows: 2, maxRows: 4}"
                                     placeholder="请输入内容"
-                                    v-model="formData.textarea2">
+                                    v-model="formData.notice">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="机构介绍：">
@@ -32,26 +32,18 @@
                                     type="textarea"
                                     :autosize="{ minRows: 2, maxRows: 4}"
                                     placeholder="请输入内容"
-                                    v-model="formData.textarea2">
+                                    v-model="formData.introduction">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="机构banner：" style="margin-right: 10px">
-                            <el-upload
-                                    class="avatar-uploader"
-                                    action="https://jsonplaceholder.typicode.com/posts/"
-                                    :show-file-list="false"
-                                    :on-success="handleAvatarSuccess"
-                                    :before-upload="beforeAvatarUpload">
-                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
+                            <Elupload @load="banner" />
                         </el-form-item>
 
                         <el-form-item label="机构头像：" style="margin-right: 10px">
-                            <el-image :src="src"></el-image>
+                            <Elupload @load="avatar" />
                         </el-form-item>
                         <el-form-item label="机构二维码：" style="margin-right: 10px">
-                            <el-image :src="src"></el-image>
+                            <el-image :src="formData.qrCode"></el-image>
                         </el-form-item>
                     </el-form>
 
@@ -60,7 +52,7 @@
             <el-row type="flex" class="row-bg" justify="center">
 
                 <el-col :span="3">
-                    <el-button type="danger" size="medium">保存</el-button>
+                    <el-button type="danger" size="medium" @click="save">保存</el-button>
                 </el-col>
 
             </el-row>
@@ -70,6 +62,8 @@
 </template>
 
 <script>
+    import {instDetail, serviceCo, instupdate} from '@http/inst'
+    import Elupload from '@com/el-upload'
 
     export default {
         name: "teamDetail",
@@ -77,70 +71,38 @@
             return {
                 formData: {},
                 src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-                tableData: {
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        },]
-                },
-                pickerOptions: {
-                    shortcuts: [{
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-
             }
         },
-        components: {},
+        components: {
+            Elupload
+        },
         methods: {
-            handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
+            async init() {
+                let instId = JSON.parse(
+                    sessionStorage.getItem("userInfo")
+                ).instId;
+                let res = await instDetail(instId)
+                this.formData = res.data
             },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
+            banner(data) {
+                this.formData.banner=data
+            },
+            avatar(data) {
+                this.formData.avatar=data
+            },
+            async save() {
+                console.log(this.formData);
+                let res = instupdate(this.formData)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('操作成功', 'success')
+                    this.init()
                 }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
             }
-        }
+        },
+        created() {
+            this.init()
+        },
+
     }
 </script>
 
@@ -148,30 +110,5 @@
     .el-image {
         width: 300px;
         height: 150px;
-    }
-</style>
-<style>
-    .avatar-uploader .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-    .avatar-uploader .el-upload:hover {
-        border-color: #409EFF;
-    }
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 178px;
-        height: 178px;
-        line-height: 178px;
-        text-align: center;
-    }
-    .avatar {
-        width: 178px;
-        height: 178px;
-        display: block;
     }
 </style>

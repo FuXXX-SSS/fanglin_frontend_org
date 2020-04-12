@@ -9,18 +9,23 @@
                         size="small"
                         class="demo-form-inline"
                 >
-                    <el-form-item label="客户姓名">
-                        <el-input v-model="formData.name"></el-input>
+                    <el-form-item label="发布人">
+                        <el-input v-model="formData.name" placeholder="发布人"></el-input>
                     </el-form-item>
-                    <el-form-item label="入库时间">
+                    <el-form-item label="起始时间">
                         <el-date-picker
                                 v-model="formData.value2"
-                                type="datetimerange"
-                                :picker-options="pickerOptions"
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期"
-                                align="right">
+                                type="date"
+                                placeholder="选择日期"
+                        >
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="服务时间">
+                        <el-date-picker
+                                v-model="formData.value2"
+                                type="date"
+                                placeholder="选择日期"
+                        >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="状态">
@@ -40,21 +45,27 @@
             <div class="my-block">
                 <div class="total">
                     <p>成交总额</p>
-                    <p>20000</p>
+                    <p>{{totalAmount}}</p>
                     <p>元</p>
                 </div>
                 <el-table :data="tableData.records" border>
-                    <el-table-column type="index" label="序号" width="50"/>
-                    <el-table-column prop="name" label="订单时间"/>
-                    <el-table-column prop="date" label="项目名称"/>
+                    <el-table-column prop="billDate" label="订单时间"/>
+                    <el-table-column prop="projectName" label="项目名称"/>
                     <el-table-column prop="address" label="发布方"/>
-                    <el-table-column prop="name" label="资助人"/>
-                    <el-table-column prop="name" label="回馈标准"/>
-                    <el-table-column prop="name" label="支付金额"/>
+                    <el-table-column prop="sponsorName" label="资助人"/>
+                    <el-table-column prop="refundStd" label="回馈标准"/>
+                    <el-table-column prop="payAmount" label="支付金额"/>
                     <el-table-column prop="name" label="回馈价值"/>
-                    <el-table-column prop="name" label="状态"/>
+                    <el-table-column prop="billStatus" label="状态">
+                        <template slot-scope="scope">
+                            {{ scope.row.billStatus === 3 ? "未支付" :
+                            scope.row.billStatus === 4 ? '完成':
+                            scope.row.billStatus === 5 ? '已支付':
+                            '未知' }}
+                        </template>
+                    </el-table-column>
                 </el-table>
-                <pagination/>
+                <pagination :total="total" @pageChange="pageChange"/>
             </div>
         </div>
     </div>
@@ -62,33 +73,22 @@
 
 <script>
     import pagination from '@com/el-pagination'
+    import {projectList, totalAmountList} from '@http/order'
 
     export default {
         name: "index",
         data() {
             return {
                 isShow: true,
-                formData: {},
+                formData: {pageNum: 1, pageSize: 10},
+                total: 0,
                 tableData: {
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        }, {
-                            date: '2016-05-03',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1516 弄'
-                        }]
-                }
+                    records: []
+                },
+                pageData: {},
+                totalAmount: '',
+                userInfo: {}
+
             }
         },
         components: {
@@ -97,17 +97,46 @@
         methods: {
             Godetail(data) {
                 console.log(123);
-            }
+            },
+            async init() {
+                let obj = {
+                    pageSize: this.formData.pageSize,
+                    pageNum: this.formData.pageNum,
+                    cert: true,
+                }
+                let res = await projectList(obj)
+                let {total, pageNum, pageSize, list} = res.data
+                this.tableData.records = list
+                this.total = total
+                this.tableData.records.forEach(item => {
+                    item.userStatus === 1 ? item.userStatus = true : item.userStatus = false
+                })
+            },
+            async totalAmountList() {
+                let res = await totalAmountList(0)
+                let {totalAmount} = res.data
+                this.totalAmount = totalAmount
+            },
+            pageChange(item) {
+                this.formData.pageNum = item.page_index;
+                this.formData.pageSize = item.page_limit;
+                this.init()
+            },
         },
+        created() {
+            this.init()
+            this.totalAmountList()
+        }
     }
 </script>
 
 <style scoped lang="less">
-    .total{
-        p{
+    .total {
+        p {
             display: inline-block;
             margin-right: 20px;
-            &:nth-child(2){
+
+            &:nth-child(2) {
                 color: red;
                 font-weight: bold;
                 font-size: 25px;

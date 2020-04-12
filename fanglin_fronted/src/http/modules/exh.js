@@ -17,3 +17,13 @@ export const exhDetail = data =>
         method: "get",
         params: data
     });
+
+
+
+// --新增兑换品信息
+export const exhadd = data =>
+    _axios({
+        url: `/bms/exh/add`,
+        method: "post",
+        data: data
+    });

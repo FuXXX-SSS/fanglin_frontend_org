@@ -25,3 +25,12 @@ export const projectDeal = data =>
         method: "post",
         data: data
     });
+
+
+// 发布项目
+export const projectpublish = data =>
+    _axios({
+        url: `/bms/project/publish`,
+        method: "post",
+        data: data
+    });

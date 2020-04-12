@@ -1,33 +1,36 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">新增文章</div>
+            <div class="sub-title">推荐</div>
             <el-row :gutter="20">
 
-                <el-col :span="12">
+                <el-col :span="24" class="el-right">
                     <el-form
                             :inline="false"
                             :model="formData"
+                            label-width="80px"
                             size="small"
                             class="demo-form-inline"
-                            label-width="100px"
                     >
-                        <el-form-item label="文章标题 : ">
+
+                        <el-form-item label="原标题 : ">
+                            <div>{{this.formData.oriTitle}}</div>
+                        </el-form-item>
+                        <el-form-item label="推荐标题 : ">
                             <el-input v-model="formData.title"></el-input>
                         </el-form-item>
-                        <el-form-item label="发布栏目 : ">
-                            <el-select v-model="formData.accType">
-                                <el-option label="开启" value="1"></el-option>
-                                <el-option label="关闭" value="2"></el-option>
+                        <el-form-item label="推荐栏目 : ">
+                            <el-select filterable v-model="formData.accType">
+                                <el-option
+                                        :label="i.name"
+                                        :value="i.id"
+                                        v-for="i in typeList"
+                                        :key="i.id"
+                                ></el-option>
                             </el-select>
+
                         </el-form-item>
-                        <el-form-item label="作者 : ">
-                            <el-input v-model="formData.author"></el-input>
-                        </el-form-item>
-                        <el-form-item label="关键字 : ">
-                            <el-input v-model="formData.keywords"></el-input>
-                        </el-form-item>
-                        <el-form-item label="缩略图 : ">
+                        <el-form-item label="推荐图片 : ">
                             <el-upload
                                     class="avatar-uploader"
                                     name="image"
@@ -48,64 +51,41 @@
                                 <i class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </el-form-item>
-
-                        <el-form-item label="摘要 : ">
+                        <el-form-item label="推荐链接 : ">
+                            <el-input v-model="formData.url"></el-input>
+                        </el-form-item>
+                        <el-form-item label="推荐摘要 : ">
                             <el-input
                                     type="textarea"
                                     :autosize="{ minRows: 2, maxRows: 4}"
                                     placeholder="请输入内容"
-                                    v-model="formData.abstractInfo">
+                                    v-model="formData.recAbstract">
                             </el-input>
                         </el-form-item>
-
                     </el-form>
 
-
                 </el-col>
-
-
             </el-row>
-            <el-form
-                    :inline="false"
-                    :model="formData"
-                    size="small"
-                    class="demo-form-inline"
-                    label-width="100px"
-            >
-                <el-form-item label="正文 : ">
-                    <Qutil @qutil="qutil"/>
-                </el-form-item>
-            </el-form>
         </div>
-        <div class="my-block">
+        <div class="my-block block_bot">
             <el-row type="flex" class="row-bg" justify="center">
                 <el-col :span="3">
-                    <el-button type="warning" @click="save">保存</el-button>
+                    <el-button type="warning" @click="save()">保存</el-button>
                 </el-col>
                 <el-col :span="3">
-                    <el-button type="primary">推荐</el-button>
-                </el-col>
-                <el-col :span="3">
-                    <el-button type="info" @click="back">取消</el-button>
+                    <el-button type="info" @click="back">删除</el-button>
                 </el-col>
             </el-row>
         </div>
-
     </div>
 </template>
 
 <script>
-    import detailBottom from '@com/detailBottom'
-    import Qutil from '@com/quill-editor'
-    import {publish} from '@http/article'
+    import {recommendUp} from '@http/recommend'
     import baseUrl from '@/http/baseUrl'
+    import {mapState} from 'vuex'
 
     export default {
-        props: {
-            userInfo: {
-                type: Object,
-            }
-        },
         name: "teamDetail",
         data() {
             return {
@@ -115,6 +95,15 @@
                 baseUrl: baseUrl,
                 imageUrl: '',
                 dialogImageUrl: '',
+                typeList: [
+                    {name: '文章', id: 0},
+                    {name: '活动', id: 1},
+                    {name: '项目', id: 2},
+                    {name: '兑换品', id: 3},
+                    {name: '志愿者', id: 4},
+                    {name: '团队', id: 5},
+                    {name: '机构', id: 6},
+                ],
                 headers: {},
                 activeName: "0",
                 form: {
@@ -122,14 +111,12 @@
                 },
             }
         },
-        components: {
-            Qutil
+        computed: {
+            ...mapState({
+                recomObj: state => state.recommend.recomObj,
+            })
         },
         methods: {
-            back() {
-                this.$emit('Godetail')
-                this.$emit('init')
-            },
             handleAvatarSuccess(res, file) {
                 this.imageUrl = URL.createObjectURL(file.raw);
                 this.formData.image = res.data.url
@@ -137,19 +124,30 @@
             beforeAvatarUpload(file) {
                 const isJPG = file.type == "image/jpeg" || file.type == "image/png";
                 const isLt4M = file.size / 1024 / 1024 < 1;
+                console.log(file);
 
                 if (!isJPG) {
-                    this.$message.error("缩略图只能是 JPG/PNG 格式!");
+                    this.$message.error("推荐图片只能是 JPG/PNG 格式!");
                 }
                 if (!isLt4M) {
-                    this.$message.error("缩略图大小不能超过 1MB!");
+                    this.$message.error("推荐图片大小不能超过 1MB!");
                 }
                 return isJPG && isLt4M;
             },
+            back() {
+                this.$router.go(-1)
+            },
+            async save() {
+                let res = await recommendUp(this.formData)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('保存成功', 'success')
+                }
+            },
             onExceed() {
-                this.$tools.$mes("缩略图仅能上传一张图片！", 'warning');
+                this.$tools.$mes("推荐图片仅能上传一张图片！", 'warning');
             },
             handlePictureCardPreview(file) {
+                console.log(file);
                 this.dialogImageUrl = file.response.data.url;
                 this.dialogVisible = true;
             },
@@ -183,16 +181,8 @@
                 this.headers = {
                     Authorization: userInfo.token
                 };
-            },
-            async save() {
-                console.log(this.formData);
-                let res = await publish(this.formData)
-                if (res && res.code === 1000) {
-                    this.$tools.$mes("新增文章成功！", 'success');
-                }
-            },
-            qutil(data) {
-                this.formData.detail = data
+                this.formData.columnId = this.$route.params.columnId;
+                this.formData.oriTitle = this.$route.params.oriTitle;
             }
         },
         created() {
@@ -209,5 +199,57 @@
 
     .el-divider--horizontal {
         margin: 0 0 20px 0;
+    }
+
+    .my-block
+    /deep/ .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .my-block
+    /deep/ .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+
+    .my-block
+    /deep/ .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        text-align: center;
+    }
+
+    .my-block
+    /deep/ .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
+
+</style>
+<style>
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        text-align: center;
+    }
+
+    .avatar {
+        display: block;
     }
 </style>

@@ -13,26 +13,30 @@
                                 class="demo-form-inline"
                         >
                             <el-form-item label="服务编号 : ">
-                                <div>用户名称</div>
+                                <div>{{formData.serviceNo}}</div>
                             </el-form-item>
                             <el-form-item label="活动名称：">
-                                <div>用户名称</div>
+                                <div>{{formData.activityName}}</div>
                             </el-form-item>
                             <el-form-item label="活动价值：">
-                                <div>用户名称</div>
+                                <div>{{formData.value}}</div>
                             </el-form-item>
                             <el-form-item label="状态： ">
-                                <div>用户名称</div>
+                                {{formData.serviceStatus===0?'未完成' :
+                                formData.serviceStatus===1?'已完成':
+                                formData.serviceStatus===2?'已结算':
+                                formData.serviceStatus===3?'争议':
+                                '未知'}}
                             </el-form-item>
                             <br>
                             <el-form-item label="服务方：">
-                                <div>用户名称</div>
+                                <div>{{formData.serviceName}}</div>
                             </el-form-item>
                             <el-form-item label="开始时间：">
-                                <div>用户名称</div>
+                                <div>{{formData.beginTime}}</div>
                             </el-form-item>
                             <el-form-item label="活动时长：">
-                                <div>用户名称</div>
+                                <div>{{formData.duration}}</div>
                             </el-form-item>
 
 
@@ -41,58 +45,61 @@
                     </el-col>
                 </el-row>
             </div>
-            <div class="my-block">
+            <div class="my-block block_bot">
                 <el-row :gutter="20">
-
+                    <!--you-->
                     <el-col :span="12" class="el-right">
                         <div class="time-address">
                             <div class="co-fl">
                                 <p>签到时间 ：</p>
-                                <p>1019-19-19 64-4654-49894</p>
-                            </div>
-                            <div class="co-fl">
-                                <p>签到地点 ：</p>
-                                <p>1019-19-19 64-4654-49894</p>
+                                <p>{{formData.checkInTime}}</p>
                             </div>
                         </div>
+                        <div class="co-fl ">
+                            <p>签到地点：</p>
+                            <p class="address_right">{{formData.checkInAddress}}</p>
+                        </div>
                         <div class="map">
-                            <Map/>
+                            <Map :checkInCo="formData.checkInCo" :userInfo="userInfo"/>
 
                         </div>
                     </el-col>
+                    <!--                    zuo-->
                     <el-col :span="12" class="el-right">
                         <div class="time-address">
                             <div class="co-fl">
                                 <p>签到时间 ：</p>
-                                <p>1019-19-19 64-4654-SSSSS</p>
-                            </div>
-                            <div class="co-fl">
-                                <p>签到地点 ：</p>
-                                <p>1019-19-19 64-4654-49894</p>
+                                <p>{{formData.checkOutTime}}</p>
                             </div>
                         </div>
+                        <div class="co-fl">
+                            <p>签到地点 ：</p>
+                            <p class="address_left">{{formData.checkInAddress}}</p>
+                        </div>
                         <div class="map">
-                            <Map2/>
+                            <Map2 :checkInfo="formData.checkOutCo"/>
                         </div>
                     </el-col>
 
                     <div class="title">
-                        <div class="left">签退备注 :</div>
-                        <div class="right">
-                            <div>用户名称</div>
-                            <div class="imgList">
-                                <el-image :src="src"></el-image>
-                                <el-image :src="src"></el-image>
-                                <el-image :src="src"></el-image>
-                                <el-image :src="src"></el-image>
-                            </div>
+                        <div class="left">签退备注 :
+                            <div style="display: inline-block;color: #8c939d;margin-left: 10px">{{formData.checkOutDesc}}</div>
                         </div>
+                        <!--                        <div class="right">-->
+                        <!--                            <div>用户名称</div>-->
+                        <!--                            <div class="imgList">-->
+                        <!--                                <el-image :src="src"></el-image>-->
+                        <!--                                <el-image :src="src"></el-image>-->
+                        <!--                                <el-image :src="src"></el-image>-->
+                        <!--                                <el-image :src="src"></el-image>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
                     </div>
 
 
                 </el-row>
             </div>
-            <div class="my-block">
+            <div class="my-block ">
                 <el-form
                         :inline="true"
                         :model="formData"
@@ -117,42 +124,44 @@
                 </el-form>
 
             </div>
-            <div class="my-block">
+            <div class="my-block block_bot">
                 <el-row type="flex" class="row-bg" justify="center">
-                    <el-col :span="3">
-                        <el-button type="warning" @click="isShow=false">发起争议</el-button>
+                    <el-col :span="5">
+                        <el-button type="warning" @click="isShow=false">处理争议</el-button>
                     </el-col>
-                    <el-col :span="3">
-                        <el-button type="info" @click="back">返回</el-button>
+                    <el-col :span="3" :offset="1">
+                        <el-button type="info" @click="$emit('Godetail')">返回</el-button>
                     </el-col>
                 </el-row>
             </div>
         </div>
         <div class="deal" v-else>
-            <div class="my-block">
+            <div class="my-block block_bot">
                 <el-form
-                        :inline="true"
+                        :inline="false"
                         :model="formData"
                         size="small"
                         class="demo-form-inline"
-                        label-width="83px"
-                        label-position="right"
                 >
-                    <el-form-item label="服务编号：">
+                    <el-form-item label="申请人 : ">
+
+                        <el-avatar
+                                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                        <span style="display: inline-block" class="name">用户名称</span>
+
+                    </el-form-item>
+                    <el-form-item label="说明：">
                         <div>用户名称</div>
                     </el-form-item>
-                    <el-form-item label="活动名称：">
-                        <div>用户名称</div>
+                    <el-form-item label="凭证：">
+                        <div class="imgList">
+                            <el-image :src="src"></el-image>
+                            <el-image :src="src"></el-image>
+                            <el-image :src="src"></el-image>
+                            <el-image :src="src"></el-image>
+                        </div>
                     </el-form-item>
-                    <br>
-                    <el-form-item label="服务方：">
-                        <div>用户名称</div>
-                    </el-form-item>
-                    <el-form-item label="开始时间：">
-                        <div>用户名称</div>
-                    </el-form-item>
-                    <br>
-                    <el-form-item label="争议诉求： ">
+                    <el-form-item label="处理结果： ">
                         <div style="display: flex">
                             <el-input
                                     type="textarea"
@@ -162,27 +171,17 @@
                             >
                             </el-input>
                         </div>
-                    </el-form-item>
-                    <br>
-                    <el-form-item label="上传证明文件： ">
-                        <el-upload
-                                class="avatar-uploader"
-                                action="https://jsonplaceholder.typicode.com/posts/"
-                                :show-file-list="false"
-                                :on-success="handleAvatarSuccess"
-                                :before-upload="beforeAvatarUpload">
-                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                        </el-upload>
+
+
                     </el-form-item>
                 </el-form>
             </div>
-            <div class="my-block">
+            <div class="my-block block_bot">
                 <el-row type="flex" class="row-bg" justify="center">
-                    <el-col :span="3">
-                        <el-button type="danger" @click="isShow=true">确定</el-button>
+                    <el-col :span="5">
+                        <el-button type="warning" @click="isShow=true">提交处理结果</el-button>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="3" :offset="1">
                         <el-button type="info" @click="isShow=true">返回</el-button>
                     </el-col>
                 </el-row>
@@ -195,33 +194,24 @@
 <script>
     import Map from '@com/map-QQ'
     import Map2 from '@com/map-QQ/index2'
+    import {serviceDetail} from '@http/order'
 
     export default {
+        props: {
+            userInfo: {
+                type: Object,
+            }
+        },
         name: "teamDetail",
         data() {
             return {
                 isShow: true,
                 formData: {},
-                imageUrl: '',
                 src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
                 tableData: {
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        },]
+                    records: []
                 },
                 value1: null,
-
             }
         },
         components: {
@@ -229,24 +219,33 @@
             Map2
         },
         methods: {
-            back() {
-                this.$emit('Godetail')
+            async init() {
+                let res = await serviceDetail(this.userInfo.id)
+                this.formData = res.data
+                var checkInAddress = ''
+                var geocoder = new qq.maps.Geocoder({
+                    complete: function (result) {
+                        checkInAddress = result.detail.address
+                        document.getElementsByClassName('address_right')[0].innerHTML = checkInAddress
+                    }
+                });
+                var geocoder2 = new qq.maps.Geocoder({
+                    complete: function (result) {
+                        checkInAddress = result.detail.address
+                        document.getElementsByClassName('address_left')[0].innerHTML = checkInAddress
+                    }
+                });
+                let info = res.data.checkInCo
+                let info2 = res.data.checkOutCo
+                var myLatlng = new qq.maps.LatLng(info.split(",")[0], info.split(",")[1]);
+                var myLatlng2 = new qq.maps.LatLng(info2.split(",")[0], info2.split(",")[1]);
+                geocoder.getAddress(myLatlng)
+                geocoder2.getAddress(myLatlng2)
+                this.formData.checkInAddress = checkInAddress
             },
-            handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
-            },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
-            }
+        },
+        created() {
+            this.init()
         }
     }
 </script>
@@ -262,19 +261,16 @@
         align-self: center;
         justify-content: space-between;
 
-        .co-fl {
-            flex: 1;
 
-            p {
-                display: inline-block;
-
-                &:nth-child(2) {
-                    color: #8e9aac;
-                }
+    }
+    .co-fl {
+        p {
+            display: inline-block;
+            &:nth-child(2){
+                color: #8e9aac;
             }
         }
     }
-
     .imgList {
         padding: 18px 10px;
 
@@ -310,32 +306,7 @@
     .el-avatar--circle {
         margin-top: -3px;
     }
-</style>
-<style>
-    .avatar-uploader .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
 
-    .avatar-uploader .el-upload:hover {
-        border-color: #409EFF;
-    }
-
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 178px;
-        height: 178px;
-        line-height: 178px;
-        text-align: center;
-    }
-
-    .avatar {
-        width: 178px;
-        height: 178px;
-        display: block;
+    .address_right, .address_left {
     }
 </style>

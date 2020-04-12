@@ -14,62 +14,73 @@
 
                     >
                         <el-form-item label="物资名称 : ">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.name"></el-input>
 
                         </el-form-item>
                         <el-form-item label="供应单位：">
-                            <el-input v-model="formData.value"></el-input>
+                            <el-input v-model="formData.provider"></el-input>
 
                         </el-form-item>
                         <el-form-item label="状态：">
                             <el-radio-group v-model="formData.resource">
-                                <el-radio label="上架"></el-radio>
-                                <el-radio label="下架"></el-radio>
+                                <el-radio label="1">上架</el-radio>
+                                <el-radio label="0">下架</el-radio>
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item label="入库数量：">
-                            <el-input v-model="formData.value" style="    width: 25%;
+                            <el-input v-model="formData.totalStock" style="    width: 25%;
     float: left;"></el-input>
-                            <el-input v-model="formData.value" style="    width: 25%;
+                            <el-input v-model="formData.unit" style="    width: 25%;
     float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
                         <el-form-item label="兑换标准：">
-                            <el-input v-model="formData.value" style="    width: 25%;
-    float: left;"></el-input><span style="margin-left: 14px;">芳邻点/单位</span>
+                            <el-input v-model="formData.exhAmount" style="    width: 25%;
+    float: left;"></el-input>
+                            <span style="margin-left: 14px;">芳邻点/单位</span>
                         </el-form-item>
                         <el-form-item label="购买价格：">
-                            <el-input v-model="formData.value" style="    width: 25%;
+                            <el-input v-model="formData.buyAmount" style="    width: 25%;
     float: left;"></el-input>
                             <span style="margin-left: 14px;">元/单位</span>
                         </el-form-item>
                         <el-form-item label="购买回馈：">
-                            <el-input v-model="formData.value" style="    width: 25%;
+                            <el-input v-model="formData.refundAmount" style="    width: 25%;
     float: left;"></el-input>
                             <span style="margin-left: 14px;">芳邻点/单位</span>
                         </el-form-item>
-                        <el-form-item label="所属项目：">
+                        <el-form-item label="摘要：">
                             <el-input
                                     type="textarea"
                                     :autosize="{ minRows: 2, maxRows: 4}"
                                     placeholder="请输入内容"
-                                    v-model="formData.textarea2">
+                                    v-model="formData.description">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
-                            <el-image :src="src"></el-image>
+                            <Elupload @load="load" :limit="limit"/>
                         </el-form-item>
                     </el-form>
 
                 </el-col>
             </el-row>
-            <Quill/>
+            <el-form
+                    :inline="false"
+                    :model="formData"
+                    size="small"
+                    class="demo-form-inline"
+                    label-width="100px"
+            >
+                <el-form-item label="物品说明 : ">
+                    <Quill @qutil="qutil" :description="formData.introduction"/>
+                </el-form-item>
+            </el-form>
 
         </div>
         <div class="my-block">
             <el-row type="flex" class="row-bg" justify="center">
 
                 <el-col :span="3">
-                    <el-button type="warning">保存</el-button>
+                    <el-button type="warning" @click="save">保存</el-button>
                 </el-col>
                 <el-col :span="3">
                     <el-button type="info" @click="back">取消</el-button>
@@ -81,69 +92,43 @@
 </template>
 
 <script>
-    import detailBottom from '@com/detailBottom'
     import Quill from '@com/quill-editor'
+    import Elupload from '@com/el-upload'
+    import {exhadd} from '@http/exh'
 
     export default {
         name: "teamDetail",
         data() {
             return {
-                formData: {},
-                src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-                tableData: {
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        },]
-                },
-                pickerOptions: {
-                    shortcuts: [{
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                },
-
+                formData: {imageList: [], introduction: ''},
+                limit: 3
             }
         },
         components: {
-            Quill
+            Quill,
+            Elupload
         },
         methods: {
             back() {
                 this.$store.dispatch('mecha_asset/setProject', 1)
             },
+            load(data) {
+                this.formData.imageList.push(data)
+                console.log(this.formData.imageList);
+            },
+            qutil(data) {
+                this.formData.introduction = data
+            },
+            async save() {
+                let res = await exhadd(this.formData)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('操作成功', 'success')
+                    this.back()
+                }
+            }
         },
+        created() {
+        }
     }
 </script>
 

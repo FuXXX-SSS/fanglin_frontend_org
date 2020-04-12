@@ -18,12 +18,8 @@
                     <el-form-item label="入库时间">
                         <el-date-picker
                                 v-model="formData.value2"
-                                type="datetimerange"
-                                :picker-options="pickerOptions"
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期"
-                                align="right">
+                                type="date"
+                        >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="状态">
@@ -42,15 +38,22 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
-                    <el-table-column type="index" label="序号" width="50"/>
-                    <el-table-column prop="name" label="入库时间"/>
-                    <el-table-column prop="date" label="物品名称"/>
-                    <el-table-column prop="name" label="缩略图"/>
-                    <el-table-column prop="name" label="兑换标准"/>
-                    <el-table-column prop="name" label="入库数量"/>
-                    <el-table-column prop="name" label="当前库存"/>
-                    <el-table-column prop="name" label="供应单位"/>
-                    <el-table-column prop="name" label="状态"/>
+                    <el-table-column prop="publishTime" label="入库时间"/>
+                    <el-table-column prop="name" label="物品名称"/>
+                    <el-table-column prop="name" label="缩略图">
+                        <template slot-scope="scope">
+                            <img :src="scope.row.image" min-width="70" height="70"/>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="exhAmount" label="兑换标准"/>
+                    <el-table-column prop="totalStock" label="入库数量"/>
+                    <el-table-column prop="stock" label="当前库存"/>
+                    <el-table-column prop="provider" label="供应单位"/>
+                    <el-table-column prop="name" label="状态">
+                        <template slot-scope="scope">
+                            {{ scope.row.goodsStatus === 1 ? "上架" : scope.row.goodsStatus === 0 ? '下架':'' }}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <el-button
@@ -63,11 +66,12 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <pagination/>
+                <pagination :total="total" @pageChange="pageChange"/>
+
             </div>
         </div>
         <div class="detail" v-if="isShow===2">
-            <Deatail/>
+            <Deatail :userInfo="userInfo"/>
         </div>
         <div class="detail" v-if="isShow===3">
             <Add/>
@@ -80,32 +84,19 @@
     import Deatail from './teamDetail'
     import {mapState} from "vuex";
     import Add from './add'
+    import {exhList} from '@http/exh'
 
     export default {
         name: "index",
         data() {
             return {
-                formData: {},
+                formData: {pageNum: 1, pageSize: 10},
+                total: 0,
+                pageData: {},
+                userInfo: {},
                 tableData: {
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        }, {
-                            date: '2016-05-03',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1516 弄'
-                        }]
-                }
+                    records: []
+                },
             }
         },
         components: {
@@ -119,12 +110,33 @@
         },
         methods: {
             Godetail(data) {
-                console.log(123);
                 this.$store.dispatch('mecha_asset/setProject', 2)
+                this.userInfo = data
+
             },
             add() {
                 this.$store.dispatch('mecha_asset/setProject', 3)
             },
+            async init() {
+                let obj = {
+                    pageSize: this.formData.pageSize,
+                    pageNum: this.formData.pageNum,
+                    projectStatus: '',
+                    managerUserId: '',
+                }
+                let res = await exhList(obj)
+                let {total, pageNum, pageSize, list} = res.data
+                this.tableData.records = list
+                this.total = total
+            },
+            pageChange(item) {
+                this.formData.pageNum = item.page_index;
+                this.formData.pageSize = item.page_limit;
+                this.init()
+            },
+        },
+        created() {
+            this.init()
         }
     }
 </script>

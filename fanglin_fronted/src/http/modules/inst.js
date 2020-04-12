@@ -49,6 +49,15 @@ export const instDeal = data =>
         data: data
     });
 
+
+// 修改机构信息
+export const instupdate = data =>
+    _axios({
+        url: `/bms/inst/update`,
+        method: "post",
+        data: data
+    });
+
 // 获取机构列表(下拉框，多选框使用)
 export const basicList = data =>
     _axios({

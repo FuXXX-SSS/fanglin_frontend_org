@@ -53,6 +53,12 @@ const RouteData =[
                 checked: false,
                 meta: {title: "推荐管理", icon: "icon-basic", show: true},
             },
+            {
+                path: "/index/recommend/:columnId/:oriTitle",
+                name: "recommend",
+                meta: {title: "新建推荐", icon: "icon-basic", show: true},
+                component: () => import ("@com/recommend/index")
+            },
         ]
     },
     {
@@ -229,6 +235,12 @@ const RouteData2 =[
                 routeName: "referral",
                 checked: false,
                 meta: {title: "推荐管理", icon: "icon-basic", show: true},
+            },
+            {
+                path: "/index/recommend/:columnId/:oriTitle",
+                name: "recommend",
+                meta: {title: "新建推荐", icon: "icon-basic", show: true},
+                component: () => import ("@com/recommend/index")
             },
         ]
     },

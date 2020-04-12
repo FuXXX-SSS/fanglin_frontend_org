@@ -104,8 +104,12 @@
                         type="selection"
                         width="55">
                 </el-table-column>
-                <el-table-column prop="name" label="申请人"/>
-                <el-table-column prop="date" label="性别"/>
+                <el-table-column prop="userName" label="申请人"/>
+                <el-table-column prop="userGender" label="性别">
+                    <template slot-scope="scope">
+                        {{ scope.row.userGender===1 ? "男" :'女' }}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="date" label="年龄"/>
                 <el-table-column prop="date" label="服务时长"/>
                 <el-table-column prop="date" label="服务次数"/>
@@ -114,7 +118,6 @@
                 <el-table-column prop="date" label="专长"/>
                 <el-table-column prop="date" label="申请时间"/>
             </el-table>
-            <pagination/>
 
         </div>
         <div class="my-block">
@@ -137,45 +140,47 @@
 <script>
     import detailBottom from '@com/detailBottom'
     import pagination from '@com/el-pagination'
+    import {activityDetail, select} from '@http/activity'
 
     export default {
+        props: {
+            userInfo: {
+                type: Object,
+            }
+        },
         name: "teamDetail",
         data() {
             return {
                 formData: {},
                 multipleSelection: [],
-                src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-                tableData: {
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        },]
-                }
+                tableData: {records: []},
+                pageData: {},
+                total: 0,
 
             }
         },
-        components: {
-            pagination,
-
-        },
+        components: {},
         methods: {
             back() {
                 this.$store.dispatch('mecha_asset/setAsset', 1)
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
-            }
+            },
+            async activityDetail() {
+                let res = await activityDetail(this.userInfo.activityId)
+                this.formData = res.data
+            },
+            async select() {
+                let res = await select()
+                this.tableData.records = res.data
+            },
+
         },
+        created() {
+            this.activityDetail()
+            this.select()
+        }
     }
 </script>
 

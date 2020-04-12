@@ -31,16 +31,22 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
-                    <el-table-column prop="name" label="发布时间"/>
-                    <el-table-column prop="date" label="活动名称"/>
-                    <el-table-column prop="address" label="联系电话"/>
-                    <el-table-column prop="name" label="任务地点"/>
-                    <el-table-column prop="name" label="开始时间"/>
-                    <el-table-column prop="name" label="时长"/>
-                    <el-table-column prop="name" label="价值/人"/>
-                    <el-table-column prop="name" label="人员"/>
-                    <el-table-column prop="name" label="报名"/>
-                    <el-table-column prop="name" label="状态"/>
+                    <el-table-column type="index" label="序号" width="50"/>
+                    <el-table-column prop="publishTime" label="发布时间"/>
+                    <el-table-column prop="name" label="活动名称"/>
+                    <el-table-column prop="instName" label="发布者"/>
+                    <el-table-column prop="phone" label="联系电话"/>
+                    <el-table-column prop="position" label="任务地点"/>
+                    <el-table-column prop="beginTime" label="开始时间"/>
+                    <el-table-column prop="duration" label="时长"/>
+                    <el-table-column prop="value" label="价值/人"/>
+                    <el-table-column prop="userName" label="人员"/>
+                    <el-table-column prop="userNum" label="报名"/>
+                    <el-table-column prop="activityStatus" label="状态">
+                        <template slot-scope="scope">
+                            {{ scope.row.activityStatus===1 ? "开启" :'关闭 ' }}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <el-button
@@ -53,11 +59,11 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <pagination/>
+                <pagination :total="total" @pageChange="pageChange"/>
             </div>
         </div>
         <div class="detail" v-if="isShow===2">
-            <Deatail/>
+            <Deatail  :userInfo="userInfo"/>
         </div>
         <div class="detail" v-if="isShow===3">
             <Add/>
@@ -70,32 +76,17 @@
     import Deatail from './teamDetail'
     import Add from './add'
     import {mapState} from 'vuex'
+    import {activityList} from '@http/activity'
 
     export default {
         name: "index",
         data() {
             return {
-                formData: {},
-                tableData: {
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        }, {
-                            date: '2016-05-03',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1516 弄'
-                        }]
-                }
+                formData: {pageNum: 1, pageSize: 10},
+                tableData: {records: []},
+                pageData: {},
+                total: 0,
+                userInfo: {}
             }
         },
         computed: {
@@ -110,14 +101,33 @@
         },
         methods: {
             Godetail(data) {
-                console.log(123);
+                this.userInfo=data
                 this.$store.dispatch('mecha_asset/setAsset', 2)
             },
             add() {
                 this.$store.dispatch('mecha_asset/setAsset', 3)
             },
+            async activityList() {
+                let obj = {
+                    pageSize: this.formData.pageSize,
+                    pageNum: this.formData.pageNum,
+                    activityStatus: '',
+                    keyword: '',
+                }
+                let res = await activityList(obj)
+                let {total, pageNum, pageSize, list} = res.data
+                this.tableData.records = list
+                this.total = total
+            },
+            pageChange(item) {
+                this.formData.pageNum = item.page_index;
+                this.formData.pageSize = item.page_limit;
+                this.init()
+            },
         },
-
+    created() {
+        this.activityList()
+    }
     }
 </script>
 

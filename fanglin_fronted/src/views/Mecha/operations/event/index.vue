@@ -31,36 +31,40 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
-                    <el-table-column type="index" label="序号" width="50" />
-                    <el-table-column prop="name" label="发布时间" />
-                    <el-table-column prop="date" label="项目名称" />
-                    <el-table-column prop="name" label="联系电话" />
-                    <el-table-column prop="name" label="募资目标" />
-                    <el-table-column prop="name" label="回馈方式" />
-                    <el-table-column prop="name" label="募集金额" />
-                    <el-table-column prop="name" label="活动次数" />
-                    <el-table-column prop="name" label="活动人数" />
-                    <el-table-column prop="name" label="服务时长" />
-                    <el-table-column prop="name" label="状态" />
+                    <el-table-column prop="publishTime" label="发布时间"/>
+                    <el-table-column prop="name" label="活动名称"/>
+                    <el-table-column prop="phone" label="联系电话"/>
+                    <el-table-column prop="amount" label="募资目标"/>
+                    <el-table-column prop="refundStd" label="回馈标准"/>
+                    <el-table-column prop="donatedAmount" label="募集金额"/>
+                    <el-table-column prop="activityCount" label="活动次数"/>
+                    <el-table-column prop="activityUserCount" label="活动人数"/>
+                    <el-table-column prop="serviceDuration" label="服务时长"/>
+                    <el-table-column prop="projectStatus" label="状态">
+                        <template slot-scope="scope">
+                            {{ scope.row.projectStatus===1 ? "开启" :'关闭 ' }}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <el-button
                                     @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >项目详情</el-button
+                            >详情
+                            </el-button
                             >
                         </template>
                     </el-table-column>
                 </el-table>
-                <pagination />
+                <pagination :total="total" @pageChange="pageChange"/>
             </div>
         </div>
         <div class="detail" v-if="isShow===2">
-            <Deatail />
+            <Deatail @Godetail="Godetail" :userInfo="userInfo"/>
         </div>
         <div class="detail" v-if="isShow===3">
-            <Add />
+            <Add/>
         </div>
     </div>
 </template>
@@ -69,53 +73,59 @@
     import pagination from '@com/el-pagination'
     import Deatail from './teamDetail'
     import Add from './add'
+    import {projectList} from '@http/project'
 
     import {mapState} from "vuex";
+
     export default {
         name: "index",
         data() {
             return {
-                formData: {},
-                tableData:{
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        }, {
-                            date: '2016-05-03',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1516 弄'
-                        }]
-                }
+                formData: {pageNum: 1, pageSize: 10},
+                tableData: {records: []},
+                pageData: {},
+                total: 0,
+                userInfo: {}
             }
         },
-        components:{
+        components: {
             pagination,
             Add,
             Deatail
         },
-        computed:{
+        computed: {
             ...mapState({
-                isShow:state => state.mecha_asset.EventisShow
+                isShow: state => state.mecha_asset.EventisShow
             })
         },
-        methods:{
-            Godetail(data){
+        methods: {
+            Godetail(data) {
                 console.log(123);
-                this.$store.dispatch('mecha_asset/setEvent',2)
+                this.$store.dispatch('mecha_asset/setEvent', 2)
             },
-            add(){
-                this.$store.dispatch('mecha_asset/setEvent',3)
+            add() {
+                this.$store.dispatch('mecha_asset/setEvent', 3)
             },
+            async activityList() {
+                let obj = {
+                    pageSize: this.formData.pageSize,
+                    pageNum: this.formData.pageNum,
+                    activityStatus: '',
+                    keyword: '',
+                }
+                let res = await projectList(obj)
+                let {total, pageNum, pageSize, list} = res.data
+                this.tableData.records = list
+                this.total = total
+            },
+            pageChange(item) {
+                this.formData.pageNum = item.page_index;
+                this.formData.pageSize = item.page_limit;
+                this.init()
+            },
+        },
+        created() {
+            this.activityList()
         }
     }
 </script>

@@ -42,12 +42,12 @@
                                     size="small"
                             >推荐
                             </el-button>
-                            <el-button
-                                    type="text"
-                                    size="small"
-                                    @click="Godetail()"
-                            >编辑
-                            </el-button>
+<!--                            <el-button-->
+<!--                                    type="text"-->
+<!--                                    size="small"-->
+<!--                                    @click="Godetail()"-->
+<!--                            >编辑-->
+<!--                            </el-button>-->
 
                         </template>
                     </el-table-column>
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="detail" v-else>
-            <Deatail @Godetail="Godetail"/>
+            <Deatail @Godetail="Godetail" :userInfo="userInfo" @init="init"/>
         </div>
     </div>
 </template>
@@ -115,10 +115,13 @@
                 }
             },
             async StatusInfo(data) {
-                console.log(data.articleStatus);
-
-                // let obj = `${data}` + '/' + `${this.userInfo.articleId}`
-                // let res = deal(obj)
+                let obj = `${data.articleStatus}` + '/' + `${data.articleId}`
+                let res = await deal(obj)
+                console.log(res);
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('操作成功', 'success')
+                    this.init()
+                }
             },
         },
         created() {
