@@ -8,35 +8,38 @@
                         :model="formData"
                         size="small"
                         class="demo-form-inline"
-                >
-                    <el-form-item label="资金名称">
-                        <el-input v-model="formData.name" placeholder="资金名称"></el-input>
-                    </el-form-item>
+                >  <el-form-item label="资金名称">
+                    <el-input v-model="formData.goodsName" placeholder="资金名称"></el-input>
+                </el-form-item>
                     <el-form-item label="兑换人">
-                        <el-input v-model="formData.name" placeholder="兑换人"></el-input>
+                        <el-input v-model="formData.exhName" placeholder="兑换人"></el-input>
                     </el-form-item>
                     <el-form-item label="电话">
-                        <el-input v-model="formData.name" placeholder="电话"></el-input>
+                        <el-input v-model="formData.phone" placeholder="电话"></el-input>
                     </el-form-item>
                     <el-form-item label="起始时间">
                         <el-date-picker
-                                v-model="formData.value2"
+                                v-model="formData.queryBeginTime"
                                 type="date"
+                                value-format="timestamp"
                                 placeholder="选择日期"
                         >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="状态">
-                        <el-select v-model="formData.accType">
-                            <el-option label="开启" value="1"></el-option>
-                            <el-option label="关闭" value="2"></el-option>
+                        <el-select v-model="formData.billStatus">
+                            <el-option label="待审核" value="0"></el-option>
+                            <el-option label="已同意" value="1"></el-option>
+                            <el-option label="已拒绝" value="2"></el-option>
+                            <el-option label="未支付" value="3"></el-option>
+                            <el-option label="已支付" value="4"></el-option>
+                            <el-option label="完成" value="5"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item class="options">
-                        <el-button @click="formData = {}
-            " size="medium">重 置
+                        <el-button @click="formData = {pageNum: 1, pageSize: 10},init()" size="medium">重 置
                         </el-button>
-                        <el-button type="primary" size="medium">查 询</el-button>
+                        <el-button type="primary" size="medium" @click="init()">查 询</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -79,55 +82,55 @@
                 <pagination :total="total" @pageChange="pageChange"/>
             </div>
         </div>
-        <el-dialog
-                title="兑换实物"
-                :visible.sync="dialogVisible"
-                width="35%"
-        >
-            <el-form :inline="true"
-                     :model="formData"
-                     size="small"
-                     class="demo-form-inline"
-                     label-position="left"
-            >
-                <el-form-item label="商品名称：" :label-width="formLabelWidth">
-                    <div>商品商品商品商</div>
-                </el-form-item>
-                <el-form-item label="入库数量：" :label-width="formLabelWidth">
-                    <div>商品商品商</div>
-                </el-form-item>
-                <el-form-item label="当前库存：" :label-width="formLabelWidth">
-                    <div>商品商品品</div>
-                </el-form-item>
-                <br>
-                <el-form-item label="兑换人：" :label-width="formLabelWidth">
-                    <div>商品商品商商品</div>
-                </el-form-item>
-                <el-form-item label="收货人：" :label-width="formLabelWidth">
-                    <div>商品商品商品</div>
-                </el-form-item>
-                <el-form-item label="联系电话：" :label-width="formLabelWidth">
-                    <div>商品商品商品</div>
-                </el-form-item>
-                <br>
+<!--        <el-dialog-->
+<!--                title="兑换实物"-->
+<!--                :visible.sync="dialogVisible"-->
+<!--                width="35%"-->
+<!--        >-->
+<!--            <el-form :inline="true"-->
+<!--                     :model="formData"-->
+<!--                     size="small"-->
+<!--                     class="demo-form-inline"-->
+<!--                     label-position="left"-->
+<!--            >-->
+<!--                <el-form-item label="商品名称：" :label-width="formLabelWidth">-->
+<!--                    <div>商品商品商品商</div>-->
+<!--                </el-form-item>-->
+<!--                <el-form-item label="入库数量：" :label-width="formLabelWidth">-->
+<!--                    <div>商品商品商</div>-->
+<!--                </el-form-item>-->
+<!--                <el-form-item label="当前库存：" :label-width="formLabelWidth">-->
+<!--                    <div>商品商品品</div>-->
+<!--                </el-form-item>-->
+<!--                <br>-->
+<!--                <el-form-item label="兑换人：" :label-width="formLabelWidth">-->
+<!--                    <div>商品商品商商品</div>-->
+<!--                </el-form-item>-->
+<!--                <el-form-item label="收货人：" :label-width="formLabelWidth">-->
+<!--                    <div>商品商品商品</div>-->
+<!--                </el-form-item>-->
+<!--                <el-form-item label="联系电话：" :label-width="formLabelWidth">-->
+<!--                    <div>商品商品商品</div>-->
+<!--                </el-form-item>-->
+<!--                <br>-->
 
-                <el-form-item label="支付：" :label-width="formLabelWidth">
-                    <div>商品商品商品</div>
-                </el-form-item>
-                <el-form-item label="兑换数量：" :label-width="formLabelWidth">
-                    <div>商品商品商品</div>
-                </el-form-item>
-                <br>
-                <el-form-item label="收获地址：" :label-width="formLabelWidth">
-                    <div>商品商品</div>
-                </el-form-item>
-                <br>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible=false" type="info">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible=false">发 货</el-button>
-            </span>
-        </el-dialog>
+<!--                <el-form-item label="支付：" :label-width="formLabelWidth">-->
+<!--                    <div>商品商品商品</div>-->
+<!--                </el-form-item>-->
+<!--                <el-form-item label="兑换数量：" :label-width="formLabelWidth">-->
+<!--                    <div>商品商品商品</div>-->
+<!--                </el-form-item>-->
+<!--                <br>-->
+<!--                <el-form-item label="收获地址：" :label-width="formLabelWidth">-->
+<!--                    <div>商品商品</div>-->
+<!--                </el-form-item>-->
+<!--                <br>-->
+<!--            </el-form>-->
+<!--            <span slot="footer" class="dialog-footer">-->
+<!--                <el-button @click="dialogVisible=false" type="info">取 消</el-button>-->
+<!--                <el-button type="primary" @click="dialogVisible=false">发 货</el-button>-->
+<!--            </span>-->
+<!--        </el-dialog>-->
 
     </div>
 </template>
@@ -159,19 +162,15 @@
                 this.dialogVisible = true
             },
             async init() {
-                let obj = {
-                    pageSize: this.formData.pageSize,
-                    pageNum: this.formData.pageNum,
-                    cert: true,
-                }
-                let res = await cashList(obj)
+                let res = await cashList(this.formData)
                 let {total, pageNum, pageSize, list} = res.data
                 this.tableData.records = list
                 this.total = total
-                this.tableData.records.forEach(item => {
-                    item.userStatus === 1 ? item.userStatus = true : item.userStatus = false
-                })
-                console.log(this.tableData.records);
+                if (res.data.list !== null) {
+                    this.tableData.records.forEach(item => {
+                        item.userStatus === 1 ? item.userStatus = true : item.userStatus = false
+                    })
+                }
             },
             async totalAmountList() {
                 let res = await totalAmountList(1)

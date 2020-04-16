@@ -34,3 +34,12 @@ export const projectpublish = data =>
         method: "post",
         data: data
     });
+
+
+// 获取项目名称和id列表(不分页)
+export const projectname = data =>
+    _axios({
+        url: `/bms/project/name/list`,
+        method: "get",
+        params: data
+    });

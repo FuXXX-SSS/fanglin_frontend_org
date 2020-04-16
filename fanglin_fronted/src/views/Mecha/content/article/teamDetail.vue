@@ -189,6 +189,7 @@
                 let res = await publish(this.formData)
                 if (res && res.code === 1000) {
                     this.$tools.$mes("新增文章成功！", 'success');
+                    this.back()
                 }
             },
             qutil(data) {

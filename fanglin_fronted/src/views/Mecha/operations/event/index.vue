@@ -12,20 +12,22 @@
                         size="small"
                         class="demo-form-inline"
                 >
-                    <el-form-item label="关键字查询">
-                        <el-input v-model="formData.name" placeholder="请输入关键字查询"></el-input>
+                    <el-form-item label="项目名称">
+                        <el-input v-model="formData.keyword" placeholder="项目名称"></el-input>
                     </el-form-item>
-                    <el-form-item label="状态">
-                        <el-select v-model="formData.accType">
+                    <el-form-item label="电话">
+                        <el-input v-model="formData.phone" placeholder="电话"></el-input>
+                    </el-form-item>
+                    <el-form-item label="项目状态">
+                        <el-select v-model="formData.projectStatus">
                             <el-option label="开启" value="1"></el-option>
-                            <el-option label="关闭" value="2"></el-option>
+                            <el-option label="关闭" value="0"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item class="options">
-                        <el-button @click="formData = {}
-            " size="medium">重 置
+                        <el-button @click="formData = {pageNum: 1, pageSize: 10},init()" size="medium">重 置
                         </el-button>
-                        <el-button type="primary" size="medium">查 询</el-button>
+                        <el-button type="primary" size="medium" @click="init()">查 询</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -106,14 +108,9 @@
             add() {
                 this.$store.dispatch('mecha_asset/setEvent', 3)
             },
-            async activityList() {
-                let obj = {
-                    pageSize: this.formData.pageSize,
-                    pageNum: this.formData.pageNum,
-                    activityStatus: '',
-                    keyword: '',
-                }
-                let res = await projectList(obj)
+            async init() {
+
+                let res = await projectList(this.formData)
                 let {total, pageNum, pageSize, list} = res.data
                 this.tableData.records = list
                 this.total = total
@@ -125,7 +122,7 @@
             },
         },
         created() {
-            this.activityList()
+            this.init()
         }
     }
 </script>

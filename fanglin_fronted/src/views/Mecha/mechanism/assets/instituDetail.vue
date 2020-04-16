@@ -12,23 +12,33 @@
                         class="demo-form-inline"
                 >
                     <el-form-item label="关键字查询">
-                        <el-input v-model="formData.name" placeholder="请输入关键字查询"></el-input>
+                        <el-input v-model="formData.keyword" placeholder="请输入关键字查询"></el-input>
                     </el-form-item>
                     <el-form-item label="时间查询">
                         <el-date-picker
-                                v-model="formData.value2"
-                                type="date"
-                                placeholder="请输入时间查询"
+                                v-model="value1"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                format="yyyy 年 MM 月 dd 日"
+                                value-format="timestamp"
                         >
                         </el-date-picker>
                     </el-form-item>
-
+                    <el-form-item label="交易类型">
+                        <el-select v-model="formData.billType" placeholder="请选择交易类型">
+                            <el-option label="直接转账" value=1></el-option>
+                            <el-option label="项目" value=0></el-option>
+                            <el-option label="活动" value=1></el-option>
+                            <el-option label="兑换实物" value=2></el-option>
+                            <el-option label="兑换现金" value=3></el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item class="options">
-                        <el-button @click="formData = {}
-            " size="medium">重 置
+                        <el-button @click="formData = {pageNum: 1, pageSize: 10},init()" size="medium">重 置
                         </el-button>
-                        <el-button type="primary" size="medium">查 询</el-button>
-                        <el-button type="info" size="medium" @click="back">返回</el-button>
+                        <el-button type="primary" size="medium" @click="init()">查 询</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -69,6 +79,8 @@
                 pageData: {},
                 userInfo: {},
                 total: 0,
+                value1: []
+
             }
         },
         components: {
@@ -79,12 +91,14 @@
                 this.$emit('Godetail')
             },
             async init() {
-                let obj = {
-                    pageSize: this.formData.pageSize,
-                    pageNum: this.formData.pageNum,
-                    keyword: this.formData.keyword,
+                if (this.value1.length === 0 ) {
+                    this.formData.beginTime = ''
+                    this.formData.endTime = ''
+                } else {
+                    this.formData.beginTime = this.value1[0]
+                    this.formData.endTime = this.value1[1] + 86400000
                 }
-                let res = await columnList(obj)
+                let res = await columnList(this.formData)
                 let {total, list} = res.data
                 this.tableData.records = list
                 this.total = total

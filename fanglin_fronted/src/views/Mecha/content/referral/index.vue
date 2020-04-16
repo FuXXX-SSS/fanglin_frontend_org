@@ -14,17 +14,30 @@
                     <el-form-item label="推荐机构">
                         <el-input v-model="formData.name" placeholder="推荐机构"></el-input>
                     </el-form-item>
-                    <el-form-item label="推荐类型">
-                        <el-input v-model="formData.name" placeholder="推荐类型"></el-input>
-                    </el-form-item>
                     <el-form-item label="推荐栏目">
-                        <el-input v-model="formData.name" placeholder="推荐栏目"></el-input>
+                        <el-select filterable v-model="formData.columnId">
+                            <el-option
+                                    :label="i.name"
+                                    :value="i.id"
+                                    v-for="i in column"
+                                    :key="i.id"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="推荐类型">
+                        <el-select filterable v-model="formData.type">
+                            <el-option
+                                    :label="i.name"
+                                    :value="i.id"
+                                    v-for="i in typelist"
+                                    :key="i.id"
+                            ></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item class="options">
-                        <el-button @click="formData = {}
-            " size="medium">重 置
+                        <el-button @click="formData = {pageNum: 1, pageSize: 10},init()" size="medium">重 置
                         </el-button>
-                        <el-button type="primary" size="medium">查 询</el-button>
+                        <el-button type="primary" size="medium" @click="init()">查 询</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -75,7 +88,8 @@
     import pagination from '@com/el-pagination'
     import Deatail from './teamDetail'
     import {recommendList} from '@http/recommend'
-
+    import {typeList} from '@http/column'
+    import {Stidlist} from '@http/inst'
     export default {
         name: "index",
         data() {
@@ -87,7 +101,8 @@
                     records: []
                 },
                 total: 0,
-
+                typelist: [],
+                column: [],
                 pageData: {},
             }
         },
@@ -106,11 +121,8 @@
                 });
             },
             async init() {
-                let obj = {
-                    pageSize: this.formData.pageSize,
-                    pageNum: this.formData.pageNum,
-                }
-                let res = await recommendList(obj)
+
+                let res = await recommendList(this.formData)
                 let {total, pageNum, pageSize, list} = res.data
                 this.tableData.records = list
                 this.total = total
@@ -120,9 +132,17 @@
                 this.formData.pageSize = item.page_limit;
                 this.init()
             },
+            async listCheck() {
+                let res2 = await typeList()
+                let res3 = await Stidlist()
+                this.typelist = res2.data
+                this.column = res3.data
+            },
         },
         created() {
             this.init()
+            this.listCheck()
+
         }
     }
 </script>

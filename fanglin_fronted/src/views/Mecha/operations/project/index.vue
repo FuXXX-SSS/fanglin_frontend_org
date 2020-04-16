@@ -12,27 +12,30 @@
                         size="small"
                         class="demo-form-inline"
                 >
-                    <el-form-item label="关键字查询">
-                        <el-input v-model="formData.name" placeholder="请输入关键字查询"></el-input>
+                    <el-form-item label="商品名称">
+                        <el-input v-model="formData.name" placeholder="商品名称"></el-input>
                     </el-form-item>
-                    <el-form-item label="入库时间">
-                        <el-date-picker
-                                v-model="formData.value2"
-                                type="date"
-                        >
-                        </el-date-picker>
+                    <el-form-item label="发布机构">
+                        <el-input v-model="formData.instName" placeholder="发布机构"></el-input>
                     </el-form-item>
-                    <el-form-item label="状态">
-                        <el-select v-model="formData.accType">
-                            <el-option label="开启" value="1"></el-option>
-                            <el-option label="关闭" value="2"></el-option>
+                    <el-form-item label="上架状态">
+                        <el-select v-model="formData.goodsStatus">
+                            <el-option label="上架" value="1"></el-option>
+                            <el-option label="下架" value="0"></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item label="发布时间">
+                        <el-date-picker
+                                v-model="formData.created"
+                                type="date"
+                                value-format="timestamp"
+                                placeholder="选择日期">
+                        </el-date-picker>
+                    </el-form-item>
                     <el-form-item class="options">
-                        <el-button @click="formData = {}
-            " size="medium">重 置
+                        <el-button  @click="formData = {pageNum: 1, pageSize: 10,type:0},init()" size="medium">重 置
                         </el-button>
-                        <el-button type="primary" size="medium">查 询</el-button>
+                        <el-button type="primary" size="medium" @click="init()">查 询</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -73,7 +76,7 @@
         <div class="detail" v-if="isShow===2">
             <Deatail :userInfo="userInfo"/>
         </div>
-        <div class="detail" v-if="isShow===3">
+        <div class="detail" v-if="isShow===3" @init="init">
             <Add/>
         </div>
     </div>
@@ -118,13 +121,7 @@
                 this.$store.dispatch('mecha_asset/setProject', 3)
             },
             async init() {
-                let obj = {
-                    pageSize: this.formData.pageSize,
-                    pageNum: this.formData.pageNum,
-                    projectStatus: '',
-                    managerUserId: '',
-                }
-                let res = await exhList(obj)
+                let res = await exhList(this.formData)
                 let {total, pageNum, pageSize, list} = res.data
                 this.tableData.records = list
                 this.total = total

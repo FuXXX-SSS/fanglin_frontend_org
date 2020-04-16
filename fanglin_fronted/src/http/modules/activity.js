@@ -34,3 +34,13 @@ export const select= data =>
         method: "post",
         data: data
     });
+
+
+
+// 发布活动
+export const publish= data =>
+    _axios({
+        url: `/bms/activity/publish`,
+        method: "post",
+        data: data
+    });

@@ -10,27 +10,32 @@
                         class="demo-form-inline"
                 >
                     <el-form-item label="服务编号">
-                        <el-input v-model="formData.name" placeholder="服务编号"></el-input>
+                        <el-input v-model="formData.serviceNo" placeholder="服务编号"></el-input>
                     </el-form-item>
                     <el-form-item label="服务时间">
                         <el-date-picker
-                                v-model="formData.value2"
-                                type="date"
-                                placeholder="选择日期"
+                                v-model="value1"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                format="yyyy 年 MM 月 dd 日"
+                                value-format="timestamp"
                         >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="状态">
-                        <el-select v-model="formData.accType">
-                            <el-option label="开启" value="1"></el-option>
-                            <el-option label="关闭" value="2"></el-option>
+                        <el-select v-model="formData.serviceStatus">
+                            <el-option label="未完成" value="0"></el-option>
+                            <el-option label="已完成" value="1"></el-option>
+                            <el-option label="已结算" value="2"></el-option>
+                            <el-option label="争议" value="3"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item class="options">
-                        <el-button @click="formData = {}
-            " size="medium">重 置
+                        <el-button @click="formData = {pageNum: 1, pageSize: 10},value1=[],init()" size="medium">重 置
                         </el-button>
-                        <el-button type="primary" size="medium">查 询</el-button>
+                        <el-button type="primary" size="medium" @click="init(formData)">查 询</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -90,7 +95,8 @@
                     records: []
                 },
                 pageData: {},
-                userInfo: {}
+                userInfo: {},
+                value1: []
             }
         },
         components: {
@@ -103,12 +109,15 @@
                 this.isShow = !this.isShow
             },
             async init() {
-                let obj = {
-                    pageSize: this.formData.pageSize,
-                    pageNum: this.formData.pageNum,
-                    cert: true,
+                if (this.value1.length === 0 ) {
+                    this.formData.queryBeginTime = ''
+                    this.formData.queryEndTime = ''
+                } else {
+                    this.formData.queryBeginTime = this.value1[0]
+                    this.formData.queryEndTime = this.value1[1] + 86400000
                 }
-                let res = await serviceList(obj)
+                let res = await serviceList(this.formData)
+
                 let {total, pageNum, pageSize, list} = res.data
                 this.tableData.records = list
                 this.total = total

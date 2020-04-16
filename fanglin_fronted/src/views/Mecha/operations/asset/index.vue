@@ -12,20 +12,25 @@
                         size="small"
                         class="demo-form-inline"
                 >
-                    <el-form-item label="关键字查询">
-                        <el-input v-model="formData.name" placeholder="请输入关键字查询"></el-input>
+                    <el-form-item label="活动名称 : ">
+                        <el-input v-model="formData.keyword" placeholder="活动名称"></el-input>
                     </el-form-item>
-                    <el-form-item label="状态">
-                        <el-select v-model="formData.accType">
+                    <el-form-item label="发布者 : ">
+                        <el-input v-model="formData.publishName" placeholder="发布者"></el-input>
+                    </el-form-item>
+                    <el-form-item label="电话 : ">
+                        <el-input v-model="formData.phone" placeholder="电话"></el-input>
+                    </el-form-item>
+                    <el-form-item label="活动状态">
+                        <el-select v-model="formData.activityStatus">
                             <el-option label="开启" value="1"></el-option>
-                            <el-option label="关闭" value="2"></el-option>
+                            <el-option label="关闭" value="0"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item class="options">
-                        <el-button @click="formData = {}
-            " size="medium">重 置
+                        <el-button @click="formData = {pageNum: 1, pageSize: 10},init()" size="medium">重 置
                         </el-button>
-                        <el-button type="primary" size="medium">查 询</el-button>
+                        <el-button type="primary" size="medium" @click="init()">查 询</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -63,10 +68,10 @@
             </div>
         </div>
         <div class="detail" v-if="isShow===2">
-            <Deatail  :userInfo="userInfo"/>
+            <Deatail :userInfo="userInfo"/>
         </div>
         <div class="detail" v-if="isShow===3">
-            <Add/>
+            <Add @init="init"/>
         </div>
     </div>
 </template>
@@ -101,20 +106,14 @@
         },
         methods: {
             Godetail(data) {
-                this.userInfo=data
+                this.userInfo = data
                 this.$store.dispatch('mecha_asset/setAsset', 2)
             },
             add() {
                 this.$store.dispatch('mecha_asset/setAsset', 3)
             },
-            async activityList() {
-                let obj = {
-                    pageSize: this.formData.pageSize,
-                    pageNum: this.formData.pageNum,
-                    activityStatus: '',
-                    keyword: '',
-                }
-                let res = await activityList(obj)
+            async init() {
+                let res = await activityList(this.formData)
                 let {total, pageNum, pageSize, list} = res.data
                 this.tableData.records = list
                 this.total = total
@@ -125,9 +124,9 @@
                 this.init()
             },
         },
-    created() {
-        this.activityList()
-    }
+        created() {
+            this.init()
+        }
     }
 </script>
 

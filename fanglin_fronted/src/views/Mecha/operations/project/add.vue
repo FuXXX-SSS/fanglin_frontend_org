@@ -123,6 +123,7 @@
                 let res = await exhadd(this.formData)
                 if (res && res.code === 1000) {
                     this.$tools.$mes('操作成功', 'success')
+                    this.$emit('init')
                     this.back()
                 }
             }
