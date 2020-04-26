@@ -13,7 +13,8 @@
                             label-position="left"
                     >
                         <el-form-item label="资产名称：">
-                            <el-input v-model="formData.assetsUnitName"></el-input>
+                            <el-input v-model="formData.assetsUnitName" maxlength="6"
+                                      show-word-limit></el-input>
                         </el-form-item>
                         <br>
                         <el-form-item label="订单结算比例：">
@@ -50,9 +51,9 @@
 
 
                         <el-form-item label="加入方式：">
-                            <el-radio v-model="formData.joinType" label="0">自由加入</el-radio>
-                            <el-radio v-model="formData.joinType" label="1">审核加入</el-radio>
-                            <el-radio v-model="formData.joinType" label="-1">关闭加入</el-radio>
+                            <el-radio v-model="formData.joinType" :label=0>自由加入</el-radio>
+                            <el-radio v-model="formData.joinType" :label='1'>审核加入</el-radio>
+                            <el-radio v-model="formData.joinType" :label=-1>关闭加入</el-radio>
                         </el-form-item>
                         <br>
                         <el-form-item label="发送红包：">
@@ -69,7 +70,10 @@
                         <br>
 
                         <el-form-item label="汇率：">
-                            <div>汇率</div>
+                            <div v-for="(item,index) in formData.assetsRateVOList"
+                                 :key="index+1"
+                            >{{item.activeUnitName}}:{{item.passiveUnitName}}={{item.passiveAmount}}:{{item.activeAmount}}
+                            </div>
                         </el-form-item>
                     </el-form>
 
@@ -78,7 +82,7 @@
             <el-row type="flex" class="row-bg" justify="center">
 
                 <el-col :span="3">
-                    <el-button type="danger"  size="medium" @click="save">保存</el-button>
+                    <el-button type="danger" size="medium" @click="save">保存</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -110,7 +114,8 @@
                 let res2 = await serviceCo(instId)
                 this.instServiceCoVOList = res2.data
                 this.formData.instUserCount = res.data.instUserCount
-                this.formData.userLimit = res.data.userLimit
+                this.formData = res.data
+                console.log(this.formData.joinType);
             },
             async save() {
                 this.formData.instServiceCoVOList = this.instServiceCoVOList

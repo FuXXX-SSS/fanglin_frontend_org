@@ -14,7 +14,8 @@
 
                     >
                         <el-form-item label="机构名称 : ">
-                            <el-input v-model="formData.name"></el-input>
+                            <el-input v-model="formData.name"
+                                      show-word-limit></el-input>
                         </el-form-item>
                         <el-form-item label="机构地点 : ">
                             <el-input v-model="formData.address"></el-input>
@@ -36,11 +37,18 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item label="机构banner：" style="margin-right: 10px">
-                            <Elupload @load="banner" />
+                            <Banner @load="banner"
+                                    :isDetail=false
+                                    :isUpload=true
+                            />
                         </el-form-item>
 
                         <el-form-item label="机构头像：" style="margin-right: 10px">
-                            <Elupload @load="avatar" />
+                            <Elupload @load="avatar"
+                                      :isDetail=true
+                                      :isUpload=true
+
+                            />
                         </el-form-item>
                         <el-form-item label="机构二维码：" style="margin-right: 10px">
                             <el-image :src="formData.qrCode"></el-image>
@@ -64,17 +72,21 @@
 <script>
     import {instDetail, serviceCo, instupdate} from '@http/inst'
     import Elupload from '@com/el-upload'
+    import Banner from '@com/el-upload/banner'
 
     export default {
         name: "teamDetail",
         data() {
             return {
                 formData: {},
-                src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
+                avatarCode: '',
+                isDetail: true,
+                isUpload: true
             }
         },
         components: {
-            Elupload
+            Elupload,
+            Banner
         },
         methods: {
             async init() {
@@ -85,14 +97,15 @@
                 this.formData = res.data
             },
             banner(data) {
-                this.formData.banner=data
+                this.formData.banner = data
             },
             avatar(data) {
-                this.formData.avatar=data
+                this.formData.avatar = data
             },
             async save() {
                 console.log(this.formData);
-                let res = instupdate(this.formData)
+                this.formData.instName = this.formData.name
+                let res = await instupdate(this.formData)
                 if (res && res.code === 1000) {
                     this.$tools.$mes('操作成功', 'success')
                     this.init()
@@ -102,10 +115,8 @@
         created() {
             this.init()
         },
-
     }
 </script>
-
 <style scoped>
     .el-image {
         width: 300px;

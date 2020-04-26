@@ -11,9 +11,9 @@
                         size="small"
                         class="demo-form-inline"
                 >
-                    <el-form-item label="推荐机构">
-                        <el-input v-model="formData.name" placeholder="推荐机构"></el-input>
-                    </el-form-item>
+<!--                    <el-form-item label="推荐机构">-->
+<!--                        <el-input v-model="formData.name" placeholder="推荐机构"></el-input>-->
+<!--                    </el-form-item>-->
                     <el-form-item label="推荐栏目">
                         <el-select filterable v-model="formData.columnId">
                             <el-option
@@ -79,7 +79,8 @@
             </div>
         </div>
         <div class="detail" v-else>
-            <Deatail @Godetail="Godetail"/>
+            <Deatail @Godetail="Godetail" :userInfo="userInfo"/>
+
         </div>
     </div>
 </template>
@@ -112,13 +113,8 @@
         },
         methods: {
             Godetail(data) {
-                this.$router.push({
-                    name: "recommend",
-                    params: {
-                        columnId: data.columnId,
-                        oriTitle: data.oriTitle
-                    }
-                });
+                this.isShow = !this.isShow
+                this.userInfo = data
             },
             async init() {
 

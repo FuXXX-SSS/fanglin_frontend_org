@@ -37,7 +37,7 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
-                    <el-table-column prop="date" label="申请时间"/>
+                    <el-table-column prop="joinTime" label="申请时间"/>
                     <el-table-column prop="name" label="用户头像">
                         <template slot-scope="scope">
                             <img :src="scope.row.avatar" min-width="70" height="70"/>
@@ -141,7 +141,7 @@
             async check(data, type) {
                 let obj = {
                     userId: data.userId,
-                    type: type
+                    checkStatus: type
                 }
                 let res = await userCheckGet(obj)
                 console.log(res);

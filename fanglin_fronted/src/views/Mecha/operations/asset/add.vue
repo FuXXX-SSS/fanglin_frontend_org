@@ -33,7 +33,7 @@
                         <el-form-item label="开始时间：">
                             <el-date-picker
                                     v-model="formData.beginTime"
-                                    type="date"
+                                    type="datetime"
                                     value-format="timestamp"
                                     placeholder="开始时间"
                                     align="right">
@@ -73,16 +73,24 @@
                         <br>
 
                         <el-form-item label="人员要求：">
-                            <el-tag
-                                    v-for="tag in tags"
-                                    :key="tag.name"
-                                    closable
-                                    :type="tag.type">
-                                {{tag.name}}
-                            </el-tag>
+                            <el-checkbox-group v-model="formData.serviceCatIdList">
+                                <el-checkbox
+                                        v-for="i in serviceList"
+                                        :label="i.serviceCatId"
+                                        :value="i.serviceCatName"
+                                        :key="i.serviceCatId"
+                                        @change="selectChange"
+                                >
+                                    {{i.serviceCatName}}
+                                </el-checkbox>
+
+                            </el-checkbox-group>
                         </el-form-item>
-                        <el-form-item label="活动状态：">
-                            <div>用户名称</div>
+                        <el-form-item label="人数要求 : ">
+                            <el-input v-model="formData.userNum" placeholder="人数要求" @change="numChange"></el-input>
+                        </el-form-item>
+                        <el-form-item label="活动价值：">
+                            <div>{{calValue}}积分/人 共计{{toatalValue}}积分</div>
                         </el-form-item>
                         <el-form-item label="性别：">
                             <el-radio v-model="formData.gender" label="1">男</el-radio>
@@ -104,7 +112,7 @@
                         </el-form-item>
                         <br>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
-                            <Elupload @load="load"/>
+                            <Elupload @load="load" :isDetail="isDetail"/>
                         </el-form-item>
                         <el-form-item label="活动介绍：">
                             <el-input
@@ -148,7 +156,7 @@
             </el-row>
         </div>
         <el-dialog
-                title="收货地址"
+                title="地址"
                 :visible.sync="dialog"
                 width="50%"
                 center
@@ -185,7 +193,8 @@
     import 'vue-slider-component/theme/default.css'
     import Elupload from '@com/el-upload'
     import {projectname} from '@http/project'
-    import {publish} from '@http/activity'
+    import {publish, cal} from '@http/activity'
+    import {instList} from '@http/service'
 
     var geocoder, map, marker = null;
     export default {
@@ -199,7 +208,7 @@
                     {name: '性别', type: 'info'},
                     {name: '实名认证', type: 'warning'},
                 ],
-                formData: {duration: 0.5},
+                formData: {duration: 0.5, serviceCatIdList: [], userNum: 1, projectId: ''},
                 num: '',
                 dialog: false,
                 markersArray: [],
@@ -215,7 +224,11 @@
                     lat: 39.915
                 },
                 zoom: 15,
-                project: []
+                project: [],
+                serviceList: [],
+                calValue: '',
+                toatalValue: '',
+                isDetail: true,
             }
         },
         components: {
@@ -302,9 +315,25 @@
             },
             async init() {
                 let res = await projectname()
-                this.project = res.data
+                let res2 = await instList()
+                if (res && res.data.list !== null) {
+                    this.project = res.data
+                } else {
+                    this.project = []
+                }
+                console.log(res2.data);
+                if (res2 ) {
+                    this.serviceList = res2.data
+                } else {
+                    this.serviceList = []
+
+                }
+                console.log(this.serviceList);
             },
             async submit() {
+                console.log(this.formData);
+                this.formData.value = this.calValue
+                this.formData.positionName = this.mapLocation.address
                 this.formData.maxAge = this.value2[1]
                 this.formData.minAge = this.value2[0]
                 let res = await publish(this.formData)
@@ -313,10 +342,27 @@
                     this.back()
                     this.$emit('init')
                 }
+            },
+            async selectChange() {
+                console.log(this.formData.serviceCatIdList);
+                this.cal()
+            },
+            async cal() {
+                let obj = {
+                    duration: this.formData.duration,
+                    serviceCatIdList: this.formData.serviceCatIdList
+                }
+                let res = await cal(obj)
+                this.calValue = res.data.value
+                this.toatalValue = parseInt(this.calValue) * parseInt(this.formData.userNum)
+            },
+            numChange() {
+                this.toatalValue = parseInt(this.calValue) * parseInt(this.formData.userNum)
             }
         },
         created() {
             this.init()
+            this.cal()
         }
     }
 </script>

@@ -41,7 +41,9 @@
                             </el-switch>
                         </el-form-item>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
-                            <Elupload @load="load"/>
+                            <Elupload @load="load" :isDetail=true
+                                      :isUpload=true
+                            />
                         </el-form-item>
                         <el-form-item label="摘要：">
                             <el-input
@@ -76,7 +78,7 @@
                     <el-button  type="warning">保存</el-button>
                 </el-col>
                 <el-col :span="3">
-                    <el-button type="primary">推荐</el-button>
+                    <el-button type="primary" @click="recommend">推荐</el-button>
                 </el-col>
                 <el-col :span="3">
                     <el-button type="info" @click="back">取消</el-button>
@@ -103,6 +105,8 @@
             return {
                 formData: {},
                 projectStatus: '',
+                isDetail: true,
+                isUpload: true
             }
         },
         components: {
@@ -125,6 +129,17 @@
             },
             qutil(data) {
                 this.formData.introduction = data
+            },
+            recommend() {
+                let obj = {
+                    rfid: this.formData.id,
+                    type: 8,
+                    title: this.formData.name
+                }
+                this.$store.dispatch('recommend/setReco', obj)
+                this.$router.push({
+                    name: "recommend",
+                });
             }
         },
     created() {

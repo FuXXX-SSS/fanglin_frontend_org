@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">文章详情</div>
+            <div class="sub-title">推荐</div>
             <el-row :gutter="20">
 
                 <el-col :span="24" class="el-right">
@@ -14,30 +14,29 @@
                     >
 
                         <el-form-item label="原标题 : ">
-                            <div>用户名称</div>
+                            <div>{{formData.oriTitle}}</div>
                         </el-form-item>
                         <el-form-item label="推荐标题 : ">
-                            <el-input v-model="formData.name"></el-input>
+                            <el-input v-model="formData.title"></el-input>
                         </el-form-item>
-                        <el-form-item label="推荐栏目 : ">
-                                <el-select v-model="formData.accType">
-                                    <el-option label="开启" value="1"></el-option>
-                                    <el-option label="关闭" value="2"></el-option>
-                                </el-select>
+                        <el-form-item label="推荐栏目">
+                            <el-select filterable v-model="formData.columnId">
+                                <el-option
+                                        :label="i.name"
+                                        :value="i.id"
+                                        v-for="i in column"
+                                        :key="i.id"
+                                ></el-option>
+                            </el-select>
                         </el-form-item>
+
                         <el-form-item label="推荐图片 : ">
-                            <el-upload
-                                    class="avatar-uploader"
-                                    action="https://jsonplaceholder.typicode.com/posts/"
-                                    :show-file-list="false"
-                                    :on-success="handleAvatarSuccess"
-                                    :before-upload="beforeAvatarUpload">
-                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
+                            <Elupload @load="avatar"
+                                      :isDetail=true
+                            />
                         </el-form-item>
                         <el-form-item label="推荐链接 : ">
-                            <el-input v-model="formData.name"></el-input>
+                            <el-input v-model="formData.url"></el-input>
                         </el-form-item>
                         <el-form-item label="推荐摘要 : ">
                             <el-input
@@ -52,70 +51,69 @@
                 </el-col>
             </el-row>
         </div>
-        <div class="my-block">
+        <div class="my-block block_bot">
             <el-row type="flex" class="row-bg" justify="space-around">
                 <el-col :span="6">
-                    <el-button type="info">保存</el-button>
+                    <el-button type="warning" @click="save()">保存</el-button>
+
                 </el-col>
                 <el-col :span="6">
-                    <el-button type="primary" @click="back">取消</el-button>
+                    <el-button type="info" @click="back">返回</el-button>
                 </el-col>
             </el-row>
         </div>
-
     </div>
 </template>
 
 <script>
-    import detailBottom from '@com/detailBottom'
+    import Elupload from '@com/el-upload'
+
+    import {Stidlist} from '@http/inst'
+    import {recommendUp} from '@http/recommend'
 
     export default {
+        props: {
+            userInfo: {
+                type: Object,
+            }
+        },
         name: "teamDetail",
         data() {
             return {
                 formData: {},
                 src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
                 imageUrl: '',
-                tableData: {
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        },]
-                }
+                column: [],
+                isDetail: true,
+                isUpload: true
 
             }
         },
-        components: {
+        components: {            Elupload,
         },
         methods: {
-            handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
-            },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
+            avatar(data) {
+                this.formData.avatar = data
             },
             back() {
                 this.$emit('Godetail')
-            }
+            },
+            async init() {
+                let res3 = await Stidlist()
+                this.formData = this.userInfo
+                this.column = res3.data
+            },
+            async save() {
+
+                let res = await recommendUp(this.formData)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('推荐成功', 'success')
+                    this.back()
+                }
+            },
+        },
+        created() {
+            this.init()
         }
     }
 </script>
@@ -144,15 +142,7 @@
         border-color: #409EFF;
     }
 
-    .my-block
-    /deep/ .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 178px;
-        height: 178px;
-        line-height: 178px;
-        text-align: center;
-    }
+
 
     .my-block
     /deep/ .avatar {

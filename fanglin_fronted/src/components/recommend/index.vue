@@ -20,7 +20,7 @@
                             <el-input v-model="formData.title"></el-input>
                         </el-form-item>
                         <el-form-item label="推荐栏目 : ">
-                            <el-select filterable v-model="formData.accType">
+                            <el-select filterable v-model="formData.columnId">
                                 <el-option
                                         :label="i.name"
                                         :value="i.id"
@@ -73,7 +73,7 @@
                     <el-button type="warning" @click="save()">保存</el-button>
                 </el-col>
                 <el-col :span="3">
-                    <el-button type="info" @click="back">删除</el-button>
+                    <el-button type="info" @click="back">返回</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -84,6 +84,7 @@
     import {recommendUp} from '@http/recommend'
     import baseUrl from '@/http/baseUrl'
     import {mapState} from 'vuex'
+    import {Stidlist} from '@http/inst'
 
     export default {
         name: "teamDetail",
@@ -95,15 +96,7 @@
                 baseUrl: baseUrl,
                 imageUrl: '',
                 dialogImageUrl: '',
-                typeList: [
-                    {name: '文章', id: 0},
-                    {name: '活动', id: 1},
-                    {name: '项目', id: 2},
-                    {name: '兑换品', id: 3},
-                    {name: '志愿者', id: 4},
-                    {name: '团队', id: 5},
-                    {name: '机构', id: 6},
-                ],
+                typeList: [],
                 headers: {},
                 activeName: "0",
                 form: {
@@ -138,9 +131,11 @@
                 this.$router.go(-1)
             },
             async save() {
+
                 let res = await recommendUp(this.formData)
                 if (res && res.code === 1000) {
-                    this.$tools.$mes('保存成功', 'success')
+                    this.$tools.$mes('推荐成功', 'success')
+                    this.back()
                 }
             },
             onExceed() {
@@ -181,11 +176,19 @@
                 this.headers = {
                     Authorization: userInfo.token
                 };
-                this.formData.columnId = this.$route.params.columnId;
-                this.formData.oriTitle = this.$route.params.oriTitle;
-            }
+                console.log(this.$route.params);
+                let {title,type,rfid} = this.recomObj
+                this.formData.oriTitle = title;
+                this.formData.type= type;
+                this.formData.rfid= rfid;
+            },
+            async listCheck() {
+                let res2 = await Stidlist()
+                this.typeList = res2.data
+            },
         },
         created() {
+            this.listCheck()
             this.init()
         }
     }

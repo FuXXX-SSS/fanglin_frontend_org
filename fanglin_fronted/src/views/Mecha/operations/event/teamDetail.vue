@@ -48,7 +48,7 @@
                             <div>{{formData.position}}</div>
                         </el-form-item>
                         <el-form-item label="项目状态：">
-                            <div>{{formData.position}}</div>
+                            <div>{{formData.projectStatus===1?'开启':'关闭'}}</div>
                         </el-form-item>
 
                         <el-form-item label="所属项目：">
@@ -90,27 +90,27 @@
                     >
 
                         <el-form-item label="募集金额 : ">
-                            <div>{{formData.name}}</div>
+                            <div>{{formData.donatedAmount}}</div>
                         </el-form-item>
                         <el-form-item label="捐赠人数 : ">
-                            <div>{{formData.name}}</div>
+                            <div>{{formData.donatedUserCount}}</div>
                         </el-form-item>
                         <el-form-item label="回馈 : ">
-                            <div>{{formData.name}}</div>
+                            <div>{{formData.assetsUnitName}}</div>
                         </el-form-item>
                         <br>
 
                         <el-form-item label="活动次数 : ">
-                            <div>{{formData.name}}</div>
+                            <div>{{formData.activityCount}}</div>
                         </el-form-item>
                         <el-form-item label="活动人次 : ">
-                            <div>{{formData.name}}</div>
+                            <div>{{formData.activityUserCount}}</div>
                         </el-form-item>
                         <el-form-item label="服务时长 : ">
-                            <div>{{formData.name}}</div>
+                            <div>{{formData.serviceDuration}}</div>
                         </el-form-item>
                         <el-form-item label="执行说明 : ">
-                            <Qutil/>
+                            <Qutil :description="des" @qutil="qutil"/>
                         </el-form-item>
 
                     </el-form>
@@ -124,10 +124,13 @@
         <div class="my-block">
             <el-row type="flex" class="row-bg" justify="center">
                 <el-col :span="3">
-                    <el-button type="success">保存</el-button>
+                    <el-button type="success" @click="save">保存</el-button>
                 </el-col>
                 <el-col :span="3">
-                    <el-button type="warning">编辑</el-button>
+                    <el-button type="primary" @click="recommend">推荐</el-button>
+                </el-col>
+                <el-col :span="3">
+                    <el-button type="warning" @click="detailUpate">编辑</el-button>
                 </el-col>
                 <el-col :span="3">
                     <el-button type="info" @click="back">返回</el-button>
@@ -140,30 +143,20 @@
 
 <script>
     import Qutil from '@com/quill-editor'
+    import {projectDetail, description} from '@http/project'
 
     export default {
+        props: {
+            userInfo: {
+                type: Object,
+            }
+        },
         name: "teamDetail",
         data() {
             return {
                 formData: {},
-                src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-                tableData: {
-                    records: [
-                        {
-                            date: '2016-05-02',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1518 弄'
-                        }, {
-                            date: '2016-05-04',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1517 弄'
-                        }, {
-                            date: '2016-05-01',
-                            name: '王小虎',
-                            address: '上海市普陀区金沙江路 1519 弄'
-                        },]
-                }
-
+                tableData: {},
+                des: ''
             }
         },
         components: {
@@ -173,7 +166,46 @@
             back() {
                 this.$store.dispatch('mecha_asset/setEvent', 1)
             },
+            async init() {
+                let res = await projectDetail(this.userInfo.projectId)
+                this.formData = res.data
+                this.des = res.data.description
+                this.projectStatus = res.data.userStatus
+                this.projectStatus === 1 ? this.projectStatus = true : this.projectStatus = false
+            },
+            qutil(data) {
+                console.log(data);
+                this.des = data
+            },
+            async save() {
+                let obj = {
+                    description: this.des,
+                    projectId: this.userInfo.projectId,
+                }
+                let res = await description(obj)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('修改成功', 'success')
+                    this.init()
+                }
+            },
+            detailUpate() {
+                this.$store.dispatch('mecha_asset/setEvent', 3)
+            },
+            recommend() {
+                let obj = {
+                    rfid: this.formData.projectId,
+                    type: 3,
+                    title: this.formData.name
+                }
+                this.$store.dispatch('recommend/setReco', obj)
+                this.$router.push({
+                    name: "recommend",
+                });
+            }
         },
+        created() {
+            this.init()
+        }
     }
 </script>
 

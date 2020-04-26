@@ -42,7 +42,8 @@
             isDetail: {
                 type: Boolean,
                 default: false
-            },  isUpload: {
+            },
+            isUpload: {
                 type: Boolean,
                 default: false
             },
@@ -121,8 +122,8 @@
                 ).instId;
                 if (this.isUpload) {
                     let res = await instDetail(instId)
-                    if (res.data.avatar!==''){
-                        this.baseImage = res.data.avatar
+                    if (res.data.banner!==''){
+                        this.baseImage = res.data.banner
                         this.isShow = false
                     }
                 }
@@ -142,7 +143,6 @@
         },
         created() {
             this.init()
-            console.log(this.isDetail);
         }
     }
 </script>

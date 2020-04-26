@@ -43,3 +43,12 @@ export const projectname = data =>
         method: "get",
         params: data
     });
+
+
+ // 保存项目执行说明
+export const description = data =>
+    _axios({
+        url: `/bms/project/save/description`,
+        method: "post",
+        data: data
+    });

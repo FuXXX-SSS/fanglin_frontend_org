@@ -42,11 +42,11 @@
                             <div>{{formData.score}}</div>
                         </el-form-item>
                         <el-form-item label="实名认证 : ">
-                            <div>{{formData.cert===1?'是':'否'}}</div>
+                            <div>{{formData.cert?'是':'否'}}</div>
                         </el-form-item>
                         <el-form-item label="专长 : ">
                             <div v-for="(item,index) in formData.serviceCategories" :key="index+1"
-                                 style="display: inline-block">{{item.name}}
+                                 style="display: inline-block;margin-right: 10px">{{item.name}}
                             </div>
                         </el-form-item>
                         <br>
@@ -93,27 +93,35 @@
         <div class="my-block">
             <el-row type="flex" class="row-bg" justify="center">
                 <el-col :span="3">
-                    <el-button type="success" @click="back">移出</el-button>
+                    <el-button type="success" @click="userCheck">移出</el-button>
                 </el-col>
                 <el-col :span="3">
-                    <el-button type="primary">转账</el-button>
+                    <el-button type="primary" @click="diaLog">转账</el-button>
+
                 </el-col>
                 <el-col :span="3">
-                    <el-button type="warning">推荐</el-button>
+                    <el-button type="warning"  @click="recommend">推荐</el-button>
                 </el-col>
                 <el-col :span="3">
                     <el-button type="info" @click="back">返回</el-button>
                 </el-col>
             </el-row>
         </div>
-
+        <DiaLog
+                :dialogVisible="dialogVisible"
+                @diaLog="diaLog"
+                :form="walletURL"
+                @Sure="Sure()"
+        />
     </div>
 </template>
 
 <script>
-    import {userDetail, userQuaCertPost, userJoinInfo, userQuaInfo} from '@http/user'
-
-
+    import {userDetail, userQuaCertPost, userJoinInfo, userQuaInfo,userCheckGet} from '@http/user'
+    import DiaLog from '@com/dia-log'
+    import md5 from 'js-md5'
+    import {walletURL, commonTrade} from '@http/common'
+    import {instDetail} from '@http/inst'
     export default {
         props: {
             userInfo: {
@@ -133,6 +141,7 @@
                 quanInfoList: [],
                 dialogVisible: false,
                 projectStatus: '',
+                info:'',
                 walletURL: {}
             }
         },
@@ -168,11 +177,61 @@
                     this.$tools.$mes('修改成功', 'success')
                     this.userQuaInfo()
                 }
+            },
+            async userCheck(){
+                let obj ={
+                    checkStatus:3,
+                    userId:this.userInfo.userId,
+
+                }
+                let res = await userCheckGet(obj)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('修改成功', 'success')
+                    this.back()
+                }
+            },
+            async diaLog() {
+                this.dialogVisible = !this.dialogVisible
+                let res = await walletURL(`${0}/${this.userInfo.userId}`)
+                this.walletURL = res.data
+            },
+            async Sure(msg) {
+                if (msg[1] === 1) {
+                    let res = await instDetail(JSON.parse(sessionStorage.getItem("userInfo")).instId)
+                    let obj = {
+                        amount: msg[0].amount,
+                        billType: 0,
+                        password: md5(msg[0].password + "fanglin"),
+                        receiveType: 0,
+                        receiveWalletUrl: msg[0].walletURL,
+                    }
+                    let res2 = await commonTrade(obj)
+                    if (res2 && res.code === 1000) {
+                        let assetsUnitName = JSON.parse(
+                            sessionStorage.getItem("userInfo")
+                        ).assetsUnitName;
+                        this.info=assetsUnitName
+                    }
+                }
+            },
+            recommend() {
+                let obj = {
+                    rfid: this.formData.userId,
+                    type: 5,
+                    title: this.formData.nickname
+                }
+                this.$store.dispatch('recommend/setReco', obj)
+                this.$router.push({
+                    name: "recommend",
+                });
             }
         },
         created() {
             this.init()
             this.userQuaInfo()
+        },
+        components:{
+            DiaLog
         }
     }
 </script>

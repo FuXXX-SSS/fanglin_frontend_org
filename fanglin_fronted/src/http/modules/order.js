@@ -53,3 +53,11 @@ export const cashList = data =>
         params: data
     });
 
+
+// 实物订单发货
+export const ship = data =>
+    _axios({
+        url: `/bms/bill/goods/ship/${data}`,
+        method: "post",
+        data: data
+    });

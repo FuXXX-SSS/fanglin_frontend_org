@@ -54,9 +54,10 @@
                     <el-table-column prop="name" label="回馈价值"/>
                     <el-table-column prop="billStatus" label="状态">
                         <template slot-scope="scope">
-                            {{ scope.row.billStatus === 3 ? "未支付" :
-                            scope.row.billStatus === 4 ? '完成':
-                            scope.row.billStatus === 5 ? '已支付':
+                            {{ scope.row.billStatus === 0 ? "未支付" :
+                            scope.row.billStatus === 1 ? '待发货':
+                            scope.row.billStatus === 2 ? '已发货':
+                            scope.row.billStatus === 3 ? '完成':
                             '未知' }}
                         </template>
                     </el-table-column>

@@ -44,3 +44,14 @@ export const publish= data =>
         method: "post",
         data: data
     });
+
+
+// 根据所选专长和活动时长计算活动价值
+export const cal= data =>
+    _axios({
+        url: `/bms/activity/cal/value`,
+        method: "post",
+        data: data
+    });
+
+

@@ -66,7 +66,7 @@
             <Deatail @Godetail="Godetail" :userInfo="userInfo"/>
         </div>
         <div class="detail" v-if="isShow===3">
-            <Add/>
+            <Add @init="init"/>
         </div>
     </div>
 </template>
@@ -102,7 +102,7 @@
         },
         methods: {
             Godetail(data) {
-                console.log(123);
+                this.userInfo = data
                 this.$store.dispatch('mecha_asset/setEvent', 2)
             },
             add() {

@@ -28,12 +28,10 @@
                     </el-form-item>
                     <el-form-item label="状态">
                         <el-select v-model="formData.billStatus">
-                            <el-option label="待审核" value="0"></el-option>
-                            <el-option label="已同意" value="1"></el-option>
-                            <el-option label="已拒绝" value="2"></el-option>
-                            <el-option label="未支付" value="3"></el-option>
-                            <el-option label="已支付" value="4"></el-option>
-                            <el-option label="完成" value="5"></el-option>
+                            <el-option label="未支付" value="0"></el-option>
+                            <el-option label="待发货" value="1"></el-option>
+                            <el-option label="已发货" value="2"></el-option>
+                            <el-option label="完成" value="3"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item class="options">
@@ -58,12 +56,11 @@
                     <el-table-column prop="receiverAccount" label="收款账户"/>
                     <el-table-column prop="billStatus" label="状态">
                         <template slot-scope="scope">
-                            {{ scope.row.billStatus === 0 ? "待审核" :
-                            scope.row.billStatus === 1 ? '已同意':
-                            scope.row.billStatus === 2 ? '已拒绝':
-                            scope.row.billStatus === 3 ? '未支付':
-                            scope.row.billStatus === 4 ? '已支付':
-                            scope.row.billStatus === 5 ? '完成':
+                            {{
+                            scope.row.billStatus === 0 ? '未支付':
+                            scope.row.billStatus === 1 ? '待发货':
+                            scope.row.billStatus === 2 ? '已发货':
+                            scope.row.billStatus === 3 ? '完成':
                             '未知' }}
                         </template>
                     </el-table-column>

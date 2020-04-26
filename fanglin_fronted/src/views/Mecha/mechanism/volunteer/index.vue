@@ -41,7 +41,7 @@
                     <el-table-column prop="nickname" label="昵称"/>
                     <el-table-column prop="gender" label="性别">
                         <template slot-scope="scope">
-                            {{ scope.row.gender === 1 ? "男" : scope.row.gender == 2 ? '女':'未知' }}
+                            {{ scope.row.gender === 1 ? "男" : scope.row.gender === 0 ? '女':'未知' }}
                         </template>
                     </el-table-column>
 
@@ -105,7 +105,7 @@
         data() {
             return {
                 isShow: true,
-                formData: {pageNum: 1, pageSize: 10},
+                formData: {pageNum: 1, pageSize: 10, type: 1},
                 tableData: {records: []},
                 pageData: {},
                 userInfo: {},

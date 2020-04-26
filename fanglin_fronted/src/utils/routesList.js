@@ -237,7 +237,7 @@ const RouteData2 =[
                 meta: {title: "推荐管理", icon: "icon-basic", show: true},
             },
             {
-                path: "/index/recommend/:columnId/:oriTitle",
+                path: "/index/recommend/:oriTitle",
                 name: "recommend",
                 meta: {title: "新建推荐", icon: "icon-basic", show: true},
                 component: () => import ("@com/recommend/index")

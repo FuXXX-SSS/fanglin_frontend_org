@@ -22,7 +22,7 @@
 
                         </el-form-item>
                         <el-form-item label="状态：">
-                            <el-radio-group v-model="formData.resource">
+                            <el-radio-group v-model="formData.goodsStatus">
                                 <el-radio label="1">上架</el-radio>
                                 <el-radio label="0">下架</el-radio>
                             </el-radio-group>
@@ -36,7 +36,7 @@
                         <el-form-item label="兑换标准：">
                             <el-input v-model="formData.exhAmount" style="    width: 25%;
     float: left;"></el-input>
-                            <span style="margin-left: 14px;">芳邻点/单位</span>
+                            <span style="margin-left: 14px;">{{assetsUnitName}}/单位</span>
                         </el-form-item>
                         <el-form-item label="购买价格：">
                             <el-input v-model="formData.buyAmount" style="    width: 25%;
@@ -46,7 +46,7 @@
                         <el-form-item label="购买回馈：">
                             <el-input v-model="formData.refundAmount" style="    width: 25%;
     float: left;"></el-input>
-                            <span style="margin-left: 14px;">芳邻点/单位</span>
+                            <span style="margin-left: 14px;">{{assetsUnitName}}/单位</span>
                         </el-form-item>
                         <el-form-item label="摘要：">
                             <el-input
@@ -57,7 +57,10 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
-                            <Elupload @load="load" :limit="limit"/>
+                            <Elupload @load="load"
+                                      :limit="limit"
+                                      :isDetail=true
+                            />
                         </el-form-item>
                     </el-form>
 
@@ -100,8 +103,9 @@
         name: "teamDetail",
         data() {
             return {
-                formData: {imageList: [], introduction: ''},
-                limit: 3
+                formData: {imageList: [], introduction: '',type:0},
+                limit: 3,
+                assetsUnitName: ''
             }
         },
         components: {
@@ -126,9 +130,16 @@
                     this.$emit('init')
                     this.back()
                 }
+            },
+            init() {
+                this.assetsUnitName = JSON.parse(
+                    sessionStorage.getItem("userInfo")
+                ).assetsUnitName;
             }
         },
         created() {
+            this.init()
+
         }
     }
 </script>

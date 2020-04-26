@@ -16,9 +16,13 @@
                             <el-input v-model="formData.title"></el-input>
                         </el-form-item>
                         <el-form-item label="发布栏目 : ">
-                            <el-select v-model="formData.accType">
-                                <el-option label="开启" value="1"></el-option>
-                                <el-option label="关闭" value="2"></el-option>
+                            <el-select filterable v-model="formData.columnId">
+                                <el-option
+                                        :label="i.name"
+                                        :value="i.id"
+                                        v-for="i in column"
+                                        :key="i.id"
+                                ></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="作者 : ">
@@ -99,6 +103,7 @@
     import Qutil from '@com/quill-editor'
     import {publish} from '@http/article'
     import baseUrl from '@/http/baseUrl'
+    import {Stidlist} from '@http/inst'
 
     export default {
         props: {
@@ -120,6 +125,8 @@
                 form: {
                     picList: []
                 },
+                column: [],
+
             }
         },
         components: {
@@ -194,10 +201,16 @@
             },
             qutil(data) {
                 this.formData.detail = data
+            },
+            async columns() {
+                let res = await Stidlist()
+                this.column = res.data
+
             }
         },
         created() {
             this.init()
+            this.columns()
         }
     }
 </script>

@@ -68,7 +68,7 @@
             </div>
         </div>
         <div class="detail" v-if="isShow===2">
-            <Deatail :userInfo="userInfo"/>
+            <Deatail :userInfo="userInfo" @init="init"/>
         </div>
         <div class="detail" v-if="isShow===3">
             <Add @init="init"/>

@@ -76,8 +76,8 @@
         <div class="detail" v-if="isShow===2">
             <Deatail :userInfo="userInfo"/>
         </div>
-        <div class="detail" v-if="isShow===3" @init="init">
-            <Add/>
+        <div class="detail" v-if="isShow===3" >
+            <Add @init="init"/>
         </div>
     </div>
 </template>

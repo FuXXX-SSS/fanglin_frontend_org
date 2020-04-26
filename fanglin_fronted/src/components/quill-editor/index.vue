@@ -1,7 +1,7 @@
 <template>
     <div class="edit_container" style="">
         <quill-editor
-                v-model="des"
+                v-model="description"
                 ref="myQuillEditor"
                 :options="editorOption"
                 @blur="onEditorBlur($event)"
@@ -32,6 +32,7 @@
         data() {
             return {
                 content: "",
+                des:this.description,
                 editorOption: {
                     des:this.description,
                     placeholder: "请输入...",
@@ -46,7 +47,7 @@
             },
 // 失去焦点事件
             onEditorBlur(val) {
-                this.$emit('qutil',this.des)
+                this.$emit('qutil',this.description)
             },
 // 富文本获得焦点时的内容
             onEditorFocus(val, editor) {
@@ -59,8 +60,6 @@
         },
         computed: {
             editor() {
-                // false禁止编辑  true语序编辑
-                // this.$refs.myQuillEditor.quill.enable(false)
                 return this.$refs.myQuillEditor.quill;
             },
 

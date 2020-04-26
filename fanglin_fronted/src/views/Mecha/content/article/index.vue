@@ -40,14 +40,15 @@
                             <el-button
                                     type="text"
                                     size="small"
+                                    @click="recommend(scope.row)"
                             >推荐
                             </el-button>
-<!--                            <el-button-->
-<!--                                    type="text"-->
-<!--                                    size="small"-->
-<!--                                    @click="Godetail()"-->
-<!--                            >编辑-->
-<!--                            </el-button>-->
+                            <!--                            <el-button-->
+                            <!--                                    type="text"-->
+                            <!--                                    size="small"-->
+                            <!--                                    @click="Godetail()"-->
+                            <!--                            >编辑-->
+                            <!--                            </el-button>-->
 
                         </template>
                     </el-table-column>
@@ -86,6 +87,17 @@
             Deatail
         },
         methods: {
+            recommend(data) {
+                let obj = {
+                    rfid: data.articleId,
+                    type: 1,
+                    title: data.title
+                }
+                this.$store.dispatch('recommend/setReco', obj)
+                this.$router.push({
+                    name: "recommend",
+                });
+            },
             Godetail(data) {
                 this.userInfo = data
                 this.isShow = !this.isShow
@@ -107,7 +119,7 @@
                 this.init()
             },
             async deleteInfo(data) {
-                let res = await  Delete(data.articleId)
+                let res = await Delete(data.articleId)
                 console.log(res);
                 if (res && res.code === 1000) {
                     this.$tools.$mes('删除成功', 'success')
@@ -115,6 +127,7 @@
                 }
             },
             async StatusInfo(data) {
+                data.articleStatus === 0 ?  data.articleStatus=1 :data.articleStatus=0
                 let obj = `${data.articleStatus}` + '/' + `${data.articleId}`
                 let res = await deal(obj)
                 console.log(res);

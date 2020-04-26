@@ -79,7 +79,7 @@
             <Deatail :userInfo="userInfo"/>
         </div>
         <div class="detail" v-if="isShow===3">
-            <Add/>
+            <Add @init="init"/>
         </div>
     </div>
 </template>

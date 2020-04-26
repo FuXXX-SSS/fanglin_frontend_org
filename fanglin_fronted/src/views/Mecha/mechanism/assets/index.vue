@@ -48,7 +48,11 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <DiaLog :dialogVisible="dialogVisible" @diaLog="diaLog" :form="walletURL" />
+            <DiaLog :dialogVisible="dialogVisible"
+                    @diaLog="diaLog"
+                    :form="walletURL"
+                    @Sure="Sure(arguments)"
+                    :info="info"/>
 
         </div>
         <div class="detail" v-else>
@@ -62,17 +66,22 @@
     import Clipboard from 'clipboard';
     import {totalInfo} from '@http/assets'
     import DiaLog from '@com/dia-log'
+    import md5 from 'js-md5'
+    import {walletURL, commonTrade} from '@http/common'
+    import {instDetail} from '@http/inst'
+
     export default {
         name: "index",
         data() {
             return {
                 isShow: true,
-                formData: {pageNum: 1, pageSize: 10,name: 'as5d546asd645asd546d56s4a654sda564'},
+                formData: {pageNum: 1, pageSize: 10, name: 'as5d546asd645asd546d56s4a654sda564'},
                 tableData: {records: []},
                 pageData: {},
                 userInfo: {},
                 total: 0,
                 dialogVisible: false,
+                info: '',
                 walletURL: {}
             }
         },
@@ -113,9 +122,29 @@
                 })
 
             },
-            async diaLog() {
+            async diaLog(data) {
                 this.dialogVisible = !this.dialogVisible
-                console.log(this.dialogVisible);
+                let res = await walletURL(`${2}/${data.assetsUnitId}`)
+                this.walletURL = res.data
+            },
+            async Sure(msg) {
+                if (msg[1] === 1) {
+                    let res = await instDetail(JSON.parse(sessionStorage.getItem("userInfo")).instId)
+                    let obj = {
+                        amount: msg[0].amount,
+                        billType: 0,
+                        password: md5(msg[0].password + "fanglin"),
+                        receiveType: 0,
+                        receiveWalletUrl: msg[0].walletURL,
+                    }
+                    let res2 = await commonTrade(obj)
+                    if (res2 && res.code === 1000) {
+                        let assetsUnitName = JSON.parse(
+                            sessionStorage.getItem("userInfo")
+                        ).assetsUnitName;
+                        this.info = assetsUnitName
+                    }
+                }
             },
         },
         created() {

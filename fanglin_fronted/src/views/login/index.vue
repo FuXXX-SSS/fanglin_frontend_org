@@ -45,13 +45,13 @@
                                         placeholder="请输入手机号/"
                                 ></el-input>
                             </el-form-item>
-                            <el-form-item label="" prop="oldPass">
-                                <el-input
-                                        v-model="ruleForm.oldPass"
-                                        autocomplete="off"
-                                        placeholder="请输入旧密码"
-                                ></el-input>
-                            </el-form-item>
+<!--                            <el-form-item label="" prop="oldPass">-->
+<!--                                <el-input-->
+<!--                                        v-model="ruleForm.oldPass"-->
+<!--                                        autocomplete="off"-->
+<!--                                        placeholder="请输入旧密码"-->
+<!--                                ></el-input>-->
+<!--                            </el-form-item>-->
                             <el-form-item label="" prop="pass">
                                 <el-input
                                         v-model="ruleForm.pass"
@@ -232,7 +232,7 @@
                             let obj = {
                                 code: this.ruleForm.checkCode,
                                 newPassword: this.ruleForm.checkPass,
-                                oldPassword: this.ruleForm.oldPass,
+                                // oldPassword: this.ruleForm.oldPass,
                                 phone: this.ruleForm.age,
                                 userType: 1,
                             }

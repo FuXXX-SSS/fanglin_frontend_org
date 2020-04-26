@@ -30,12 +30,10 @@
 
                     <el-form-item label="状态">
                         <el-select v-model="formData.billStatus">
-                            <el-option label="待审核" value="0"></el-option>
-                            <el-option label="已同意" value="1"></el-option>
-                            <el-option label="已拒绝" value="2"></el-option>
-                            <el-option label="未支付" value="3"></el-option>
-                            <el-option label="已支付" value="4"></el-option>
-                            <el-option label="完成" value="5"></el-option>
+                            <el-option label="未支付" value="0"></el-option>
+                            <el-option label="待发货" value="1"></el-option>
+                            <el-option label="已发货" value="2"></el-option>
+                            <el-option label="完成" value="3"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item class="options">
@@ -58,86 +56,87 @@
                     <el-table-column prop="receiverAddr" label="收货地址"/>
                     <el-table-column prop="billStatus" label="状态">
                         <template slot-scope="scope">
-                            {{ scope.row.billStatus === 0 ? "待审核" :
-                            scope.row.billStatus === 1 ? '已同意':
-                            scope.row.billStatus === 2 ? '已拒绝':
-                            scope.row.billStatus === 3 ? '未支付':
-                            scope.row.billStatus === 4 ? '已支付':
-                            scope.row.billStatus === 5 ? '完成':
+                            {{
+                            scope.row.billStatus === 0 ? '未支付':
+                            scope.row.billStatus === 1 ? '待发货':
+                            scope.row.billStatus === 2 ? '已发货':
+                            scope.row.billStatus === 3 ? '完成':
                             '未知' }}
                         </template>
                     </el-table-column>
-                    <!--                    <el-table-column label="操作">-->
-                    <!--                        <template slot-scope="scope">-->
-                    <!--                            <el-button-->
-                    <!--                                    @click="Godetail(scope.row)"-->
-                    <!--                                    type="text"-->
-                    <!--                                    size="small"-->
-                    <!--                            >发货-->
-                    <!--                            </el-button-->
-                    <!--                            >-->
-                    <!--                        </template>-->
-                    <!--                    </el-table-column>-->
+                    <el-table-column label="操作">
+                        <template slot-scope="scope" v-if="scope.row.billStatus===1">
+                            <el-button
+                                    @click="Godetail(scope.row)"
+                                    type="text"
+                                    size="small"
+                            >发货
+                            </el-button
+                            >
+                        </template>
+                    </el-table-column>
 
                 </el-table>
                 <pagination :total="total" @pageChange="pageChange"/>
             </div>
         </div>
-        <!--        <el-dialog-->
-        <!--                title="兑换实物"-->
-        <!--                :visible.sync="dialogVisible"-->
-        <!--                width="35%"-->
-        <!--        >-->
-        <!--            <el-form :inline="true"-->
-        <!--                     :model="formData"-->
-        <!--                     size="small"-->
-        <!--                     class="demo-form-inline"-->
-        <!--                     label-position="left"-->
-        <!--            >-->
-        <!--                <el-form-item label="商品名称：" :label-width="formLabelWidth">-->
-        <!--                    <div>商品商品商品商</div>-->
-        <!--                </el-form-item>-->
-        <!--                <el-form-item label="入库数量：" :label-width="formLabelWidth">-->
-        <!--                    <div>商品商品商</div>-->
-        <!--                </el-form-item>-->
-        <!--                <el-form-item label="当前库存：" :label-width="formLabelWidth">-->
-        <!--                    <div>商品商品品</div>-->
-        <!--                </el-form-item>-->
-        <!--                <br>-->
-        <!--                <el-form-item label="兑换人：" :label-width="formLabelWidth">-->
-        <!--                    <div>商品商品商商品</div>-->
-        <!--                </el-form-item>-->
-        <!--                <el-form-item label="收货人：" :label-width="formLabelWidth">-->
-        <!--                    <div>商品商品商品</div>-->
-        <!--                </el-form-item>-->
-        <!--                <el-form-item label="联系电话：" :label-width="formLabelWidth">-->
-        <!--                    <div>商品商品商品</div>-->
-        <!--                </el-form-item>-->
-        <!--                <br>-->
+        <el-dialog
+                title="兑换实物"
+                :visible.sync="dialogVisible"
+                width="28%"
+        >
+            <el-form :inline="true"
+                     :model="formData"
+                     size="small"
+                     class="demo-form-inline"
+                     label-width="90px"
+            >
+                <el-form-item label="商品名称：">
+                    {{sendObj.exhGoodsName}}
+                </el-form-item>
+                <el-form-item label="入库数量：">
+                    {{sendObj.totalStock}}
+                </el-form-item>
+                <el-form-item label="当前库存：">
+                    {{sendObj.stock}}
+                </el-form-item>
+                <br>
+                <el-form-item label="兑换人：">
+                    {{sendObj.exhUserName}}
+                </el-form-item>
+                <el-form-item label="收货人：">
+                    {{sendObj.receiverName}}
+                </el-form-item>
+                <el-form-item label="联系电话：">
+                    {{sendObj.receiverPhone}}
+                </el-form-item>
+                <br>
 
-        <!--                <el-form-item label="支付：" :label-width="formLabelWidth">-->
-        <!--                    <div>商品商品商品</div>-->
-        <!--                </el-form-item>-->
-        <!--                <el-form-item label="兑换数量：" :label-width="formLabelWidth">-->
-        <!--                    <div>商品商品商品</div>-->
-        <!--                </el-form-item>-->
-        <!--                <br>-->
-        <!--                <el-form-item label="收获地址：" :label-width="formLabelWidth">-->
-        <!--                    <div>商品商品</div>-->
-        <!--                </el-form-item>-->
-        <!--                <br>-->
-        <!--            </el-form>-->
-        <!--            <span slot="footer" class="dialog-footer">-->
-        <!--                <el-button @click="dialogVisible=false" type="info">取 消</el-button>-->
-        <!--                <el-button type="primary" @click="dialogVisible=false">发 货</el-button>-->
-        <!--            </span>-->
-        <!--        </el-dialog>-->
+                <el-form-item label="支付：">
+                    {{sendObj.amount}}
+                </el-form-item>
+                <el-form-item label="兑换数量：">
+                    {{sendObj.billNumber}}
+                </el-form-item>
+                <br>
+                <el-form-item label="收获地址：">
+                    {{sendObj.receiverAddr}}
+                </el-form-item>
+                <br>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible=false" type="info">取 消</el-button>
+                <el-button type="primary" @click="shipBild">发 货</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
 <script>
     import pagination from '@com/el-pagination'
-    import {goodsList} from '@http/order'
+    import {goodsList, ship} from '@http/order'
+
 
     export default {
         name: "index",
@@ -151,7 +150,9 @@
                     records: []
                 },
                 pageData: {},
-                userInfo: {}
+                userInfo: {},
+                sendObj: {}
+
 
             }
         },
@@ -161,6 +162,17 @@
         methods: {
             Godetail(data) {
                 this.dialogVisible = true
+                this.sendObj = data
+
+            },
+            async shipBild() {
+                let obj = `${this.sendObj.billId}`
+                let res = await ship(obj)
+                if (res && res.code === 1000) {
+                    this.dialogVisible = false
+                    this.$tools.$mes('发货成功', 'success')
+                    this.init()
+                }
             },
             async init() {
 
