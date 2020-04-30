@@ -130,7 +130,8 @@
                         <el-button type="warning" @click="isShow=false">处理争议</el-button>
                     </el-col>
                     <el-col :span="3" :offset="1">
-                        <el-button type="info" @click="$emit('Godetail')">返回</el-button>
+                        <el-button type="info" @click="back">返回</el-button>
+
                     </el-col>
                 </el-row>
             </div>
@@ -195,13 +196,10 @@
     import Map from '@com/map-QQ'
     import Map2 from '@com/map-QQ/index2'
     import {serviceDetail} from '@http/order'
+    import {mapState} from "vuex";
 
     export default {
-        props: {
-            userInfo: {
-                type: Object,
-            }
-        },
+
         name: "teamDetail",
         data() {
             return {
@@ -218,7 +216,15 @@
             Map,
             Map2
         },
+        computed: {
+            ...mapState({
+                userInfo: state => state.baseData.OrderData,
+            })
+        },
         methods: {
+            back() {
+                this.$router.go(-1)
+            },
             async init() {
                 let res = await serviceDetail(this.userInfo.id)
                 this.formData = res.data

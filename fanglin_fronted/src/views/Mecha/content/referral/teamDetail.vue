@@ -31,8 +31,11 @@
                         </el-form-item>
 
                         <el-form-item label="推荐图片 : ">
-                            <Elupload @load="avatar"
+                            <Elupload
+                                      @load="avatar"
                                       :isDetail=true
+                                      :isupdate=true
+                                      :baseImg="formData.image"
                             />
                         </el-form-item>
                         <el-form-item label="推荐链接 : ">
@@ -52,12 +55,14 @@
             </el-row>
         </div>
         <div class="my-block block_bot">
-            <el-row type="flex" class="row-bg" justify="space-around">
-                <el-col :span="6">
+            <el-row type="flex" class="row-bg" justify="center">
+                <el-col :span="3">
                     <el-button type="warning" @click="save()">保存</el-button>
-
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="3">
+                    <el-button type="primary" @click="deleteId()">删除</el-button>
+                </el-col>
+                <el-col :span="3">
                     <el-button type="info" @click="back">返回</el-button>
                 </el-col>
             </el-row>
@@ -69,19 +74,14 @@
     import Elupload from '@com/el-upload'
 
     import {Stidlist} from '@http/inst'
-    import {recommendUp} from '@http/recommend'
+    import {recommendUp, recommenddelete} from '@http/recommend'
+    import {mapState} from "vuex";
 
     export default {
-        props: {
-            userInfo: {
-                type: Object,
-            }
-        },
+
         name: "teamDetail",
         data() {
             return {
-                formData: {},
-                src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
                 imageUrl: '',
                 column: [],
                 isDetail: true,
@@ -89,18 +89,23 @@
 
             }
         },
-        components: {            Elupload,
+        components: {
+            Elupload,
+        },
+        computed: {
+            ...mapState({
+                formData: state => state.baseData.ReferalData,
+            })
         },
         methods: {
             avatar(data) {
-                this.formData.avatar = data
+                this.formData.image = data
             },
             back() {
-                this.$emit('Godetail')
+                this.$router.go(-1)
             },
             async init() {
                 let res3 = await Stidlist()
-                this.formData = this.userInfo
                 this.column = res3.data
             },
             async save() {
@@ -111,6 +116,13 @@
                     this.back()
                 }
             },
+            async deleteId() {
+                let res = await recommenddelete(this.formData.id)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('删除成功', 'success')
+                    this.back()
+                }
+            }
         },
         created() {
             this.init()
@@ -118,7 +130,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
     .el-image {
         width: 300px;
         height: 150px;
@@ -143,12 +155,16 @@
     }
 
 
-
     .my-block
     /deep/ .avatar {
         width: 178px;
         height: 178px;
         display: block;
     }
-
+    .my-block {
+    /deep/ .successImg {
+        width: 618px;
+        height: 218px;
+    }
+    }
 </style>

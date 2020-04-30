@@ -4,7 +4,7 @@
             <div class="sub-title">活动详情</div>
             <el-row :gutter="20">
 
-                <el-col :span="8">
+                <el-col :span="16">
                     <el-form
                             :inline="true"
                             :model="formData"
@@ -23,7 +23,7 @@
                     </el-form>
 
                 </el-col>
-                <el-col :span="16">
+                <el-col :span="8">
                     <el-form
                             :inline="true"
                             :model="formData"
@@ -35,7 +35,7 @@
 
                         </el-form-item>
                         <el-form-item label="时长：">
-                            <div>{{formData.duration}}</div>
+                            <div>{{formData.duration}}小时</div>
 
                         </el-form-item>
                         <el-form-item label="联系电话：">
@@ -51,7 +51,7 @@
                             <div>{{formData.position}}</div>
                         </el-form-item>
                         <el-form-item>
-                            <i class="el-icon-s-opportunity" style="font-size: 18px;color: #0099ff;cursor: pointer"></i>
+                            <i class="el-icon-s-opportunity" style="font-size: 18px;color: #0099ff;cursor: pointer" @click="map"></i>
                         </el-form-item>
                         <br>
 
@@ -148,7 +148,14 @@
                 </el-col>
             </el-row>
         </div>
-
+        <el-dialog
+                title="地点"
+                :visible.sync="dialog"
+                width="50%"
+                center
+        >
+            <div id="container" style="width:100%;height:380px;"></div>
+        </el-dialog>
     </div>
 </template>
 
@@ -156,14 +163,11 @@
     import detailBottom from '@com/detailBottom'
     import pagination from '@com/el-pagination'
     import {activityDetail, select, applyList} from '@http/activity'
+    import {mapState} from "vuex";
 
     let value = ''
     export default {
-        props: {
-            userInfo: {
-                type: Object,
-            }
-        },
+
         name: "teamDetail",
         data() {
             return {
@@ -177,10 +181,16 @@
                 dataInfo: {},
                 hasSelectList: [],
                 obj: {},
-                value:value
+                value: value,                dialog: false
+
             }
         },
         components: {},
+        computed: {
+            ...mapState({
+                userInfo: state => state.baseData.EventData,
+            })
+        },
         methods: {
             recommend() {
                 let obj = {
@@ -195,6 +205,7 @@
             },
             back() {
                 this.$store.dispatch('mecha_asset/setAsset', 1)
+                this.$router.go(-1)
             },
             async sure() {
                 let res = await select(this.dataInfo)
@@ -233,6 +244,27 @@
                 this.totalPeople = parseInt(this.selectedVOList.length)
                 this.totalCore = parseInt(this.selectedVOList.length) * parseInt(this.formData.value)
             },
+            async map() {
+                let info = ''
+                info = this.formData.positionCo
+                this.dialog = true
+                await info
+                var myLatlng = new qq.maps.LatLng(info.split(",")[1], info.split(",")[0]);
+                var myOptions = {
+                    zoom: 8,
+                    center: myLatlng,
+                    mapTypeId: qq.maps.MapTypeId.ROADMAP
+                }
+
+                var map = new qq.maps.Map(document.getElementById("container"), myOptions);
+                setTimeout(function () {
+                    var marker = new qq.maps.Marker({
+                        position: myLatlng,
+                        animation: qq.maps.MarkerAnimation.DROP,
+                        map: map
+                    });
+                }, 2000);
+            },
 
             toggle(data) {
                 if (data.length) {
@@ -259,8 +291,8 @@
     }
 
     .el-image {
-        width: 300px;
-        height: 150px;
+        width: 686px;
+        height: 218px;
     }
 
     .rightText {

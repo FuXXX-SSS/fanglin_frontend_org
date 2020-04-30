@@ -2,21 +2,22 @@
     <div>
         <div class="index">
             <div class="context">
-                <img src="@/assets/LOGO.jpg" alt="">
+                <img :src="imgSrc" alt="" v-if="imgSrc!==''">
+                <img src="@/assets/LOGO.jpg" alt="" v-else>
                 <p>芳邻时间银行机构管理后台</p>
             </div>
             <div class="rightcontext">
                 <div class="item">用户：{{userName}}</div>
-                  <span class="el-dropdown-link" @click="logout">
+                <span class="el-dropdown-link" @click="logout">
                     退出登录
                   </span>
-                    <!--                    <el-dropdown-menu slot="dropdown">-->
-                    <!--                        <el-dropdown-item command="a">我的信息</el-dropdown-item>-->
-                    <!--                        <el-dropdown-item command="b">-->
-                    <!--                            <span >退出登录</span>-->
-                    <!--                        </el-dropdown-item>-->
+                <!--                    <el-dropdown-menu slot="dropdown">-->
+                <!--                        <el-dropdown-item command="a">我的信息</el-dropdown-item>-->
+                <!--                        <el-dropdown-item command="b">-->
+                <!--                            <span >退出登录</span>-->
+                <!--                        </el-dropdown-item>-->
 
-                    <!--                    </el-dropdown-menu>-->
+                <!--                    </el-dropdown-menu>-->
             </div>
         </div>
     </div>
@@ -43,7 +44,8 @@
                         message: "新密码不能为空"
                     }
                 },
-                psData: {}
+                psData: {},
+                imgSrc: ''
             };
         },
         methods: {
@@ -58,11 +60,15 @@
                         this.$router.push("/login");
                     }, 1000);
                 }
-
             },
+            init() {
+                this.userName = JSON.parse(sessionStorage.getItem("userInfo")).userName
+                this.imgSrc = JSON.parse(sessionStorage.getItem("InfoData")).avatar
+
+            }
         },
         created() {
-            this.userName = JSON.parse(sessionStorage.getItem("userInfo")).userName
+            this.init()
         }
     };
 </script>
@@ -79,6 +85,7 @@
 
         .rightcontext {
             margin-right: 30px;
+
             .item {
                 margin-right: 30px;
                 float: left;

@@ -16,7 +16,7 @@
                         <el-input v-model="formData.keyword" placeholder="项目名称"></el-input>
                     </el-form-item>
                     <el-form-item label="电话">
-                        <el-input v-model="formData.phone" placeholder="电话"></el-input>
+                        <el-input v-model="formData.phone" placeholder="电话" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                     </el-form-item>
                     <el-form-item label="项目状态">
                         <el-select v-model="formData.projectStatus">
@@ -33,8 +33,10 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="publishTime" label="发布时间"/>
-                    <el-table-column prop="name" label="活动名称"/>
+                    <el-table-column prop="name" label="项目名称"/>
                     <el-table-column prop="phone" label="联系电话"/>
                     <el-table-column prop="amount" label="募资目标"/>
                     <el-table-column prop="refundStd" label="回馈标准"/>
@@ -104,9 +106,17 @@
             Godetail(data) {
                 this.userInfo = data
                 this.$store.dispatch('mecha_asset/setEvent', 2)
+                this.$router.push({
+                    name: "eventDetail",
+                });
+                this.$store.dispatch('baseData/setProject', data)
+                sessionStorage.setItem("ProjectData", JSON.stringify(data));
             },
             add() {
                 this.$store.dispatch('mecha_asset/setEvent', 3)
+                this.$router.push({
+                    name: "eventAdd",
+                });
             },
             async init() {
 

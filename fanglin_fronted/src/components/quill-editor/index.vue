@@ -27,7 +27,6 @@
         },
         components: {quillEditor},
         created() {
-            console.log(this.description);
         },
         data() {
             return {
@@ -55,6 +54,8 @@
             },
 // 内容改变事件
             onEditorChange() {
+                this.$emit('qutil',this.description)
+                console.log(this.description);
             }
 
         },

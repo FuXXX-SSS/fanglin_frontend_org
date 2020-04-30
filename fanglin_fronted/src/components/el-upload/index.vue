@@ -17,10 +17,12 @@
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
                 list-type="picture-card"
+                :class="{hide:hideUpload}"
+                :on-change="handleEditChange"
         >
             <i class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
-        <div v-else style="width: 200px;height: 140px;position:relative;">
+        <div v-else style="position:relative;" class="successImg">
             <img :src="baseImage" alt style="width: 100%;height:100%;"/>
             <div class="close" @click="clearImg">
                 ×
@@ -42,9 +44,15 @@
             isDetail: {
                 type: Boolean,
                 default: false
-            },  isUpload: {
+            }, isUpload: {
                 type: Boolean,
                 default: false
+            }, isupdate: {
+                type: Boolean,
+                default: false
+            }, baseImg: {
+                type: String,
+                default: ''
             },
         },
         name: "index",
@@ -62,26 +70,34 @@
                 },
                 activeName: "0",
                 baseImage: '',
-                isShow:this.isDetail
+                isShow: this.isDetail,
+                hideUpload: false,
+                limitCount: 1
             }
         },
         methods: {
+            handleEditChange(file, fileList) {
+                let vm = this
+                vm.hideUpload = fileList.length >= 1
+                console.log(vm.hideUpload);
+            },
             handleAvatarSuccess(res, file) {
                 console.log(res);
                 this.imageUrl = URL.createObjectURL(file.raw);
                 this.formData.image = res.data.url
+                console.log(this.formData.image);
                 this.$emit('load', this.formData.image)
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type == "image/jpeg" || file.type == "image/png";
-                const isLt4M = file.size / 1024 / 1024 < 1;
+                const isLt5M = file.size / 1024 / 1024 < 5;
                 if (!isJPG) {
                     this.$message.error("图片只能是 JPG/PNG 格式!");
                 }
-                if (!isLt4M) {
-                    this.$message.error("图片大小不能超过 1MB!");
+                if (!isLt5M) {
+                    this.$message.error("图片大小不能超过 5MB!");
                 }
-                return isJPG && isLt4M;
+                return isJPG && isLt5M;
             },
             onExceed(files, fileList) {
                 this.$tools.$mes(`图片仅能上传${this.limit}张图片！`, 'warning');
@@ -92,7 +108,9 @@
                 this.dialogImageUrl = file.response.data.url;
                 this.dialogVisible = true;
             },
-            handleRemove(file) {
+            handleRemove(file, fileList) {
+                let vm = this
+                vm.hideUpload = fileList.length >= 1
                 console.log(file);
                 this.form.picList.forEach((item, i) => {
                     if (!file.response) {
@@ -121,10 +139,16 @@
                 ).instId;
                 if (this.isUpload) {
                     let res = await instDetail(instId)
-                    if (res.data.avatar!==''){
+                    if (res.data.avatar !== '') {
                         this.baseImage = res.data.avatar
                         this.isShow = false
                     }
+                }
+                if (   await  this.isupdate) {
+                    console.log(this.baseImg);
+                   this.baseImage =   this.baseImg
+                    console.log(this.baseImage);
+                    this.isShow = false
                 }
                 let userInfo = JSON.parse(
                     sessionStorage.getItem("userInfo")
@@ -147,7 +171,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
     .close {
         position: absolute;
         top: -15px;
@@ -162,5 +186,25 @@
         font-weight: bold;
         font-size: 20px;
         cursor: pointer;
+    }
+
+    .hide /deep/ .el-upload--picture-card {
+        display: none;
+    }
+
+    .hide /deep/ .el-upload-list--picture-card .el-upload-list__item {
+        width: 686px;
+        height: 218px;
+    }
+
+    .avatar {
+        /deep/ img {
+            width: 686px;
+        }
+    }
+
+    .my-block /deep/ .el-upload {
+        width: 686px;
+        height: 218px;
     }
 </style>

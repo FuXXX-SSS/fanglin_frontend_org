@@ -17,7 +17,8 @@
                             <el-input v-model="formData.activityName" placeholder="活动名称"></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话：">
-                            <el-input v-model="formData.phone" placeholder="联系电话"></el-input>
+                            <el-input v-model="formData.phone" placeholder="联系电话"
+                                      onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"></el-input>
 
                         </el-form-item>
                         <el-form-item label="所属项目：">
@@ -34,52 +35,76 @@
                             <el-date-picker
                                     v-model="formData.beginTime"
                                     type="datetime"
-                                    value-format="timestamp"
                                     placeholder="开始时间"
-                                    align="right">
+                                    format="yyyy-MM-dd hh:mm"
+                                    value-format="timestamp"
+                                    align="right"
+                                    @change="changeTime"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item label="结束时间：">
+                            <el-date-picker
+                                    v-model="formData.endTime"
+                                    type="datetime"
+                                    placeholder="结束时间"
+                                    format="yyyy-MM-dd hh:mm"
+                                    value-format="timestamp"
+                                    align="right"
+                                    @change="changeTime"
+                            >
                             </el-date-picker>
                         </el-form-item>
 
-                        <el-form-item label="服务时长：">
-                            <el-input-number v-model.number="formData.duration"
-                                             :min="0.5"
-                                             :step="0.5"
-                                             step-strictly
-                                             @change="change"
-                                             size="medium"></el-input-number>
-                            <p style="display: inline-block;margin: 0;margin-left:10px!important;">服务时长以半小时为单位</p>
-                        </el-form-item>
+                        <!--                        <el-form-item label="服务时长：">-->
+                        <!--                            <el-input-number v-model.number="formData.duration"-->
+                        <!--                                             :min="0.5"-->
+                        <!--                                             :step="0.5"-->
+                        <!--                                             step-strictly-->
+                        <!--                                             @change="change"-->
+                        <!--                                             size="medium"></el-input-number>-->
+                        <!--                            <p style="display: inline-block;margin: 0;margin-left:10px!important;">服务时长以半小时为单位</p>-->
+                        <!--                        </el-form-item>-->
                         <el-form-item label="重复：">
-                            <el-radio v-model="formData.repeatActivity" label="0">单次</el-radio>
-                            <el-radio v-model="formData.repeatActivity" label="1">每天</el-radio>
-                            <el-radio v-model="formData.repeatActivity" label="2">每周</el-radio>
-                            <el-radio v-model="formData.repeatActivity" label="3">每月</el-radio>
-                            <el-radio v-model="formData.repeatActivity" label="4">每年</el-radio>
+                            <el-radio-group v-model="formData.repeatActivity" @change="changeRadio">
+                                <el-radio label="0">单次</el-radio>
+                                <el-radio label="1">每天</el-radio>
+                                <el-radio label="2">每周</el-radio>
+                                <el-radio label="3">每月</el-radio>
+                                <el-radio label="4">每年</el-radio>
+                            </el-radio-group>
+
                             <el-form-item label="重复截止日期：" style="margin-top: 30px">
                                 <el-date-picker
-                                        v-model="formData.endTime"
-                                        type="date"
-                                        value-format="timestamp"
+                                        v-model="formData.repeatEndTime"
+                                        type="datetime"
                                         placeholder="重复截止日期"
-                                        align="right">
+                                        format="yyyy-MM-dd hh:mm"
+                                        value-format="timestamp"
+                                        align="right"
+                                        @change="changeTime"
+                                >
                                 </el-date-picker>
                             </el-form-item>
                         </el-form-item>
                         <el-form-item label="年龄：">
                             <vue-slider v-model="value2" :tooltip="'always'"
+                                        :max="75"
+                                        :min="6"
                                         :tooltip-placement="['bottom', 'bottom']"></vue-slider>
                         </el-form-item>
 
                         <br>
 
-                        <el-form-item label="人员要求：">
-                            <el-checkbox-group v-model="formData.serviceCatIdList">
+                        <el-form-item label="专长要求：">
+                            <el-checkbox-group v-model="formData.serviceCatIdList" :max="3">
                                 <el-checkbox
                                         v-for="i in serviceList"
                                         :label="i.serviceCatId"
                                         :value="i.serviceCatName"
                                         :key="i.serviceCatId"
                                         @change="selectChange"
+
                                 >
                                     {{i.serviceCatName}}
                                 </el-checkbox>
@@ -87,10 +112,13 @@
                             </el-checkbox-group>
                         </el-form-item>
                         <el-form-item label="人数要求 : ">
-                            <el-input v-model="formData.userNum" placeholder="人数要求" @change="numChange"></el-input>
+                            <el-input v-model="formData.userNum"
+                                      placeholder="人数要求"
+                                      onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
+                                      @change="numChange"></el-input>
                         </el-form-item>
                         <el-form-item label="活动价值：">
-                            <div>{{calValue}}积分/人 共计{{toatalValue}}积分</div>
+                            <div>{{calValue}}{{assetsUnitName}}/人 共计{{toatalValue}}{{assetsUnitName}}</div>
                         </el-form-item>
                         <el-form-item label="性别：">
                             <el-radio v-model="formData.gender" label="1">男</el-radio>
@@ -103,7 +131,7 @@
                         </el-form-item>
                         <el-form-item label="地点：">
                             <el-input v-model="mapLocation.address" @focus="focus" placeholder="地点">
-                                <i slot="suffix" class="el-input__icon el-icon-s-opportunity"
+                                <i slot="suffix" class="el-input__icon el-icon-s-opportunity" @click="focus"
                                    style="font-size: 18px;color: #0099ff;cursor: pointer"></i>
                             </el-input>
                         </el-form-item>
@@ -179,6 +207,8 @@
                            :zoom="mapZoom"
                            :scroll-wheel-zoom="true"
                            ak="baidu-ak"
+                           @click="getClickInfo"
+                           :autoLocation="true"
                            @ready="handlerBMap">
                 </baidu-map>
 
@@ -201,14 +231,23 @@
         name: "teamDetail",
         data() {
             return {
-                value2: [0, 150],
+                value2: [6, 75],
                 tags: [
                     {name: '人数', type: ''},
                     {name: '年龄', type: 'success'},
                     {name: '性别', type: 'info'},
                     {name: '实名认证', type: 'warning'},
                 ],
-                formData: {duration: 0.5, serviceCatIdList: [], userNum: 1, projectId: ''},
+                formData: {
+                    duration: 0.5,
+                    serviceCatIdList: [],
+                    userNum: 1,
+                    projectId: '',
+                    repeatActivity: 0,
+                    beginTime: 0,
+                    endTime: 0,
+                    repeatEndTime: 0,
+                },
                 num: '',
                 dialog: false,
                 markersArray: [],
@@ -226,9 +265,14 @@
                 zoom: 15,
                 project: [],
                 serviceList: [],
-                calValue: '',
-                toatalValue: '',
+                calValue: 0,
+                toatalValue: 0,
                 isDetail: true,
+                assetsUnitName: '',
+                beginTime: 0,
+                endTime: 0,
+                repeatEndTime: 0,
+
             }
         },
         components: {
@@ -237,8 +281,40 @@
             BaiduMap,
         },
         methods: {
+            getClickInfo(e) {
+                let geocoder = new BMap.Geocoder();  //创建地址解析器的实例
+                geocoder.getLocation(e.point, rs => {
+                    //地址描述(string)=
+                    this.formData.positionCo = `${e.point.lng},${e.point.lat}`
+                    this.mapLocation.address = rs.address
+                    // console.log(rs);    //这里打印可以看到里面的详细地址信息，可以根据需求选择想要的
+                    // console.log(rs.addressComponents);//结构化的地址描述(object)
+                    // console.log(rs.addressComponents.province); //省
+                    // console.log(rs.addressComponents.city); //城市
+                    // console.log(rs.addressComponents.district); //区县
+                    // console.log(rs.addressComponents.street); //街道
+                    // console.log(rs.addressComponents.streetNumber); //门牌号
+                    // console.log(rs.surroundingPois); //附近的POI点(array)
+                    // console.log(rs.business); //商圈字段，代表此点所属的商圈(string)
+                });
+
+            },
+            changeRadio() {
+                this.cal()
+            },
+            getUnixTime(dateStr) {
+                var newstr = dateStr.replace(/-/g, '/');
+                var date = new Date(newstr);
+                var time_str = date.getTime().toString();
+                return time_str.substr(0, 10)
+            },
+            changeTime() {
+                this.cal()
+            },
             back() {
                 this.$store.dispatch('mecha_asset/setAsset', 1)
+                this.$router.go(-1)
+
             },
             change(currentValue, oldValue) {
                 console.log(currentValue);
@@ -252,6 +328,7 @@
                 this.dialog = true
             },
             handlerBMap({BMap, map}) {
+
                 this.BMap = BMap
                 this.map = map
                 if (this.mapLocation.coordinate && this.mapLocation.coordinate.lng) {
@@ -260,8 +337,8 @@
                     this.mapZoom = 15
                     map.addOverlay(new this.BMap.Marker(this.mapLocation.coordinate))
                 } else {
-                    this.mapCenter.lng = 113.271429
-                    this.mapCenter.lat = 23.135336
+                    this.mapCenter.lng = 114.3162001
+                    this.mapCenter.lat = 30.58108413
                     this.mapZoom = 10
                 }
             },
@@ -300,6 +377,7 @@
                 this.mapLocation.coordinate = point
                 this.makerCenter(point)
                 this.formData.positionCo = `${point[Object.keys(point)[0]]},${point[Object.keys(point)[1]]}`
+                console.log(this.formData.positionCo);
             },
             makerCenter(point) {
                 if (this.map) {
@@ -321,14 +399,14 @@
                 } else {
                     this.project = []
                 }
-                console.log(res2.data);
-                if (res2 ) {
+                if (res2) {
                     this.serviceList = res2.data
                 } else {
                     this.serviceList = []
 
                 }
-                console.log(this.serviceList);
+                this.assetsUnitName = JSON.parse(sessionStorage.getItem("userInfo")).assetsUnitName
+
             },
             async submit() {
                 console.log(this.formData);
@@ -349,8 +427,11 @@
             },
             async cal() {
                 let obj = {
-                    duration: this.formData.duration,
-                    serviceCatIdList: this.formData.serviceCatIdList
+                    repeatEndTime: this.formData.repeatEndTime,
+                    serviceCatIdList: this.formData.serviceCatIdList,
+                    beginTime: this.formData.beginTime,
+                    endTime: this.formData.endTime,
+                    repeat: this.formData.repeatActivity,
                 }
                 let res = await cal(obj)
                 this.calValue = res.data.value
@@ -358,23 +439,43 @@
             },
             numChange() {
                 this.toatalValue = parseInt(this.calValue) * parseInt(this.formData.userNum)
+                console.log(this.toatalValue);
+            },
+            city() {    //定义获取城市方法
+                const geolocation = new this.BMap.Geocoder()
+                var _this = this
+                geolocation.getCurrentPosition(function getinfo(position) {
+                    console.log(position);
+                    let city = position.address.city;             //获取城市信息
+                    let province = position.address.province;     //获取省份信息
+                    _this.LocationProvince = province
+                    _this.LocationCity = city
+                }, function (e) {
+                    _this.LocationCity = "定位失败"
+                }, {provider: 'baidu'});
             }
         },
         created() {
             this.init()
-            this.cal()
-        }
+
+        },
+
     }
 </script>
 
 <style scoped>
     .el-image {
-        width: 300px;
-        height: 150px;
+        width: 686px;
+        height: 218px;
     }
 
     .bm-view {
         width: 100%;
         height: 500px;
+    }
+
+    .my-block /deep/ .el-upload {
+        width: 686px;
+        height: 218px;
     }
 </style>

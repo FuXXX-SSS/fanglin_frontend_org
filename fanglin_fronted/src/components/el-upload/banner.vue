@@ -75,12 +75,12 @@
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type == "image/jpeg" || file.type == "image/png";
-                const isLt4M = file.size / 1024 / 1024 < 1;
+                const isLt4M = file.size / 1024 / 1024 < 5;
                 if (!isJPG) {
                     this.$message.error("图片只能是 JPG/PNG 格式!");
                 }
                 if (!isLt4M) {
-                    this.$message.error("图片大小不能超过 1MB!");
+                    this.$message.error("图片大小不能超过 5MB!");
                 }
                 return isJPG && isLt4M;
             },

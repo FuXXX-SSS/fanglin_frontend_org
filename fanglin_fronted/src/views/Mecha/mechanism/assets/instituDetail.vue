@@ -11,8 +11,8 @@
                         size="small"
                         class="demo-form-inline"
                 >
-                    <el-form-item label="关键字查询">
-                        <el-input v-model="formData.keyword" placeholder="请输入关键字查询"></el-input>
+                    <el-form-item label="交易方查询">
+                        <el-input v-model="formData.keyword" placeholder="请输入交易方查询"></el-input>
                     </el-form-item>
                     <el-form-item label="时间查询">
                         <el-date-picker
@@ -28,11 +28,11 @@
                     </el-form-item>
                     <el-form-item label="交易类型">
                         <el-select v-model="formData.billType" placeholder="请选择交易类型">
-                            <el-option label="直接转账" value=1></el-option>
-                            <el-option label="项目" value=0></el-option>
-                            <el-option label="活动" value=1></el-option>
-                            <el-option label="兑换实物" value=2></el-option>
-                            <el-option label="兑换现金" value=3></el-option>
+                            <el-option label="直接转账" value=0></el-option>
+                            <el-option label="项目" value=1></el-option>
+                            <el-option label="活动" value=2></el-option>
+                            <el-option label="兑换实物" value=3></el-option>
+                            <el-option label="兑换现金" value=4></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item class="options">
@@ -44,6 +44,8 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="created" label="交易时间"/>
                     <el-table-column prop="billType" label="交易类型">
                     <template slot-scope="scope">
@@ -88,7 +90,7 @@
         },
         methods: {
             back() {
-                this.$emit('Godetail')
+                this.$router.go(-1)
             },
             async init() {
                 if (this.value1.length === 0 ) {

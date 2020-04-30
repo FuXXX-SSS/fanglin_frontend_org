@@ -19,7 +19,7 @@
                         <el-input v-model="formData.publishName" placeholder="发布者"></el-input>
                     </el-form-item>
                     <el-form-item label="电话 : ">
-                        <el-input v-model="formData.phone" placeholder="电话"></el-input>
+                        <el-input v-model="formData.phone" placeholder="电话" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                     </el-form-item>
                     <el-form-item label="活动状态">
                         <el-select v-model="formData.activityStatus">
@@ -108,9 +108,17 @@
             Godetail(data) {
                 this.userInfo = data
                 this.$store.dispatch('mecha_asset/setAsset', 2)
+                this.$router.push({
+                    name: "assetDetail",
+                });
+                this.$store.dispatch('baseData/setEvent', data)
+                sessionStorage.setItem("EventData", JSON.stringify(data));
             },
             add() {
                 this.$store.dispatch('mecha_asset/setAsset', 3)
+                this.$router.push({
+                    name: "assetAdd",
+                });
             },
             async init() {
                 let res = await activityList(this.formData)

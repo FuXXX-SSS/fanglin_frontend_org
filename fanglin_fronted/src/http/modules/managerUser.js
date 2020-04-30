@@ -45,7 +45,7 @@ export const managerUserList = data =>
     _axios({
         url: "/bms/managerUser/list",
         method: "get",
-        data: data
+        params: data
     });
 
 

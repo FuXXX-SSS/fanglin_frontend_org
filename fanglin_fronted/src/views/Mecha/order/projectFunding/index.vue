@@ -45,6 +45,8 @@
                     <p>元</p>
                 </div>
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="billDate" label="订单时间"/>
                     <el-table-column prop="projectName" label="项目名称"/>
                     <el-table-column prop="address" label="发布方"/>

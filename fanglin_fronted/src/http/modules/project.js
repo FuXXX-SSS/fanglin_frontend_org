@@ -52,3 +52,12 @@ export const description = data =>
         method: "post",
         data: data
     });
+
+
+// 更新项目
+export const update = data =>
+    _axios({
+        url: `/bms/project/update`,
+        method: "post",
+        data: data
+    });

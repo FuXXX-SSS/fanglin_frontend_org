@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">发布项目</div>
+            <div class="sub-title">编辑项目</div>
             <el-row :gutter="20">
 
                 <el-col :span="18">
@@ -21,7 +21,7 @@
                             <el-input v-model="formData.phone" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                         </el-form-item>
                         <el-form-item label="募资目标：">
-                            <el-input v-model="formData.targetAmount" style="width: 80%;float: left;"></el-input>
+                            <el-input v-model="formData.amount" style="width: 80%;float: left;"></el-input>
                             <span style="margin-left: 14px;">元</span>
                         </el-form-item>
 
@@ -35,8 +35,12 @@
 
                         </el-form-item>
                         <br>
-                        <el-form-item label="缩略图：" style="margin-right: 10px">
-                            <Elupload @load="load" :isDetail="isDetail"/>
+                        <el-form-item label="缩略图：" style="margin-right: 10px" class="image">
+                            <Elupload @load="load"
+                                      :isDetail=true
+                                      :isupdate=true
+                                      :baseImg="formData.image"
+                            />
                         </el-form-item>
                     </el-form>
 
@@ -72,9 +76,10 @@
 
 <script>
     import Quill from '@com/quill-editor'
-    import {projectpublish} from '@http/project'
+    import {update} from '@http/project'
     import baseUrl from '@/http/baseUrl'
     import Elupload from '@com/el-upload'
+    import {mapState} from "vuex";
 
     export default {
         name: "teamDetail",
@@ -82,7 +87,6 @@
             return {
                 imgs: [],
                 fileList: [],
-                formData: {},
                 baseUrl: baseUrl,
                 imageUrl: '',
                 dialogImageUrl: '',
@@ -99,6 +103,11 @@
             Quill,
             Elupload
         },
+        computed: {
+            ...mapState({
+                formData: state => state.baseData.eventupdate,
+            })
+        },
         methods: {
             back() {
                 this.$store.dispatch('mecha_asset/setEvent', 1)
@@ -106,7 +115,18 @@
             },
 
             async save() {
-                let res = await projectpublish(this.formData)
+                console.log(this.formData);
+                let {amount, detail, image, name, phone, projectId, refundStd} = this.formData
+                let obj = {
+                    amount: amount,
+                    detail: detail,
+                    image: image,
+                    name: name,
+                    phone: phone,
+                    projectId: projectId,
+                    refundStd: refundStd,
+                }
+                let res = await update(this.formData)
                 if (res && res.code === 1000) {
                     this.$tools.$mes('操作成功', 'success')
                     this.$emit('init')
@@ -117,7 +137,9 @@
                 this.formData.detail = data
             },
             load(data) {
+                console.log(data);
                 this.formData.image = data
+                console.log(this.formData.image);
             },
             init() {
                 this.assetsUnitName = JSON.parse(
@@ -131,14 +153,16 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
     .el-image {
         width: 300px;
         height: 150px;
     }
-    .my-block /deep/ .el-upload {
-        width: 686px;
-        height: 218px;
-    }
 
+    .my-block {
+        /deep/ .successImg {
+            width: 618px;
+            height: 218px;
+        }
+    }
 </style>

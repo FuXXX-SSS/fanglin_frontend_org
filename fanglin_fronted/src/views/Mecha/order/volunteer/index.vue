@@ -41,6 +41,8 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="serviceNo" label="服务编号"/>
                     <el-table-column prop="activityName" label="活动名称"/>
                     <el-table-column prop="beginTime" label="开始时间"/>
@@ -107,6 +109,11 @@
             Godetail(data) {
                 this.userInfo = data
                 this.isShow = !this.isShow
+                this.$router.push({
+                    name: "orderDetail",
+                });
+                this.$store.dispatch('baseData/setOrder', data)
+                sessionStorage.setItem("OrderData", JSON.stringify(data));
             },
             async init() {
                 if (this.value1.length === 0 ) {

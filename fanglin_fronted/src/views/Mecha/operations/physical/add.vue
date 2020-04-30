@@ -29,7 +29,7 @@
                         </el-form-item>
                         <el-form-item label="入库数量：">
                             <el-input v-model="formData.totalStock" style="    width: 25%;
-    float: left;"></el-input>
+    float: left;" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                             <el-input v-model="formData.unit" style="    width: 25%;
     float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
@@ -106,6 +106,8 @@
         methods: {
             back() {
                 this.$store.dispatch('mecha_asset/setPhyscial', 1)
+                this.$router.go(-1)
+
             },
             load(data) {
                 this.formData.imageList.push(data)

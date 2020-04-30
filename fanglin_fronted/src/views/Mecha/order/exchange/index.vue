@@ -16,7 +16,7 @@
                         <el-input v-model="formData.receiverName" placeholder="收货人"></el-input>
                     </el-form-item>
                     <el-form-item label="电话">
-                        <el-input v-model="formData.phone" placeholder="电话"></el-input>
+                        <el-input v-model="formData.phone" placeholder="电话" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                     </el-form-item>
                     <el-form-item label="起始时间">
                         <el-date-picker

@@ -32,6 +32,8 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="assetsUnitName" label="资产名称"/>
                     <el-table-column prop="amount" label="活动资产数量"/>
                     <el-table-column prop="lockAmount" label="锁定资产数量"/>
@@ -51,6 +53,7 @@
             <DiaLog :dialogVisible="dialogVisible"
                     @diaLog="diaLog"
                     :form="walletURL"
+                    :Isdisabled="false"
                     @Sure="Sure(arguments)"
                     :info="info"/>
 
@@ -92,6 +95,9 @@
         methods: {
             Godetail(data) {
                 this.isShow = !this.isShow
+                this.$router.push({
+                    name: "instituDetail",
+                });
             },
             async init() {
                 let obj = {
@@ -125,7 +131,7 @@
             async diaLog(data) {
                 this.dialogVisible = !this.dialogVisible
                 let res = await walletURL(`${2}/${data.assetsUnitId}`)
-                this.walletURL = res.data
+                // this.walletURL = res.data
             },
             async Sure(msg) {
                 if (msg[1] === 1) {

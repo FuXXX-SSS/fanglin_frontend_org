@@ -9,6 +9,8 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="account" label="用户名"/>
                     <el-table-column prop="name" label="名字"/>
                     <el-table-column prop="phone" label="联系电话"/>
@@ -23,7 +25,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <pagination/>
+                <pagination :total="total" @pageChange="pageChange"/>
             </div>
         </div>
 
@@ -154,7 +156,11 @@
                         required: true,
                         message: "姓名不能为空"
                     },
-                }
+                },
+                total: 0,
+                formData: {
+                    pageNum: 1, pageSize: 10
+                },
             }
         },
         methods: {
@@ -162,9 +168,19 @@
             Change(value) {
                 let checkedCount = value.length;
             },
+            pageChange(item) {
+                this.formData.pageNum = item.page_index;
+                this.formData.pageSize = item.page_limit;
+                this.init()
+            },
             async init() {
-                let res = await managerUserList()
-                this.tableData.records = res.data
+                let res = await managerUserList(this.formData)
+                console.log(res.data);
+                let {total, list} = res.data
+                if (res && res.data !== null) {
+                    this.tableData.records = list
+                    this.total = total
+                }
             },
             async add() {
                 let res = await privilege()

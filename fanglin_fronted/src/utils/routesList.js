@@ -1,12 +1,13 @@
 import vuex from 'vuex'
-const RouteData =[
+
+const RouteData = [
     {
         path: "/userManagement",
         name: "userManagement",
         meta: {title: "用户管理", icon: "el-icon-s-custom", show: true},
         routeName: "basic",
         checked: true,
-        children:[
+        children: [
             {
                 path: "/index/userManagement/volunteer",
                 component: () =>
@@ -37,7 +38,7 @@ const RouteData =[
         path: "/content",
         routeName: "content",
         checked: false,
-        children:[
+        children: [
             {
                 path: "/index/content/article",
                 component: () =>
@@ -68,7 +69,7 @@ const RouteData =[
         redirect: "/operations",
         routeName: "operations",
         checked: false,
-        children:[
+        children: [
             {
                 path: "/index/operations/asset",
                 component: () =>
@@ -114,7 +115,7 @@ const RouteData =[
         redirect: "/order",
         routeName: "order",
         checked: false,
-        children:[
+        children: [
             {
                 path: "/index/order/volunteer",
                 component: () =>
@@ -153,7 +154,7 @@ const RouteData =[
         redirect: "/system",
         routeName: "system",
         checked: false,
-        children:[
+        children: [
             {
                 path: "/index/system/service",
                 component: () =>
@@ -180,14 +181,14 @@ const RouteData =[
     },
 
 ]
-const RouteData2 =[
+const RouteData2 = [
     {
         path: "/mecha",
         name: "mecha",
         meta: {title: "机构管理", icon: "el-icon-user", show: true},
         routeName: "basic",
         checked: true,
-        children:[
+        children: [
             {
                 path: "/index/mecha/volunteer",
                 component: () =>
@@ -195,6 +196,15 @@ const RouteData2 =[
                 routeName: "mechanism",
                 checked: false,
                 meta: {title: "成员管理", icon: "el-icon-eleme", show: true},
+            },
+            {
+                path: "/index/userManagement/volunteer1",
+                component: () =>
+                    import ("@mecha/mechanism/volunteer/teamDetail"),
+                routeName: "user",
+                checked: false,
+                name: "volunteerDetail",
+                meta: {title: "成员管理详情", icon: "el-icon-eleme", show: true},
             },
             {
                 path: "/index/mecha/join",
@@ -205,12 +215,30 @@ const RouteData2 =[
                 meta: {title: "加入申请", icon: "el-icon-delete-solid", show: true},
             },
             {
+                path: "/index/userManagement/teamDetail",
+                component: () =>
+                    import ("@mecha/mechanism/join/teamDetail"),
+                routeName: "user",
+                checked: false,
+                name: "teamDetail",
+                meta: {title: "加入申请详情", icon: "el-icon-eleme", show: true},
+            },
+            {
                 path: "/index/mecha/assets",
                 component: () =>
                     import ("@mecha/mechanism/assets"),
                 routeName: "assets",
                 checked: false,
                 meta: {title: "资产管理", icon: "el-icon-delete", show: true},
+            },
+            {
+                path: "/index/userManagement/instituDetail",
+                component: () =>
+                    import ("@mecha/mechanism/assets/instituDetail"),
+                routeName: "user",
+                checked: false,
+                name: "instituDetail",
+                meta: {title: "账单管理", icon: "el-icon-eleme", show: true},
             },
         ]
     },
@@ -220,7 +248,7 @@ const RouteData2 =[
         path: "/content",
         routeName: "content",
         checked: false,
-        children:[
+        children: [
             {
                 path: "/index/content/article",
                 component: () =>
@@ -242,6 +270,31 @@ const RouteData2 =[
                 meta: {title: "新建推荐", icon: "icon-basic", show: true},
                 component: () => import ("@com/recommend/index")
             },
+            {
+                path: "/index/content/articleDetail",
+                component: () =>
+                    import ("@mecha/content/article/teamDetail"),
+                routeName: "user",
+                checked: false,
+                name: "articleDetail",
+                meta: {title: "文章管理详情", icon: "el-icon-eleme", show: true},
+            }, {
+                path: "/index/content/articleAdd",
+                component: () =>
+                    import ("@mecha/content/article/teamDetail"),
+                routeName: "user",
+                checked: false,
+                name: "articleAdd",
+                meta: {title: "新增文章", icon: "el-icon-eleme", show: true},
+            }, {
+                path: "/index/content/referralDetail",
+                component: () =>
+                    import ("@mecha/content/referral/teamDetail"),
+                routeName: "user",
+                checked: false,
+                name: "referralDetail",
+                meta: {title: "推荐管理详情", icon: "el-icon-eleme", show: true},
+            },
         ]
     },
     {
@@ -251,7 +304,7 @@ const RouteData2 =[
         redirect: "/operations",
         routeName: "operations",
         checked: false,
-        children:[
+        children: [
             {
                 path: "/index/operations/asset",
                 component: () =>
@@ -259,6 +312,23 @@ const RouteData2 =[
                 routeName: "asset",
                 checked: false,
                 meta: {title: "活动管理", icon: "icon-basic", show: true},
+            },
+            {
+                path: "/index/operations/assetDetail",
+                component: () =>
+                    import ("@mecha/operations/asset/teamDetail"),
+                routeName: "event",
+                checked: false,
+                name: "assetDetail",
+                meta: {title: "活动管理详情", icon: "icon-basic", show: true},
+            }, {
+                path: "/index/operations/assetadd",
+                component: () =>
+                    import ("@mecha/operations/asset/add"),
+                routeName: "event",
+                checked: false,
+                name: "assetAdd",
+                meta: {title: "新增活动", icon: "icon-basic", show: true},
             }, {
                 path: "/index/operations/event",
                 component: () =>
@@ -266,6 +336,33 @@ const RouteData2 =[
                 routeName: "event",
                 checked: false,
                 meta: {title: "项目管理", icon: "icon-basic", show: true},
+            },
+            {
+                path: "/index/operations/eventadd",
+                component: () =>
+                    import ("@mecha/operations/event/add"),
+                routeName: "event",
+                checked: false,
+                name: "eventAdd",
+                meta: {title: "新增项目", icon: "icon-basic", show: true},
+            },
+            {
+                path: "/index/operations/eventupdate",
+                component: () =>
+                    import ("@mecha/operations/event/update"),
+                routeName: "event",
+                checked: false,
+                name: "eventupdate",
+                meta: {title: "编辑项目", icon: "icon-basic", show: true},
+            },
+            {
+                path: "/index/operations/eventDetail",
+                component: () =>
+                    import ("@mecha/operations/event/teamDetail"),
+                routeName: "event",
+                checked: false,
+                name: "eventDetail",
+                meta: {title: "项目管理详情", icon: "icon-basic", show: true},
             }, {
                 path: "/index/operations/project",
                 component: () =>
@@ -274,12 +371,45 @@ const RouteData2 =[
                 checked: false,
                 meta: {title: "物资管理", icon: "icon-basic", show: true},
             }, {
+                path: "/index/operations/projectDetail",
+                component: () =>
+                    import ("@mecha/operations/project/teamDetail"),
+                routeName: "physical",
+                checked: false,
+                name: "projectDetail",
+                meta: {title: "物资管理详情", icon: "icon-basic", show: true},
+            }, {
+                path: "/index/operations/projectAdd",
+                component: () =>
+                    import ("@mecha/operations/project/add"),
+                routeName: "physical",
+                checked: false,
+                name: "projectAdd",
+                meta: {title: "新增物资", icon: "icon-basic", show: true},
+            }, {
                 path: "/index/operations/physical",
                 component: () =>
                     import ("@mecha/operations/physical"),
                 routeName: "physical",
                 checked: false,
                 meta: {title: "现金管理", icon: "icon-basic", show: true},
+            },
+            {
+                path: "/index/operations/physicalDetail",
+                component: () =>
+                    import ("@mecha/operations/physical/teamDetail"),
+                routeName: "cash",
+                checked: false,
+                name: "physicalDetail",
+                meta: {title: "现金管理详情", icon: "icon-basic", show: true},
+            }, {
+                path: "/index/operations/physicaladd",
+                component: () =>
+                    import ("@mecha/operations/physical/add"),
+                routeName: "cash",
+                checked: false,
+                name: "physicalAdd",
+                meta: {title: "新增兑换", icon: "icon-basic", show: true},
             },
         ]
     },
@@ -290,7 +420,7 @@ const RouteData2 =[
         redirect: "/order",
         routeName: "order",
         checked: false,
-        children:[
+        children: [
             {
                 path: "/index/order/volunteer",
                 component: () =>
@@ -298,6 +428,15 @@ const RouteData2 =[
                 routeName: "volunteer",
                 checked: false,
                 meta: {title: "志愿服务", icon: "icon-basic", show: true},
+            },
+            {
+                path: "/index/order/volunteerDetail",
+                component: () =>
+                    import ("@mecha/order/volunteer/teamDetail"),
+                routeName: "volunteer",
+                checked: false,
+                name: "orderDetail",
+                meta: {title: "志愿服务详情", icon: "icon-basic", show: true},
             }, {
                 path: "/index/order/projectFunding",
                 component: () =>
@@ -329,7 +468,7 @@ const RouteData2 =[
         redirect: "/system",
         routeName: "system",
         checked: false,
-        children:[
+        children: [
             {
                 path: "/index/system/service",
                 component: () =>
@@ -356,8 +495,8 @@ const RouteData2 =[
     },
 
 ]
-let routeArray=[]
-RouteData2.forEach(item=>{
+let routeArray = []
+RouteData2.forEach(item => {
     routeArray.push(...item.children)
 })
-export  {routeArray,RouteData,RouteData2}
+export {routeArray, RouteData, RouteData2}

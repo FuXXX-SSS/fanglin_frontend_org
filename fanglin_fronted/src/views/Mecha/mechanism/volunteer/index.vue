@@ -21,7 +21,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="手机号">
-                        <el-input v-model="formData.phone" placeholder="手机号"></el-input>
+                        <el-input v-model="formData.phone" placeholder="手机号" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                     </el-form-item>
                     <el-form-item class="options">
                         <el-button @click="formData = {},init()" size="medium">重 置
@@ -33,6 +33,8 @@
             <div class="my-block">
 
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="name" label="用户头像">
                         <template slot-scope="scope">
                             <img :src="scope.row.avatar" min-width="70" height="70"/>
@@ -122,6 +124,11 @@
             Godetail(data) {
                 this.isShow = !this.isShow
                 this.userInfo = data
+                this.$router.push({
+                    name: "volunteerDetail",
+                });
+                this.$store.dispatch('baseData/setVolunteer', data)
+                sessionStorage.setItem("volunteerData", JSON.stringify(data));
             },
             async init() {
 

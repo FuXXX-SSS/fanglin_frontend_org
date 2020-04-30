@@ -1,7 +1,17 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">项目详情</div>
+            <div class="sub-title" style="margin-bottom: 40px">
+                <div style="display: inline-block;">项目详情</div>
+                <el-switch
+                        style="display: inline-block;float: right"
+                        v-model="projectStatus"
+                        active-text="开启项目"
+                        inactive-text="关闭项目"
+                        @change="switchChange(projectStatus)"
+                >
+                </el-switch>
+            </div>
             <el-row :gutter="20">
 
                 <el-col :span="8">
@@ -31,7 +41,7 @@
                             class="demo-form-inline"
                     >
                         <el-form-item label="发布时间：">
-                            <div>{{formData.beginTime}}</div>
+                            <div>{{formData.publishTime}}</div>
 
                         </el-form-item>
                         <el-form-item label="联系电话：">
@@ -39,37 +49,38 @@
                         </el-form-item>
 
                         <el-form-item label="募资目标：">
-                            <div>{{formData.value}}</div>
+                            <div>{{formData.amount}}元</div>
 
                         </el-form-item>
                         <br>
 
                         <el-form-item label="回馈标准：">
-                            <div>{{formData.position}}</div>
-                        </el-form-item>
-                        <el-form-item label="项目状态：">
-                            <div>{{formData.projectStatus===1?'开启':'关闭'}}</div>
-                        </el-form-item>
+                            <div>{{formData.refundStd}}元回馈{{formData.assetsUnitId}}{{formData.assetsUnitName}}</div>
 
-                        <el-form-item label="所属项目：">
-                            <div>{{formData.projectName}}</div>
                         </el-form-item>
+<!--                        <el-form-item label="项目状态：">-->
+<!--                            <div>{{formData.projectStatus===1?'开启':'关闭'}}</div>-->
+<!--                        </el-form-item>-->
+
+                        <!--                        <el-form-item label="所属项目：">-->
+                        <!--                            <div>{{formData.projectName}}</div>-->
+                        <!--                        </el-form-item>-->
                         <br>
 
-                        <el-form-item label="人员要求：">
-                            <div>{{formData.userNum}}
-                                {{formData.gender===1?'男':formData.gender===0?'女':'未知'}}
-                                {{formData.idCert?'实名认证':'未实名认证'}}
-                                <p
-                                        v-for="(item,index) in formData.serviceCategoryList"
-                                        :key="index+'1'"
-                                        style="display: inline-block;margin: 0;margin-right: 10px"
-                                >
-                                    {{item.name}}
-                                </p>
-                            </div>
+                        <!--                        <el-form-item label="人员要求：">-->
+                        <!--                            <div>{{formData.userNum}}-->
+                        <!--                                {{formData.gender===1?'男':formData.gender===0?'女':'未知'}}-->
+                        <!--                                {{formData.idCert?'实名认证':'未实名认证'}}-->
+                        <!--                                <p-->
+                        <!--                                        v-for="(item,index) in formData.serviceCategoryList"-->
+                        <!--                                        :key="index+'1'"-->
+                        <!--                                        style="display: inline-block;margin: 0;margin-right: 10px"-->
+                        <!--                                >-->
+                        <!--                                    {{item.name}}-->
+                        <!--                                </p>-->
+                        <!--                            </div>-->
 
-                        </el-form-item>
+                        <!--                        </el-form-item>-->
                     </el-form>
                 </el-col>
 
@@ -90,10 +101,12 @@
                     >
 
                         <el-form-item label="募集金额 : ">
-                            <div>{{formData.donatedAmount}}</div>
+                            <div>{{formData.donatedAmount}}元</div>
+
                         </el-form-item>
                         <el-form-item label="捐赠人数 : ">
-                            <div>{{formData.donatedUserCount}}</div>
+                            <div>{{formData.donatedUserCount}}人</div>
+
                         </el-form-item>
                         <el-form-item label="回馈 : ">
                             <div>{{formData.assetsUnitName}}</div>
@@ -101,13 +114,13 @@
                         <br>
 
                         <el-form-item label="活动次数 : ">
-                            <div>{{formData.activityCount}}</div>
+                            <div>{{formData.activityCount}}次</div>
                         </el-form-item>
                         <el-form-item label="活动人次 : ">
-                            <div>{{formData.activityUserCount}}</div>
+                            <div>{{formData.activityUserCount}}人</div>
                         </el-form-item>
                         <el-form-item label="服务时长 : ">
-                            <div>{{formData.serviceDuration}}</div>
+                            <div>{{formData.serviceDuration}}小时</div>
                         </el-form-item>
                         <el-form-item label="执行说明 : ">
                             <Qutil :description="des" @qutil="qutil"/>
@@ -130,7 +143,7 @@
                     <el-button type="primary" @click="recommend">推荐</el-button>
                 </el-col>
                 <el-col :span="3">
-                    <el-button type="warning" @click="detailUpate">编辑</el-button>
+                    <el-button type="warning" @click="detailUpate">编辑项目</el-button>
                 </el-col>
                 <el-col :span="3">
                     <el-button type="info" @click="back">返回</el-button>
@@ -143,32 +156,37 @@
 
 <script>
     import Qutil from '@com/quill-editor'
-    import {projectDetail, description} from '@http/project'
+    import {projectDetail, description, projectDeal} from '@http/project'
+    import {mapState} from "vuex";
 
     export default {
-        props: {
-            userInfo: {
-                type: Object,
-            }
-        },
+
         name: "teamDetail",
         data() {
             return {
                 formData: {},
                 tableData: {},
-                des: ''
+                des: '',
+                projectStatus: '',
+
             }
         },
         components: {
             Qutil
         },
+        computed: {
+            ...mapState({
+                userInfo: state => state.baseData.ProjectData,
+            })
+        },
         methods: {
             back() {
                 this.$store.dispatch('mecha_asset/setEvent', 1)
+                this.$router.go(-1)
             },
             async init() {
                 let res = await projectDetail(this.userInfo.projectId)
-                this.formData = res.data
+                this.formData = await res.data
                 this.des = res.data.description
                 this.projectStatus = res.data.userStatus
                 this.projectStatus === 1 ? this.projectStatus = true : this.projectStatus = false
@@ -189,7 +207,14 @@
                 }
             },
             detailUpate() {
+                this.formData.detail = this.des
+
                 this.$store.dispatch('mecha_asset/setEvent', 3)
+                this.$router.push({
+                    name: "eventupdate",
+                });
+                this.$store.dispatch('baseData/seteventupdate', this.formData)
+                sessionStorage.setItem("eventupdate", JSON.stringify(this.formData));
             },
             recommend() {
                 let obj = {
@@ -201,7 +226,17 @@
                 this.$router.push({
                     name: "recommend",
                 });
-            }
+            },
+            async switchChange(data) {
+                data ? data = 1 : data = 0
+                let obj = `${data}` + '/' + `${this.userInfo.projectId}`
+                let res = await projectDeal(obj)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('操作成功', 'success')
+                    this.init()
+                    // this.$emit('Godetail')
+                }
+            },
         },
         created() {
             this.init()

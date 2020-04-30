@@ -7,6 +7,7 @@
                     <el-button type="danger" style="float: right" @click="Godetail()">新增</el-button>
                 </div>
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
 
                     <el-table-column prop="title" label="文章标题"/>
                     <el-table-column prop="instName" label="发布者"/>
@@ -101,6 +102,9 @@
             Godetail(data) {
                 this.userInfo = data
                 this.isShow = !this.isShow
+                this.$router.push({
+                    name: "articleAdd",
+                });
             },
             async init() {
                 let obj = {

@@ -20,7 +20,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="手机号">
-                        <el-input v-model="formData.phone" placeholder="手机号"></el-input>
+                        <el-input v-model="formData.phone" placeholder="手机号" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                     </el-form-item>
                     <el-form-item label="认证">
                         <el-select v-model="formData.cert">
@@ -37,6 +37,8 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="joinTime" label="申请时间"/>
                     <el-table-column prop="name" label="用户头像">
                         <template slot-scope="scope">

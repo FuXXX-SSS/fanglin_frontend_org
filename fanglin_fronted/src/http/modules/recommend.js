@@ -18,3 +18,11 @@ export const recommendUp= data =>
         method: "post",
         data: data
     });
+
+// 删除推荐
+export const recommenddelete= data =>
+    _axios({
+        url: `/bms/recommend/delete/${data}`,
+        method: "post",
+        data: data
+    });

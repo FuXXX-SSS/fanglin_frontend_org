@@ -136,6 +136,7 @@
             back() {
                 this.$emit('Godetail')
                 this.$emit('init')
+                this.$router.go(-1)
             },
             handleAvatarSuccess(res, file) {
                 this.imageUrl = URL.createObjectURL(file.raw);

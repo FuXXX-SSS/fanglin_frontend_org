@@ -11,9 +11,9 @@
                         size="small"
                         class="demo-form-inline"
                 >
-<!--                    <el-form-item label="推荐机构">-->
-<!--                        <el-input v-model="formData.name" placeholder="推荐机构"></el-input>-->
-<!--                    </el-form-item>-->
+                    <!--                    <el-form-item label="推荐机构">-->
+                    <!--                        <el-input v-model="formData.name" placeholder="推荐机构"></el-input>-->
+                    <!--                    </el-form-item>-->
                     <el-form-item label="推荐栏目">
                         <el-select filterable v-model="formData.columnId">
                             <el-option
@@ -44,6 +44,8 @@
 
             <div class="my-block">
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="created" label="推荐时间"/>
                     <!--                    <el-table-column prop="instName" label="推荐机构"/>-->
                     <el-table-column prop="title" label="推荐标题"/>
@@ -68,7 +70,7 @@
                                     @click="Godetail(scope.row)"
                                     type="text"
                                     size="small"
-                            >推荐
+                            >编辑
                             </el-button
                             >
                         </template>
@@ -91,6 +93,7 @@
     import {recommendList} from '@http/recommend'
     import {typeList} from '@http/column'
     import {Stidlist} from '@http/inst'
+
     export default {
         name: "index",
         data() {
@@ -107,6 +110,7 @@
                 pageData: {},
             }
         },
+
         components: {
             pagination,
             Deatail
@@ -115,6 +119,11 @@
             Godetail(data) {
                 this.isShow = !this.isShow
                 this.userInfo = data
+                this.$router.push({
+                    name: "referralDetail",
+                });
+                this.$store.dispatch('baseData/setRefrl', data)
+                sessionStorage.setItem("ReferalData", JSON.stringify(data));
             },
             async init() {
 

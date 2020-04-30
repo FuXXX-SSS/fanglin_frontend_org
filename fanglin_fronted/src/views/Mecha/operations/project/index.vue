@@ -41,6 +41,8 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="publishTime" label="入库时间"/>
                     <el-table-column prop="name" label="物品名称"/>
                     <el-table-column prop="name" label="缩略图">
@@ -115,10 +117,18 @@
             Godetail(data) {
                 this.$store.dispatch('mecha_asset/setProject', 2)
                 this.userInfo = data
+                this.$router.push({
+                    name: "projectDetail",
+                });
+                this.$store.dispatch('baseData/setPhysial', data)
+                sessionStorage.setItem("PhysicalData", JSON.stringify(data));
 
             },
             add() {
                 this.$store.dispatch('mecha_asset/setProject', 3)
+                this.$router.push({
+                    name: "projectAdd",
+                });
             },
             async init() {
                 let res = await exhList(this.formData)

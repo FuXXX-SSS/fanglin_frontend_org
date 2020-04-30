@@ -100,7 +100,7 @@
 
                 </el-col>
                 <el-col :span="3">
-                    <el-button type="warning"  @click="recommend">推荐</el-button>
+                    <el-button type="warning" @click="recommend">推荐</el-button>
                 </el-col>
                 <el-col :span="3">
                     <el-button type="info" @click="back">返回</el-button>
@@ -112,22 +112,21 @@
                 @diaLog="diaLog"
                 :form="walletURL"
                 @Sure="Sure()"
+                :title="title"
         />
     </div>
 </template>
 
 <script>
-    import {userDetail, userQuaCertPost, userJoinInfo, userQuaInfo,userCheckGet} from '@http/user'
+    import {userDetail, userQuaCertPost, userJoinInfo, userQuaInfo, userCheckGet} from '@http/user'
     import DiaLog from '@com/dia-log'
     import md5 from 'js-md5'
     import {walletURL, commonTrade} from '@http/common'
     import {instDetail} from '@http/inst'
+    import {mapState} from "vuex";
+
     export default {
-        props: {
-            userInfo: {
-                type: Object,
-            }
-        },
+
         name: "teamDetail",
         data() {
             return {
@@ -141,13 +140,19 @@
                 quanInfoList: [],
                 dialogVisible: false,
                 projectStatus: '',
-                info:'',
-                walletURL: {}
+                info: '',
+                walletURL: {},
+                title: '转账'
             }
+        },
+        computed: {
+            ...mapState({
+                userInfo: state => state.baseData.volunteerData,
+            })
         },
         methods: {
             back() {
-                this.$emit('Godetail')
+                this.$router.go(-1)
             },
             async init() {
                 let res = await userDetail(this.userInfo.userId)
@@ -165,10 +170,12 @@
                 }
             },
             async quaClick(data) {
-                console.log(data);
+                let certStatus = ''
+                data.certStatus === 1 ? certStatus = 0 : certStatus = 1
+                console.log(certStatus);
                 let obj = {
-                    certStatus: data.certStatus,
-                    quaId: data.instId,
+                    certStatus: certStatus,
+                    quaId: data.id,
                     trainDuration: data.trainDuration,
                 }
                 console.log(obj);
@@ -178,10 +185,10 @@
                     this.userQuaInfo()
                 }
             },
-            async userCheck(){
-                let obj ={
-                    checkStatus:3,
-                    userId:this.userInfo.userId,
+            async userCheck() {
+                let obj = {
+                    checkStatus: 3,
+                    userId: this.userInfo.userId,
 
                 }
                 let res = await userCheckGet(obj)
@@ -210,7 +217,7 @@
                         let assetsUnitName = JSON.parse(
                             sessionStorage.getItem("userInfo")
                         ).assetsUnitName;
-                        this.info=assetsUnitName
+                        this.info = assetsUnitName
                     }
                 }
             },
@@ -230,7 +237,7 @@
             this.init()
             this.userQuaInfo()
         },
-        components:{
+        components: {
             DiaLog
         }
     }

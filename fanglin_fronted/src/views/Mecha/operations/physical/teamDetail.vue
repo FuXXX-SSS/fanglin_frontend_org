@@ -23,7 +23,7 @@
                         </el-form-item>
                         <el-form-item label="入库数量：">
                             <el-input v-model="formData.totalStock" style="    width: 25%;
-    float: left;"></el-input>
+    float: left;" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                             <el-input v-model="formData.unit" style="    width: 25%;
     float: left;margin-left: 10px" placeholder="单位"></el-input>
                         </el-form-item>
@@ -93,13 +93,10 @@
     import Quill from '@com/quill-editor'
     import {exhDetail} from '@http/exh'
     import Elupload from '@com/el-upload'
+    import {mapState} from "vuex";
 
     export default {
-        props: {
-            userInfo: {
-                type: Object,
-            }
-        },
+
         name: "teamDetail",
         data() {
             return {
@@ -113,9 +110,15 @@
             Quill,
             Elupload
         },
+        computed: {
+            ...mapState({
+                userInfo: state => state.baseData.CashData,
+            })
+        },
         methods:{
             back(){
                 this.$store.dispatch('mecha_asset/setPhyscial',1)
+                this.$router.go(-1)
             },
             async init() {
                 let res = await exhDetail(this.userInfo.id)

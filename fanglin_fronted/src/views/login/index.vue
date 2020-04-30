@@ -45,13 +45,13 @@
                                         placeholder="请输入手机号/"
                                 ></el-input>
                             </el-form-item>
-<!--                            <el-form-item label="" prop="oldPass">-->
-<!--                                <el-input-->
-<!--                                        v-model="ruleForm.oldPass"-->
-<!--                                        autocomplete="off"-->
-<!--                                        placeholder="请输入旧密码"-->
-<!--                                ></el-input>-->
-<!--                            </el-form-item>-->
+                            <!--                            <el-form-item label="" prop="oldPass">-->
+                            <!--                                <el-input-->
+                            <!--                                        v-model="ruleForm.oldPass"-->
+                            <!--                                        autocomplete="off"-->
+                            <!--                                        placeholder="请输入旧密码"-->
+                            <!--                                ></el-input>-->
+                            <!--                            </el-form-item>-->
                             <el-form-item label="" prop="pass">
                                 <el-input
                                         v-model="ruleForm.pass"
@@ -102,6 +102,7 @@
 
 <script>
     import {menuInfo, privilege, managerUserDetail, verification} from '@http/managerUser'
+    import {instInfo} from '@http/inst'
 
     export default {
         components: {},
@@ -198,15 +199,22 @@
                                     menuInfo()
                                         .then(res => {
                                             if (res && res.code === 1000) {
-                                                _this.$store.dispatch("routeData/setRouteData", res.data)
                                                 sessionStorage.setItem("routeData", JSON.stringify(res.data));
-                                                _this.$tools.$mes('登录成功', 'success')
-                                                _this.isLoading = false
-                                                _this.login = '登录'
+                                                return new Promise((resolve, reject) => {
+                                                    instInfo().then(res2 => {
+                                                        _this.$store.dispatch("user/getInfo", res2.data)
+                                                        sessionStorage.setItem("InfoData", JSON.stringify(res2.data));
+                                                        _this.$tools.$mes('登录成功', 'success')
+                                                        _this.isLoading = false
+                                                        _this.login = '登录'
+                                                        _this.$router.push({
+                                                            path: "/index"
+                                                        });
+                                                    })
+                                                })
+
                                             }
-                                            _this.$router.push({
-                                                path: "/index"
-                                            });
+
                                         })
                                         .catch(err => reject(err));
                                 });

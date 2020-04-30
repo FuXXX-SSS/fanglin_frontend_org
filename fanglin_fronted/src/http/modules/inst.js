@@ -66,3 +66,20 @@ export const basicList = data =>
         data: data
     });
 
+
+// 下载机构二维码
+export const download = data =>
+    _axios({
+        url: `/bms/inst/qrCode/download/${data}`,
+        method: "get",
+        data: data,
+        responseType: 'blob'
+    });
+
+// 获取当前登录机构的基础信息
+export const instInfo = data =>
+    _axios({
+        url: `/bms/inst/info`,
+        method: "get",
+        data: data
+    });

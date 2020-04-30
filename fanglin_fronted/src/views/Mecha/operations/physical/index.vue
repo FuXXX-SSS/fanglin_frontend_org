@@ -24,7 +24,7 @@
                             <el-option label="下架" value="0"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="发布时间">
+                    <el-form-item label="入库时间">
                         <el-date-picker
                                 v-model="formData.created"
                                 type="date"
@@ -42,6 +42,8 @@
             </div>
             <div class="my-block">
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="publishTime" label="入库时间"/>
                     <el-table-column prop="name" label="物品名称"/>
                     <el-table-column prop="name" label="缩略图">
@@ -50,8 +52,8 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="exhAmount" label="兑换标准"/>
-                    <el-table-column prop="totalStock" label="入库数量"/>
-                    <el-table-column prop="stock" label="当前库存"/>
+                    <el-table-column prop="totalStock" label="入库金额"/>
+                    <el-table-column prop="stock" label="库存金额"/>
                     <el-table-column prop="provider" label="供应单位"/>
                     <el-table-column prop="name" label="状态">
                         <template slot-scope="scope">
@@ -117,9 +119,17 @@
             Godetail(data) {
                 this.$store.dispatch('mecha_asset/setPhyscial', 2)
                 this.userInfo = data
+                this.$router.push({
+                    name: "physicalDetail",
+                });
+                this.$store.dispatch('baseData/setCash', data)
+                sessionStorage.setItem("CashData", JSON.stringify(data));
             },
             add() {
                 this.$store.dispatch('mecha_asset/setPhyscial', 3)
+                this.$router.push({
+                    name: "physicalAdd",
+                });
             },
             async init() {
 

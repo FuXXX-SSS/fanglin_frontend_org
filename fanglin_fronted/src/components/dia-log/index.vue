@@ -1,19 +1,22 @@
 <template>
     <el-dialog
-            :title="diaTitle"
+            :title="title"
             :visible.sync="dialogVisible"
             width="30%"
             center
     >
         <el-form :model="form" v-if="isSure">
             <el-form-item label="对方钱包" :label-width="formLabelWidth">
-                <el-input v-model="form.walletURL" autocomplete="off" disabled></el-input>
+                <el-input v-model="form.walletURL" autocomplete="off" ></el-input>
             </el-form-item>
             <el-form-item label="转账数量" :label-width="formLabelWidth">
-                <el-input v-model="form.amount" autocomplete="off"></el-input>
+                <el-input v-model.number="form.amount" autocomplete="off" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                    <template slot="append">{{assetsUnitName}}</template>
+                </el-input>
             </el-form-item>
-            <el-form-item label="密码" :label-width="formLabelWidth">
-                <el-input v-model="form.password" autocomplete="off" type="password"></el-input>
+            <el-form-item label="钱包密码" :label-width="formLabelWidth">
+                <el-input v-model="form.password" autocomplete="off" type="password" placeholder="输入钱包密码">
+                </el-input>
             </el-form-item>
         </el-form>
         <span v-if="!isSure" style="text-align: center">您已经成功向{{info}}转账{{form.amount}}白云分</span>
@@ -41,7 +44,14 @@
             form: {
                 type: Object
             },
-
+            Isdisabled: {
+                type: Boolean,
+                default: true
+            },
+            title: {
+                type: String,
+                default: '对方钱包'
+            }
         },
         name: "index",
         data() {
@@ -49,7 +59,8 @@
                 formLabelWidth: '120px',
                 diaTitle: '对方钱包',
                 isSure: true,
-                info:'',
+                info: '',
+                assetsUnitName:''
             }
         },
         methods: {
@@ -63,10 +74,10 @@
                 }
                 let res2 = await commonTrade(obj)
                 if (res2 && res2.code === 1000) {
-                    let assetsUnitName = JSON.parse(
+                    let userName = JSON.parse(
                         sessionStorage.getItem("userInfo")
-                    ).assetsUnitName;
-                    this.info = assetsUnitName
+                    ).userName;
+                    this.info = res2.data.name
                     this.isSure = false
                     this.isSure ? this.diaTitle = '对方钱包' : this.diaTitle = '转账成功'
                 }
@@ -77,7 +88,10 @@
             },
             Cancel() {
                 this.$emit('diaLog')
-            }
+            },
+        },
+        created() {
+            this.assetsUnitName = JSON.parse(sessionStorage.getItem("userInfo")).assetsUnitName
         }
     }
 </script>

@@ -15,7 +15,7 @@
                         <el-input v-model="formData.exhName" placeholder="兑换人"></el-input>
                     </el-form-item>
                     <el-form-item label="电话">
-                        <el-input v-model="formData.phone" placeholder="电话"></el-input>
+                        <el-input v-model="formData.phone" placeholder="电话" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                     </el-form-item>
                     <el-form-item label="起始时间">
                         <el-date-picker
@@ -48,7 +48,10 @@
                     <p>元</p>
                 </div>
                 <el-table :data="tableData.records" border>
+                    <el-table-column type="index" label="序号" width="50"/>
+
                     <el-table-column prop="billDate" label="申请时间"/>
+                    <el-table-column prop="cashName" label="资金名称"/>
                     <el-table-column prop="exhUserName" label="兑换人"/>
                     <el-table-column prop="name" label="联系电话"/>
                     <el-table-column prop="amount" label="支付"/>
