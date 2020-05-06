@@ -122,7 +122,7 @@
                 let res =await instupdate(this.formData)
                 if (res && res.code === 1000) {
                     console.log(res.data);
-                    this.$tools.$mes(res.data.msg, 'success')
+                    this.$tools.$mes('保存成功', 'success')
                     this.init()
                 }
             }

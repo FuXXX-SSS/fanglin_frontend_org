@@ -35,6 +35,7 @@
     import baseUrl from '@/http/baseUrl'
     import {instDetail} from '@http/inst'
     import {exhDetail} from '@http/exh'
+    import {projectDetail} from '@http/project'
 
     export default {
         props: {
@@ -52,6 +53,9 @@
                 type: Boolean,
                 default: false
             }, isexh: {
+                type: Boolean,
+                default: false
+            }, isevent: {
                 type: Boolean,
                 default: false
             }, Info: {
@@ -137,7 +141,12 @@
                 });
             },
             async init() {
-                 if (this.isexh) {
+                 if (this.isevent) {
+                    let res = await projectDetail(this.Info.projectId)
+                    console.log(res);
+                    this.baseImage=res.data.image
+                    this.isShow = false
+                }  if (this.isexh) {
                     let res = await exhDetail(this.Info.id)
                     console.log(res);
                     this.baseImage=res.data.image
@@ -170,7 +179,7 @@
         },
         created() {
             this.init()
-            console.log(this.isexh);
+            console.log(this.isevent);
         }
     }
 </script>

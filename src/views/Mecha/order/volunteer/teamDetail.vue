@@ -104,6 +104,9 @@
           <el-col :span="5">
             <el-button type="warning" @click="isShow=false">提起争议</el-button>
           </el-col>
+          <el-col :span="5">
+            <el-button type="primary" @click="isShow=false">确定</el-button>
+          </el-col>
           <el-col :span="3" :offset="1">
             <el-button type="info" @click="back">返回</el-button>
           </el-col>

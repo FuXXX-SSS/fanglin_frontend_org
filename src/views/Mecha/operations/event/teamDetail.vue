@@ -55,7 +55,7 @@
                         <br>
 
                         <el-form-item label="回馈标准：">
-                            <div>{{formData.refundStd}}元回馈{{formData.assetsUnitId}}{{formData.assetsUnitName}}</div>
+                            <div>资助1元回馈{{formData.refundStd}}{{formData.assetsUnitName}}</div>
 
                         </el-form-item>
 <!--                        <el-form-item label="项目状态：">-->

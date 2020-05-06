@@ -38,8 +38,7 @@
                         <el-form-item label="缩略图：" style="margin-right: 10px" class="image">
                             <Elupload @load="load"
                                       :isDetail=true
-                                      :isupdate=true
-                                      :baseImg="formData.image"
+                                      :isevent=event :Info=userInfo
                             />
                         </el-form-item>
                     </el-form>
@@ -96,7 +95,8 @@
                 },
                 activeName: "0",
                 isDetail: true,
-                assetsUnitName: ''
+                assetsUnitName: '',
+                
             }
         },
         components: {
