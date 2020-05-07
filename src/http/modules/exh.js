@@ -27,3 +27,11 @@ export const exhadd = data =>
         method: "post",
         data: data
     });
+
+// 更新兑换品信息
+export const exhupdate = data =>
+    _axios({
+        url: `/bms/exh/update`,
+        method: "post",
+        data: data
+    });

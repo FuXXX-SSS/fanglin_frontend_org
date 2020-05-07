@@ -91,21 +91,38 @@
             <div>{{formData.value}}积分</div>
           </el-form-item>
           <el-form-item label="服务评价：">
-            <el-rate v-model="commentScore" disabled text-color="#ff9900"></el-rate>
+            <el-rate v-model="commentScore" :disabled="!isRate" text-color="#ff9900"></el-rate>
           </el-form-item>
           <br />
           <el-form-item label="评价内容： " class="comment">
-            <el-input type="textarea" :autosize="{ minRows: 10}" v-model="formData.comment"></el-input>
+            <el-input
+              type="textarea"
+              :autosize="{ minRows: 10}"
+              v-model="formData.comment"
+              v-if="isRate"
+            ></el-input>
+            <div v-if="!isRate">{{formData.comment}}</div>
           </el-form-item>
         </el-form>
       </div>
+     <DiaLog
+                :dialogVisible="Visible"
+                @diaLog="Visible=false"
+                :form="walletURL"
+                @Sure="Sure()"
+                :title="Vistitle"
+        />
+
       <div class="my-block block_bot">
         <el-row type="flex" class="row-bg" justify="center">
-          <el-col :span="5">
+          <el-col :span="3">
             <el-button type="warning" @click="isShow=false">提起争议</el-button>
           </el-col>
-          <el-col :span="5">
-            <el-button type="primary" @click="isShow=false">确定</el-button>
+          <el-col :span="3">
+            <el-button type="primary" @click="rateSure" v-if="isRate">确定</el-button>
+          </el-col>
+          <el-col :span="3">
+            <el-button type="success" @click="ISdialog">转账</el-button>
           </el-col>
           <el-col :span="3" :offset="1">
             <el-button type="info" @click="back">返回</el-button>
@@ -185,10 +202,11 @@
 <script>
 import Map from "@com/map-QQ";
 import Map2 from "@com/map-QQ/index2";
-import { serviceDetail, dispute, raisedispute } from "@http/order";
+import { serviceDetail, dispute, raisedispute, rate } from "@http/order";
 import { mapState } from "vuex";
 import Elupload from "./upload";
-
+import DiaLog from "./dialog";
+import {walletURL, commonTrade} from '@http/common'
 export default {
   name: "teamDetail",
   data() {
@@ -209,13 +227,19 @@ export default {
       },
       value1: null,
       imageList: [],
-      dialogVisible: false
+      dialogVisible: false,
+      isRate: true,
+      Visible: false,
+      Vistitle: '转账',
+      walletURL: {
+      },
     };
   },
   components: {
     Map,
     Map2,
-    Elupload
+    Elupload,
+    DiaLog
   },
   computed: {
     ...mapState({
@@ -233,6 +257,8 @@ export default {
       let res = await serviceDetail(this.userInfo.id);
       this.formData = res.data;
       this.commentScore = res.data.commentScore;
+      this.isRate = res.data.rateStatus;
+      this.isRate === 0 ? (this.isRate = true) : (this.isRate = false);
       var checkInAddress = "";
       let info = res.data.checkInCo;
       let info2 = res.data.checkOutCo;
@@ -285,6 +311,43 @@ export default {
       this.$router.push({
         name: "ordervolunteer"
       });
+    },
+    async rateSure() {
+      let obj = {
+        comment: this.formData.comment,
+        score: this.commentScore,
+        id: this.userInfo.id
+      };
+      let res = await rate(obj);
+      if (res && res.code === 1000) {
+        this.$tools.$mes("操作成功", "success");
+        this.init();
+      }
+    },
+     async ISdialog() {
+                this.Visible = !this.Visible
+                let res = await walletURL(`${this.formData.serviceType}/${this.formData.serviceId}`)
+                this.walletURL = res.data
+                this.walletURL.billType=2
+            },
+    async SURE(msg) {
+      // if (msg[1] === 1) {
+      //     let res = await instDetail(JSON.parse(sessionStorage.getItem("userInfo")).instId)
+      //     let obj = {
+      //         amount: msg[0].amount,
+      //         billType: 0,
+      //         password: md5(msg[0].password + "fanglin"),
+      //         receiveType: 0,
+      //         receiveWalletUrl: msg[0].walletURL,
+      //     }
+      //     let res2 = await commonTrade(obj)
+      //     if (res2 && res.code === 1000) {
+      //         let assetsUnitName = JSON.parse(
+      //             sessionStorage.getItem("userInfo")
+      //         ).assetsUnitName;
+      //         this.info = assetsUnitName
+      //     }
+      // }
     }
   },
   created() {
@@ -304,14 +367,17 @@ export default {
   align-self: center;
   justify-content: space-between;
 }
+
 .co-fl {
   p {
     display: inline-block;
+
     &:nth-child(2) {
       color: #8e9aac;
     }
   }
 }
+
 .imgList {
   padding: 18px 10px;
 
@@ -348,11 +414,13 @@ export default {
 .el-avatar--circle {
   margin-top: -3px;
 }
+
 .comment {
   /deep/ .el-form-item__content {
     width: 500px;
   }
 }
+
 .address_right,
 .address_left {
 }

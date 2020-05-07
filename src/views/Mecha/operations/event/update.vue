@@ -38,7 +38,7 @@
                         <el-form-item label="缩略图：" style="margin-right: 10px" class="image">
                             <Elupload @load="load"
                                       :isDetail=true
-                                      :isevent=event :Info=userInfo
+                                      :isevent=true :Info=formData
                             />
                         </el-form-item>
                     </el-form>
@@ -96,7 +96,7 @@
                 activeName: "0",
                 isDetail: true,
                 assetsUnitName: '',
-                
+                event:true
             }
         },
         components: {
@@ -115,6 +115,11 @@
             },
 
             async save() {
+                console.log(this.formData.image);
+                  if (this.formData.image==='') {
+                    this.$tools.$mes('图片没上传到服务器，无法提交发布', 'warning')
+                    return false
+                }
                 console.log(this.formData);
                 let {amount, detail, image, name, phone, projectId, refundStd} = this.formData
                 let obj = {
@@ -126,6 +131,7 @@
                     projectId: projectId,
                     refundStd: refundStd,
                 }
+                console.log(obj);
                 let res = await update(this.formData)
                 if (res && res.code === 1000) {
                     this.$tools.$mes('操作成功', 'success')

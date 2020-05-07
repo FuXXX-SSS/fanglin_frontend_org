@@ -60,8 +60,7 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="缩略图：" style="margin-right: 10px" class="load">
-               <Elupload @load="load" :isDetail=true  :isexh=isexh :Info=userInfo
-                            />
+              <Elupload @load="load" :isDetail="true" :isexh="isexh" :Info="userInfo" />
             </el-form-item>
           </el-form>
         </el-col>
@@ -81,7 +80,7 @@
     <div class="my-block">
       <el-row type="flex" class="row-bg" justify="center">
         <el-col :span="3">
-          <el-button type="warning">保存</el-button>
+          <el-button type="warning" @click="save">保存</el-button>
         </el-col>
         <el-col :span="3">
           <el-button type="success" @click="recommend">推荐</el-button>
@@ -96,7 +95,7 @@
 
 <script>
 import Quill from "@com/quill-editor";
-import { exhDetail } from "@http/exh";
+import { exhDetail, exhupdate } from "@http/exh";
 import Elupload from "@com/el-upload";
 import { mapState } from "vuex";
 
@@ -104,7 +103,7 @@ export default {
   name: "teamDetail",
   data() {
     return {
-      formData: {},
+      formData: {type:0,image:''},
       src:
         "https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg",
       tableData: {
@@ -112,7 +111,7 @@ export default {
       },
       projectStatus: "",
       isDetail: true,
-       isexh: true,
+      isexh: true,
       isUpload: true
     };
   },
@@ -144,6 +143,18 @@ export default {
     },
     qutil(data) {
       this.formData.introduction = data;
+    },
+    async save() {
+      if (this.formData.image === "") {
+        this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
+        return false;
+      }
+      let res = await exhupdate(this.formData);
+      if (res && res.code === 1000) {
+        this.$tools.$mes("操作成功", "success");
+        this.$emit("init");
+        this.back();
+      }
     },
     recommend() {
       let obj = {

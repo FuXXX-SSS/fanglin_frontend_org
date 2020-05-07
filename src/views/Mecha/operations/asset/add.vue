@@ -273,9 +273,10 @@
                     serviceCatIdList: [],
                     userNum: 1,
                     projectId: '',
+                    image:'',
                     mapvalue: '',
                     repeatActivity: 0,
-                    beginTime: new Date().getTime(),
+                    beginTime: new Date().getTime()+3600000,
                     endTime: new Date().getTime() + 7199820,
                     repeatEndTime: new Date().getTime(),
                 },
@@ -482,6 +483,10 @@
 
             },
             async submit() {
+                 if (this.formData.image === "") {
+        this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
+        return false;
+      }
                 console.log(this.formData);
                 this.formData.value = this.calValue
                 this.formData.positionName = this.mapLocation.address

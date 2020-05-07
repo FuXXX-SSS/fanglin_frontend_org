@@ -77,3 +77,11 @@ export const raisedispute = data =>
         method: "post",
         data: data
     });
+
+// 评价服务
+export const rate = data =>
+    _axios({
+        url: `/bms/bill/service/rate`,
+        method: "post",
+        data: data
+    });
