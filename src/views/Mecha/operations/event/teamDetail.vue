@@ -188,7 +188,7 @@
                 let res = await projectDetail(this.userInfo.projectId)
                 this.formData = await res.data
                 this.des = res.data.description
-                this.projectStatus = res.data.userStatus
+                this.projectStatus = res.data.projectStatus
                 this.projectStatus === 1 ? this.projectStatus = true : this.projectStatus = false
             },
             qutil(data) {

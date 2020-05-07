@@ -30,7 +30,7 @@
                         </el-form-item>
                         <br>
                         <el-row :gutter="20">
-                            <el-col :span="1.5">服务系数：</el-col>
+                            <el-col :span="1.5" style="font-size: 14px; color: #606266;margin-top:5px">服务系数：</el-col>
                             <el-col :span="20">
                                 <el-form-item
                                         v-for="(item,index) in instServiceCoVOList"
@@ -58,7 +58,7 @@
                         <br>
                         <el-form-item label="发送红包：">
                             <el-checkbox v-model="formData.sendRedPacket">向完成实名认证的社区成员赠送
-                                <el-input v-model="formData.redPacketAmount" style="width: 10%;"></el-input>
+                                <el-input v-model="formData.redPacketAmount" style="width: 15%;" onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"></el-input>
                                 {{formData.assetsUnitName}}
                             </el-checkbox>
                         </el-form-item>

@@ -61,7 +61,7 @@
                         </el-form-item>
 
                         <el-form-item label="人员要求：">
-                            <div>{{formData.userNum}}
+                            <div>{{formData.userNum||0}}人
                                 {{formData.gender===1?'男':formData.gender===0?'女':'性别不限'}}
                                 {{formData.idCert?'实名认证':'未实名认证'}}
                                 <p

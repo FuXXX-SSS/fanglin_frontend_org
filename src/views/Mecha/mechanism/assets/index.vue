@@ -131,7 +131,7 @@
             async diaLog(data) {
                 this.dialogVisible = !this.dialogVisible
                 let res = await walletURL(`${2}/${data.assetsUnitId}`)
-                // this.walletURL = res.data
+                this.walletURL = res.data
             },
             async Sure(msg) {
                 if (msg[1] === 1) {

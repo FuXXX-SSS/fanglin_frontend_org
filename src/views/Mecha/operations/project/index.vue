@@ -24,7 +24,7 @@
                             <el-option label="下架" value="0"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="发布时间">
+                    <el-form-item label="入库时间">
                         <el-date-picker
                                 v-model="formData.created"
                                 type="date"

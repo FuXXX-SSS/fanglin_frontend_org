@@ -24,7 +24,6 @@
                         <el-form-item label="联系电话：">
                             <el-input v-model="formData.phone" placeholder="联系电话"
                                       onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"></el-input>
-
                         </el-form-item>
                         <el-form-item label="所属项目：">
                             <el-select filterable v-model="formData.projectId" placeholder="所属项目">
@@ -137,13 +136,17 @@
                                 <template slot="append">
                                     <p style="display: inline-block;margin: 0;cursor: pointer" @click="focus">地图标注</p>
                                     <i slot="suffix" class="el-input__icon el-icon-s-opportunity"
-                                                           @click="focus"
-                                                           style="font-size: 18px;color: #0099ff;cursor: pointer">
+                                       @click="focus"
+                                       style="font-size: 18px;color: #0099ff;cursor: pointer">
 
                                     </i>
                                 </template>
 
                             </el-input>
+                        </el-form-item>
+                        <el-form-item label="详细地址：">
+                            <el-input v-model="formData.positionName" placeholder="详细地址"
+                            ></el-input>
                         </el-form-item>
                         <el-form-item>
 
@@ -273,10 +276,10 @@
                     serviceCatIdList: [],
                     userNum: 1,
                     projectId: '',
-                    image:'',
+                    image: '',
                     mapvalue: '',
                     repeatActivity: 0,
-                    beginTime: new Date().getTime()+3600000,
+                    beginTime: new Date().getTime() + 3600000,
                     endTime: new Date().getTime() + 7199820,
                     repeatEndTime: new Date().getTime(),
                 },
@@ -483,13 +486,12 @@
 
             },
             async submit() {
-                 if (this.formData.image === "") {
-        this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
-        return false;
-      }
+                if (this.formData.image === "") {
+                    this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
+                    return false;
+                }
                 console.log(this.formData);
                 this.formData.value = this.calValue
-                this.formData.positionName = this.mapLocation.address
                 this.formData.maxAge = this.value2[1]
                 this.formData.minAge = this.value2[0]
                 let res = await publish(this.formData)
