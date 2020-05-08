@@ -6,8 +6,8 @@
                 <el-switch
                         style="display: inline-block;float: right"
                         v-model="projectStatus"
-                        active-text="开启项目"
-                        inactive-text="关闭项目"
+                        active-text="开通"
+                        inactive-text="关闭"
                         @change="switchChange(projectStatus)"
                 >
                 </el-switch>
@@ -122,8 +122,10 @@
                         <el-form-item label="服务时长 : ">
                             <div>{{formData.serviceDuration}}小时</div>
                         </el-form-item>
+                        <br>
+
                         <el-form-item label="执行说明 : ">
-                            <Qutil :description="des" @qutil="qutil"/>
+                            <Qutil ref="kindeditor" :content="formData.description" @input="qutil"></Qutil>
                         </el-form-item>
 
                     </el-form>
@@ -168,7 +170,6 @@
                 tableData: {},
                 des: '',
                 projectStatus: '',
-
             }
         },
         components: {
@@ -237,6 +238,19 @@
                     // this.$emit('Godetail')
                 }
             },
+            getContent(content) {
+                console.log(content);
+                this.des = content
+            },
+            // 编辑器内容转换成在线url
+            async getcontent2Url() {
+                try {
+                    const htmlUrl =  await this.$refs.kindeditor.content2Url()
+                    return htmlUrl
+                } catch (error) {
+                    console.log(error)
+                }
+            }
         },
         created() {
             this.init()

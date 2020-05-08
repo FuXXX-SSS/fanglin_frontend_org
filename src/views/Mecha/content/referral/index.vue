@@ -63,7 +63,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="columnName" label="推荐栏目"/>
-                    <el-table-column prop="url" label="推荐链接"/>
+<!--                    <el-table-column prop="url" label="推荐链接"/>-->
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <el-button

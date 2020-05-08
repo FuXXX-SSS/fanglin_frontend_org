@@ -5,8 +5,8 @@
             width="30%"
             center
     >
-        <el-form :model="form" v-if="isSure">
-            <el-form-item label="对方钱包" :label-width="formLabelWidth">
+        <el-form :model="form" v-if="isSure" label-position="left">
+            <el-form-item label="对方钱包" :label-width="formLabelWidth" >
                 <el-input v-model="form.walletURL" autocomplete="off" ></el-input>
             </el-form-item>
             <el-form-item label="转账数量" :label-width="formLabelWidth">
@@ -56,7 +56,7 @@
         name: "index",
         data() {
             return {
-                formLabelWidth: '120px',
+                formLabelWidth: '80px',
                 diaTitle: '对方钱包',
                 isSure: true,
                 info: '',

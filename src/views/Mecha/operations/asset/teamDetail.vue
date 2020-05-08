@@ -1,7 +1,17 @@
 <template>
     <div>
         <div class="my-block">
-            <div class="sub-title">活动详情</div>
+            <div class="sub-title" style="margin-bottom: 40px">
+                <div style="display: inline-block;">活动详情</div>
+                <el-switch
+                        style="display: inline-block;float: right"
+                        v-model="projectStatus"
+                        active-text="开启项目"
+                        inactive-text="关闭项目"
+                        @change="switchChange(projectStatus)"
+                >
+                </el-switch>
+            </div>
             <el-row :gutter="20">
 
                 <el-col :span="12">
@@ -76,10 +86,10 @@
                         </el-form-item>
                         <br>
 
-                        <el-form-item label="活动状态：">
-                            {{formData.activityStatus===1?'开启':formData.activityStatus===0?'关闭':''}}
+<!--                        <el-form-item label="活动状态：">-->
+<!--                            {{formData.activityStatus===1?'开启':formData.activityStatus===0?'关闭':''}}-->
 
-                        </el-form-item>
+<!--                        </el-form-item>-->
                         <el-form-item label="发布人：">
                             <div>{{formData.userName}}</div>
 
@@ -162,7 +172,7 @@
 <script>
     import detailBottom from '@com/detailBottom'
     import pagination from '@com/el-pagination'
-    import {activityDetail, select, applyList} from '@http/activity'
+    import {activityDetail, select, applyList,deal} from '@http/activity'
     import {mapState} from "vuex";
 
     let value = ''
@@ -181,7 +191,9 @@
                 dataInfo: {},
                 hasSelectList: [],
                 obj: {},
-                value: value,                dialog: false
+                value: value,                dialog: false,
+                projectStatus: '',
+
 
             }
         },
@@ -218,6 +230,8 @@
             async activityDetail() {
                 let res = await activityDetail(this.userInfo.activityId)
                 this.formData = res.data
+                this.projectStatus = res.data.activityStatus
+                this.projectStatus === 1 ? this.projectStatus = true : this.projectStatus = false
             },
             async applyList() {
                 let res = await applyList(this.userInfo.activityId)
@@ -275,6 +289,16 @@
                             }
                         })
                     })
+                }
+            },
+            async switchChange(data) {
+                data ? data = 1 : data = 0
+                let obj = `${data}` + '/' + `${this.userInfo.activityId}`
+                let res = await deal(obj)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('操作成功', 'success')
+                    this.init()
+                    // this.$emit('Godetail')
                 }
             },
         },

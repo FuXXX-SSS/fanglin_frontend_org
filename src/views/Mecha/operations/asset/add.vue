@@ -162,7 +162,8 @@
                                     placeholder="请输入内容"
                                     v-model="formData.description">
                             </el-input> -->
-                            <Quill @qutil="qutil" :description="formData.detail"/>
+                            <Quill ref="kindeditor" :content="formData.detail" @input="qutil"></Quill>
+
                         </el-form-item>
                     </el-form>
 

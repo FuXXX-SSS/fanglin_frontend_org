@@ -26,7 +26,7 @@
             <el-form-item label="推荐图片 : ">
               <Elupload @load="load" :isDetail="true" :isreferal="true" />
             </el-form-item>
-            <el-form-item label="推荐链接 : ">
+            <el-form-item label="推荐链接 : " v-if="false">
               <el-input v-model="formData.url"></el-input>
             </el-form-item>
             <el-form-item label="推荐摘要 : ">

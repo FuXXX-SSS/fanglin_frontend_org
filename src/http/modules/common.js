@@ -17,3 +17,11 @@ export const commonTrade = data =>
         method: "post",
         data: data
     });
+
+// 上传图片接口
+export const upload = data =>
+    _axios({
+        url: `/bms/common/image/upload`,
+        method: "post",
+        data: data
+    });

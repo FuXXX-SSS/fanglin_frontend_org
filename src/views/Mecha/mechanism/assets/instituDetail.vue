@@ -33,6 +33,11 @@
                             <el-option label="活动" value=2></el-option>
                             <el-option label="兑换实物" value=3></el-option>
                             <el-option label="兑换现金" value=4></el-option>
+                            <el-option label="发送红包" value=5></el-option>
+                            <el-option label="领取红包" value=6></el-option>
+                            <el-option label="红包退还" value=7></el-option>
+                            <el-option label="项目回赠" value=8></el-option>
+                            <el-option label="发布活动,锁定资产" value=9></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item class="options">

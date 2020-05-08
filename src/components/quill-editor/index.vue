@@ -1,98 +1,307 @@
 <template>
-        <div class="edit_container" style="">
-            <quill-editor
-                    v-model="description"
-                    ref="myQuillEditor"
-                    :options="editorOption"
-                    @blur="onEditorBlur($event)"
-                    @focus="onEditorFocus($event)"
-                    @change="onEditorChange($event)"
-            ></quill-editor>
-
-
-<!--    <script id="editor" type="text/plain"></script>-->
-        </div>
+    <div class="margin-top-20 edit_container">
+        <textarea :id="id" name="content" v-model="outContent"></textarea>
+        <input
+                @change="selectedFile"
+                style="visibility: hidden;height:0;"
+                type="file"
+                name
+                id="inputFile"
+        />
+    </div>
 </template>
 
 <script>
-    import {quillEditor} from "vue-quill-editor";
-    import "quill/dist/quill.core.css";
-    import "quill/dist/quill.snow.css";
-    import "quill/dist/quill.bubble.css";
-    import modules from './qutil'
-    import '../../assets/static/utf8-php/ueditor.config'
-    import '../../assets/static/utf8-php/ueditor.all.min'
-    import '../../assets/static/utf8-php/lang/zh-cn/zh-cn'
-    import '../../assets/static/utf8-php/ueditor.parse.min'
-    import '../../assets/static/utf8-php/themes/default/css/ueditor.css'
+    import '../../static/kindeditor/kindeditor-all.js'
+    import '../../static/kindeditor/lang/zh-CN.js'
+    import '../../static/kindeditor/themes/default/default.css'
+
+    import items from "./config/items";
+    import htmlTags from "./config/htmlTags";
+    import fontSizeTable from "./config/fontSizeTable";
+    import otherConfig from "./config/otherConfig";
+    import {upload} from '@http/common'
+    import axios from 'axios'
     export default {
-        props: {
-            description: {
-                type: String,
-                default: ''
-            },
-            config: {
-                type: Object
-            }
-        },
-        components: {quillEditor},
-        created() {
-        },
-        name:'UE',
         data() {
             return {
-                content: "",
-                des: this.description,
-                editorOption: {
-                    des: this.description,
-                    placeholder: "请输入...",
-                    theme: 'snow',
-                    modules
-                },
-                randomId: "editor_" + Math.random() * 100000000000000000,
-                //编辑器实例
-                instance: null,
-                ready: false,
-                // editor: null
-            };
+                editor: null,
+                outContent: this.content
+            }
         },
-        methods: {
-// 准备编辑器
-            onEditorReady(editor) {
+        name: "kindeditor-component",
+        props: {
+            // 编辑器内容 url
+            html: {
+                type: String,
+                default: ""
             },
-// 失去焦点事件
-            onEditorBlur(val) {
-                this.$emit('qutil', this.description)
+            // 编辑器内容
+            content: {
+                type: String,
+                default: ""
             },
-// 富文本获得焦点时的内容
-            onEditorFocus(val, editor) {
-
+            // 编辑器id
+            id: {
+                type: String,
+                // required: true,
+                default: "kindeditor-id"
             },
-// 内容改变事件
-            onEditorChange() {
-                this.$emit('qutil', this.description)
-                console.log(this.description);
+            // 宽
+            width: {
+                type: String,
+                default: `100%`
             },
-            getUEContent() { // 获取内容方法
-                return this.editor.getContent()
+            // 高
+            height: {
+                type: String,
+                default: "400"
             },
-            initEditor() {
-                const _this = this;
-                this.editor = UE.getEditor('editor', this.config); // 初始化UE
-                this.editor.addListener("ready", function () {
-                    _this.editor.setContent(_this.description); // 确保UE加载完成后，放入内容。
-                });
+            // 最小宽
+            minWidth: {
+                type: Number,
+                default: 650
             },
+            // 最小高
+            minHeight: {
+                type: Number,
+                default: 400
+            },
+            // toolbar 工具栏配置
+            items: {
+                type: Array,
+                default: function () {
+                    return [...items];
+                }
+            },
+            // 标签配置
+            htmlTags: {
+                type: Object,
+                default: function () {
+                    return {...htmlTags};
+                }
+            },
+            //字号配置
+            fontSizeTable: {
+                type: Array,
+                default: function () {
+                    return [...fontSizeTable];
+                }
+            },
+            // 语言配置
+            langType: {
+                type: String,
+                default: "zh-CN"
+            },
+            // 主题配置
+            themeType: {
+                type: String,
+                default: "default"
+            },
+            // body 的样式
+            bodyClass: {
+                type: String,
+                default: "ke-content"
+            },
+            // 其他配置项
+            ...otherConfig
         },
-        computed: {
-            editor() {
-                return this.$refs.myQuillEditor.quill;
+        watch: {
+            content(val) {
+                console.log(val);
+                this.editor && val !== this.outContent && this.editor.html(val);
+                console.log(this.editor);
             },
-
+            // 分发编辑器内容改变事件
+            outContent(val) {
+                this.$emit("update:content", val);
+                this.$emit("on-content-change", val);
+                this.$emit("input", val);
+            },
+            // 初始化编辑器内容
+            // html(val) {
+            //     if (
+            //         this.html &&
+            //         (this.html.startsWith("https://") || this.html.startsWith("http://"))
+            //     ) {
+            //         this.loadUrl(val);
+            //     } else {
+            //         this.outContent = "";
+            //         this.outContent ? this.editor.appendHtml(this.outContent) : "";
+            //     }
+            // }
+        },
+        created() {
+            if (
+                this.html &&
+                (this.html.startsWith("https://") || this.html.startsWith("http://"))
+            ) {
+                this.loadUrl(this.html);
+            } else {
+                this.outContent = "";
+                setTimeout(() => {
+                    // this.outContent ? this.editor.appendHtml(this.outContent) : "";
+                }, 1000);
+            }
         },
         mounted() {
-            // this.initEditor()
+            // 初始访问时创建
+            this.initEditor();
+            //  添加焦点
+            // this.editor.focus();
+            // 添加点击图片回调函数
+            this.editor.clickToolbar("image", () => {
+                // 禁用自带的图片弹窗
+                this.editor.hideDialog();
+                // 打开文件
+                this.handleOpenFile();
+            });
         },
+        activated() {
+            // keep-alive 进入时创建
+            this.initEditor();
+        },
+        deactivated() {
+            // keep-alive 离开时移除
+            this.removeEditor();
+        },
+        beforeDestroy() {
+            // 实例销毁之前移除
+            this.removeEditor();
+        },
+        methods: {
+            // 打开文件
+            handleOpenFile() {
+                let input = document.getElementById("inputFile");
+                // 解决同一个文件不能监听的问题
+                input.addEventListener(
+                    "click",
+                    function () {
+                        this.value = "";
+                    },
+                    false
+                );
+                // 点击input
+                input.click();
+            },
+            // 选择好文件
+            async selectedFile($event) {
+                const file = $event.target.files[0];
+                let formData = new FormData()
+                formData.append('image', file)
+                // 把图片上传到后端服务器 拿到url  uploadImage 是自己后端上传图片的接口
+                // 调用appendHtml方法把图片追加到富文本
+
+                const data= await  upload (formData)
+                console.log(data);
+                this.editor.insertHtml(
+                          `<img style="max-width:40%;" src="${data.data.url}">`
+                        );
+                console.log(this.editor);
+            },
+            // 编辑器内容上传到cos，调用返回url
+            async content2Url() {
+                // 把html片段上传到后端服务器 拿到url  uploadHtml 是自己后端上传的接口
+                //   try {
+                //     const res = await uploadHtml(this.outContent)
+                //     return res
+                //   } catch (error) {
+                //     this.$message({
+                //       message: error.data.message,
+                //       type: 'error'
+                //     })
+                //   }
+            },
+            // 加载html填充编辑器内容
+            // loadUrl(url) {
+            //     if (url && url.length > 0) {
+            //         axios.get(url)
+            //             .then(response => {
+            //                 // 处理HTML显示
+            //                 this.outContent = response.data;
+            //                 this.editor.appendHtml(this.outContent);
+            //                 this.$emit("subLoadUrlToHtml", response.data);
+            //             })
+            //             .catch(() => {
+            //                 this.outContent = "服务器数据加载失败，请重试!";
+            //                 this.editor.appendHtml(this.outContent);
+            //             });
+            //     }
+            // },
+            // 移除编辑器实例
+            removeEditor() {
+                window.KindEditor.remove(`#${this.id}`);
+            },
+            // 初始化编辑器
+            initEditor() {
+                this.removeEditor();
+                this.editor = window.KindEditor.create("#" + this.id, {
+                    width: this.width,
+                    height: this.height,
+                    minWidth: this.minWidth,
+                    minHeight: this.minHeight,
+                    items: this.items,
+                    noDisableItems: this.noDisableItems,
+                    filterMode: this.filterMode,
+                    htmlTags: this.htmlTags,
+                    wellFormatMode: this.wellFormatMode,
+                    resizeType: this.resizeType,
+                    themeType: this.themeType,
+                    langType: this.langType,
+                    designMode: this.designMode,
+                    fullscreenMode: this.fullscreenMode,
+                    basePath: this.basePath,
+                    themesPath: this.themesPath,
+                    pluginsPath: this.pluginsPath,
+                    langPath: this.langPath,
+                    minChangeSize: this.minChangeSize,
+                    loadStyleMode: this.loadStyleMode,
+                    urlType: this.urlType,
+                    newlineTag: this.newlineTag,
+                    pasteType: this.pasteType,
+                    dialogAlignType: this.dialogAlignType,
+                    shadowMode: this.shadowMode,
+                    zIndex: this.zIndex,
+                    useContextmenu: this.useContextmenu,
+                    syncType: this.syncType,
+                    indentChar: this.indentChar,
+                    cssPath: this.cssPath,
+                    cssData: this.cssData,
+                    bodyClass: this.bodyClass,
+                    colorTable: this.colorTable,
+                    afterCreate: this.afterCreate,
+                    // 编辑器内容改变回调
+                    afterChange: () => {
+                        this.editor ? (this.outContent = this.editor.html()) : "";
+                    },
+                    afterTab: this.afterTab,
+                    afterFocus: this.afterFocus,
+                    afterBlur: this.afterBlur,
+                    afterUpload: this.afterUpload,
+                    uploadJson: this.uploadJson,
+                    fileManagerJson: this.fileManagerJson,
+                    allowPreviewEmoticons: this.allowPreviewEmoticons,
+                    allowImageUpload: this.allowImageUpload,
+                    allowFlashUpload: this.allowFlashUpload,
+                    allowMediaUpload: this.allowMediaUpload,
+                    allowFileUpload: this.allowFileUpload,
+                    allowFileManager: this.allowFileManager,
+                    fontSizeTable: this.fontSizeTable,
+                    imageTabIndex: this.imageTabIndex,
+                    formatUploadUrl: this.formatUploadUrl,
+                    fullscreenShortcut: this.fullscreenShortcut,
+                    extraFileUploadParams: this.extraFileUploadParams,
+                    filePostName: this.filePostName,
+                    fillDescAfterUploadImage: this.fillDescAfterUploadImage,
+                    afterSelectFile: this.afterSelectFile,
+                    pagebreakHtml: this.pagebreakHtml,
+                    allowImageRemote: this.allowImageRemote,
+                    autoHeightMode: this.autoHeightMode,
+                    fixToolBar: this.fixToolBar,
+                    tabIndex: this.tabIndex
+                });
+            }
+        }
     };
 </script>
 <style scoped>
@@ -105,75 +314,5 @@
         height: 300px;
         display: inline-block;
         width: 100%;
-    }
-
-    .ql-snow .ql-picker.ql-size .ql-picker-label::before,
-    .ql-snow .ql-picker.ql-size .ql-picker-item::before {
-        content: "14px";
-    }
-
-    .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="small"]::before,
-    .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="small"]::before {
-        content: "10px";
-    }
-
-    .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="large"]::before,
-    .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="large"]::before {
-        content: "18px";
-    }
-
-    .ql-snow .ql-picker.ql-size .ql-picker-label[data-value="huge"]::before,
-    .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="huge"]::before {
-        content: "32px";
-    }
-
-    .ql-snow .ql-picker.ql-header .ql-picker-label::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item::before {
-        content: "文本";
-    }
-
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
-        content: "标题1";
-    }
-
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
-        content: "标题2";
-    }
-
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
-        content: "标题3";
-    }
-
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before {
-        content: "标题4";
-    }
-
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="5"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="5"]::before {
-        content: "标题5";
-    }
-
-    .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="6"]::before,
-    .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="6"]::before {
-        content: "标题6";
-    }
-
-    .ql-snow .ql-picker.ql-font .ql-picker-label::before,
-    .ql-snow .ql-picker.ql-font .ql-picker-item::before {
-        content: "标准字体";
-    }
-
-    .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="serif"]::before,
-    .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="serif"]::before {
-        content: "衬线字体";
-    }
-
-    .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="monospace"]::before,
-    .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="monospace"]::before {
-        content: "等宽字体";
     }
 </style>

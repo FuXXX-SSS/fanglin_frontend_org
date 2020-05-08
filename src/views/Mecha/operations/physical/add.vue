@@ -64,7 +64,7 @@
         label-width="100px"
       >
         <el-form-item label="现金说明 : ">
-          <Quill @qutil="qutil" :description="formData.introduction" />
+          <Quill ref="kindeditor" :content="formData.introduction" @input="qutil"></Quill>
         </el-form-item>
       </el-form>
     </div>

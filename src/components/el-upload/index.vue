@@ -102,6 +102,7 @@ export default {
       console.log(vm.hideUpload);
     },
     handleAvatarSuccess(res, file) {
+      console.log(file);
       console.log(res);
       this.imageUrl = URL.createObjectURL(file.raw);
       this.formData.image = res.data.url;

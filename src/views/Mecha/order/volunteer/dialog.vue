@@ -5,12 +5,13 @@
             width="30%"
             center
     >
-        <el-form :model="form" v-if="isSure">
+        <el-form :model="form" v-if="isSure" label-position="left">
             <el-form-item label="对方账户" :label-width="formLabelWidth">
                 <el-input v-model="form.walletURL" autocomplete="off" disabled></el-input>
             </el-form-item>
             <el-form-item label="转账数量" :label-width="formLabelWidth">
-                <el-input v-model.number="form.amount" autocomplete="off" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" >
+                <el-input v-model.number="form.amount" autocomplete="off"
+                          onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
                     <template slot="append">{{assetsUnitName}}</template>
                 </el-input>
             </el-form-item>
@@ -56,11 +57,11 @@
         name: "index",
         data() {
             return {
-                formLabelWidth: '120px',
+                formLabelWidth: '80px',
                 diaTitle: '对方钱包',
                 isSure: true,
                 info: '',
-                assetsUnitName:''
+                assetsUnitName: ''
             }
         },
         methods: {

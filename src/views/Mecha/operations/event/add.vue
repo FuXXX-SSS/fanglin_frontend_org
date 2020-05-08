@@ -51,7 +51,7 @@
         label-width="100px"
       >
         <el-form-item label="项目详情 : ">
-          <Quill @qutil="qutil" :description="formData.detail" />
+          <Quill ref="kindeditor" :content="formData.detail" @input="qutil"></Quill>
         </el-form-item>
       </el-form>
     </div>

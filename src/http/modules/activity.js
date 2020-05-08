@@ -54,4 +54,12 @@ export const cal= data =>
         data: data
     });
 
+// 开启｜关闭活动
+export const deal = data =>
+    _axios({
+        url: `/bms/activity/deal/${data}`,
+        method: "post",
+        data: data
+    });
+
 
