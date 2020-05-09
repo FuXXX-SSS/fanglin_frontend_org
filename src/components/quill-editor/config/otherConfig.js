@@ -8,7 +8,7 @@ const otherConfig = {
     },
     filterMode: {
         type: Boolean,
-        default: true
+        default: false
     },
 
     wellFormatMode: {

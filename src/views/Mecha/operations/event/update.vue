@@ -21,14 +21,14 @@
                             <el-input v-model="formData.phone" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                         </el-form-item>
                         <el-form-item label="募资目标：">
-                            <el-input v-model="formData.amount" style="width: 80%;float: left;"></el-input>
+                            <el-input v-model="formData.amount" style="width: 80%;float: left;" disabled></el-input>
                             <span style="margin-left: 14px;">元</span>
                         </el-form-item>
 
                         <el-form-item label="回馈标准：">
                             <span style="float: left;">资助1元回馈</span>
                             <el-input v-model="formData.refundStd"
-                                      style="width: 50%;float: left;margin-left: 10px;margin-right: 10px"></el-input>
+                                      style="width: 50%;float: left;margin-left: 10px;margin-right: 10px" disabled></el-input>
                             <span style="margin-left: 14px;">{{assetsUnitName}}</span>
                         </el-form-item>
                         <el-form-item>

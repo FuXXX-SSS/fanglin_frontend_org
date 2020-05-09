@@ -217,15 +217,17 @@
             <!--                </template>-->
             <!--            </el-autocomplete>-->
             <div style="margin: 5px">
-                <!--                <baidu-map class="bm-view"-->
-                <!--                           :center="mapCenter"-->
-                <!--                           :zoom="mapZoom"-->
-                <!--                           :scroll-wheel-zoom="true"-->
-                <!--                           ak="baidu-ak"-->
-                <!--                           @click="getClickInfo"-->
-                <!--                           :autoLocation="true"-->
-                <!--                           @ready="handlerBMap">-->
-                <!--                </baidu-map>-->
+                <baidu-map class="bm-view"
+                           :center="mapCenter"
+                           :zoom="mapZoom"
+                           :scroll-wheel-zoom="true"
+                           ak="baidu-ak"
+                           @click="getClickInfo"
+                           :autoLocation="true"
+                           style="display: none"
+                           @ready="handlerBMap"
+                >
+                </baidu-map>
                 <div class="map">
                     <el-autocomplete
                             v-model="mapvalue"
@@ -240,10 +242,14 @@
                         </template>
                     </el-autocomplete>
 
-                    <div id="container"
+                    <el-main id="container"
                          style="width:100%;height:380px;"
                          :autoLocation="true"
-                    ></div>
+                             v-loading="pictLoading"
+                             element-loading-background="rgba(0, 0, 0, 0.5)"
+                             element-loading-text="获取当前位置中"
+                             element-loading-spinner="el-icon-loading"
+                    ></el-main>
                 </div>
             </div>
         </el-dialog>
@@ -322,12 +328,14 @@
                 value: [],
                 list: [],
                 loading: false,
+                pictLoading:true
             }
         },
         components: {
             VueSlider,
             Elupload,
             Quill,
+            BaiduMap
         },
         watch: {
             mapvalue(newVla) {
@@ -402,22 +410,19 @@
             },
             focus() {
                 this.dialog = true
-                this.initMap()
             },
-            handlerBMap({BMap, map}) {
-
+            async handlerBMap({BMap, map}) {
+                let self= this
                 this.BMap = BMap
                 this.map = map
-                if (this.mapLocation.coordinate && this.mapLocation.coordinate.lng) {
-                    this.mapCenter.lng = this.mapLocation.coordinate.lng
-                    this.mapCenter.lat = this.mapLocation.coordinate.lat
-                    this.mapZoom = 15
-                    map.addOverlay(new this.BMap.Marker(this.mapLocation.coordinate))
-                } else {
-                    this.mapCenter.lng = 114.3162001
-                    this.mapCenter.lat = 30.58108413
-                    this.mapZoom = 10
-                }
+                var geolocation = new BMap.Geolocation()
+                 geolocation.getCurrentPosition(function (r) {
+                     console.log(r);
+                     self.lat = r.point.lat
+                     self.lng = r.point.lng
+                     self.pictLoading=false
+                     self.initMap()
+                 })
             },
             // querySearch(queryString, cb) {
             //     var that = this
@@ -484,7 +489,6 @@
 
                 }
                 this.assetsUnitName = JSON.parse(sessionStorage.getItem("userInfo")).assetsUnitName
-
             },
             async submit() {
                 if (this.formData.image === "") {
@@ -615,6 +619,7 @@
             async initMap() {
                 //步骤：定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
                 //设置地图中心点
+                console.log(this.lat);
                 var myLatlng = await new qq.maps.LatLng(this.lat, this.lng);
                 //定义工厂模式函数
                 var myOptions = {
@@ -631,7 +636,8 @@
                         map: map
                     });
                     //marker.setAnimation(qq.maps.Animation.DROP);
-                }, 2000);
+                }, 500);
+                console.log(myLatlng);
                 this.restaurants = this.loadAll();
                 var thit = this
                 qq.maps.event.addListener(map, 'click', async function (event) {
@@ -642,9 +648,10 @@
                 console.log(this.mapvalue);
             },
             analysis(data1) {
+                console.log(data1);
                 this.lat = data1.lat
                 this.lng = data1.lng
-                let url = 'http://apis.map.qq.com/ws/geocoder/v1/?';
+                let url = 'https://apis.map.qq.com/ws/geocoder/v1/?';
                 const key = 'TQOBZ-4F432-Q2VUH-CDSN5-YHDCT-ZNFOT'
                 var data = {
                     location: data1.lat + ',' + data1.lng,
@@ -665,23 +672,9 @@
                         })
                 })
             },
-            getMyLocation() {  //当前位置
-                var geolocation = new qq.maps.Geolocation("TQOBZ-4F432-Q2VUH-CDSN5-YHDCT-ZNFOT", "芳邻时间银行-志愿者端");
-                geolocation.getLocation(this.showPosition, this.showErr);
-            },
-            showPosition(position) {
-                console.log(position);
-                this.lng = position.lng
-                this.lat = position.lat
-            },
-            showErr() {
-                console.log("定位失败");
-                this.getMyLocation();//定位失败再请求定位，测试使用
-            },
         },
         created() {
             this.init()
-            this.getMyLocation()
         },
 
     }

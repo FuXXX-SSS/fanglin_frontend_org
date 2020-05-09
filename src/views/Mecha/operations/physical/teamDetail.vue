@@ -114,6 +114,7 @@ export default {
         this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
         return false;
       }
+      this.projectStatus?this.formData.goodsStatus=1:this.formData.goodsStatus=0
       let res = await exhupdate(this.formData);
       if (res && res.code === 1000) {
         this.$tools.$mes("操作成功", "success");

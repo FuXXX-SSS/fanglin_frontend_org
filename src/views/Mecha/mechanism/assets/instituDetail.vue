@@ -38,6 +38,9 @@
                             <el-option label="红包退还" value=7></el-option>
                             <el-option label="项目回赠" value=8></el-option>
                             <el-option label="发布活动,锁定资产" value=9></el-option>
+                            <el-option label="现金购物回赠" value=10></el-option>
+                            <el-option label="上架物资兑换品,锁定资产" value=11></el-option>
+                            <el-option label="下架物资兑换品,解锁资产" value=12></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item class="options">
@@ -53,13 +56,22 @@
 
                     <el-table-column prop="created" label="交易时间"/>
                     <el-table-column prop="billType" label="交易类型">
-                    <template slot-scope="scope">
-                        {{ scope.row.billType===0 ? "直接转账" :
-                           scope.row.billType===1 ? "项目" :
-                           scope.row.billType===2 ? "活动" :
-                           scope.row.billType===3 ? "兑换实物" :
-                           scope.row.billType===4 ? "兑换现金" : ''}}
-                    </template>
+                        <template slot-scope="scope">
+                            {{ scope.row.billType===0 ? "直接转账" :
+                            scope.row.billType===1 ? "项目" :
+                            scope.row.billType===2 ? "活动" :
+                            scope.row.billType===3 ? "兑换实物" :
+                            scope.row.billType===4 ? "兑换现金" :
+                            scope.row.billType == 5? '发送红包':
+                            scope.row.billType == 6? '领取红包':
+                            scope.row.billType == 7? '红包退还':
+                            scope.row.billType == 8? '项目回赠':
+                            scope.row.billType == 9? '发布活动，锁定资产':
+                            scope.row.billType == 10? '现金购物回赠':
+                            scope.row.billType == 11? '上架物资兑换品,锁定资产':
+                            scope.row.billType == 12? '下架物资兑换品,解锁资产':
+                            ''}}
+                        </template>
                     </el-table-column>
                     <el-table-column prop="name" label="交易方"/>
                     <el-table-column prop="amount" label="交易数量"/>
@@ -98,7 +110,7 @@
                 this.$router.go(-1)
             },
             async init() {
-                if (this.value1.length === 0 ) {
+                if (this.value1.length === 0) {
                     this.formData.beginTime = ''
                     this.formData.endTime = ''
                 } else {
@@ -110,11 +122,11 @@
                 this.tableData.records = list
                 this.total = total
             },
-        pageChange(item) {
-            this.formData.pageNum = item.page_index;
-            this.formData.pageSize = item.page_limit;
-            this.init()
-        },
+            pageChange(item) {
+                this.formData.pageNum = item.page_index;
+                this.formData.pageSize = item.page_limit;
+                this.init()
+            },
         },
         created() {
             this.init()

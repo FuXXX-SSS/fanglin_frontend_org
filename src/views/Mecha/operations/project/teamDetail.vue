@@ -24,6 +24,7 @@
               <el-input
                 v-model="formData.totalStock"
                 style="width: 25%;float: left;"
+                disabled
                 onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
               ></el-input>
               <el-input
@@ -34,7 +35,7 @@
             </el-form-item>
             <el-form-item label="兑换标准：">
               <el-input v-model="formData.exhAmount" style="    width: 25%;
-    float: left;"></el-input>
+    float: left;" disabled></el-input>
               <span style="margin-left: 14px;">芳邻点/套</span>
             </el-form-item>
             <el-form-item label="购买价格：">
@@ -42,13 +43,14 @@
                 v-model="formData.buyAmount"
                 style="    width: 25%;
     float: left;"
+                disabled
                 onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
               ></el-input>
               <span style="margin-left: 14px;">元/套</span>
             </el-form-item>
             <el-form-item label="购买回馈：">
               <el-input v-model="formData.refundAmount" style="    width: 25%;
-    float: left;"></el-input>
+    float: left;" disabled></el-input>
               <span style="margin-left: 14px;">芳邻点/套</span>
             </el-form-item>
             <el-form-item label="摘要：">
@@ -151,6 +153,7 @@ export default {
         this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
         return false;
       }
+      this.projectStatus?this.formData.goodsStatus=1:this.formData.goodsStatus=0
       let res = await exhupdate(this.formData);
       if (res && res.code === 1000) {
         this.$tools.$mes("操作成功", "success");
