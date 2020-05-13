@@ -4,10 +4,11 @@
             :visible.sync="dialogVisible"
             width="30%"
             center
+            :close-on-click-modal="false"
     >
         <el-form :model="form" v-if="isSure" label-position="left">
             <el-form-item label="对方钱包" :label-width="formLabelWidth" >
-                <el-input v-model="form.walletURL" autocomplete="off" ></el-input>
+                <el-input v-model="form.walletURL" autocomplete="off" :disabled="Isdisabled"></el-input>
             </el-form-item>
             <el-form-item label="转账数量" :label-width="formLabelWidth">
                 <el-input v-model.number="form.amount" autocomplete="off" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
@@ -85,6 +86,7 @@
             Sure2() {
                 this.isSure = !this.isSuccess
                 this.dialogVisible = false
+                this.$emit('successTrade')
             },
             Cancel() {
                 this.$emit('diaLog')

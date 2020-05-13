@@ -82,3 +82,19 @@ export const forgotpassword = data =>
         method: "post",
         data: data
     });
+
+// 重置钱包密码
+export const resetWalletPwd = data =>
+    _axios({
+        url: "/bms/managerUser/resetWalletPwd",
+        method: "post",
+        data: data
+    });
+
+// 修改密码(需登陆才能修改)
+export const resetpassword = data =>
+    _axios({
+        url: "/bms/managerUser/reset/password",
+        method: "post",
+        data: data
+    });

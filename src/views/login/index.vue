@@ -101,7 +101,7 @@
 </template>
 
 <script>
-    import {menuInfo, privilege, managerUserDetail, verification} from '@http/managerUser'
+    import {menuInfo, privilege, managerUserDetail, verification,forgotpassword} from '@http/managerUser'
     import {instInfo} from '@http/inst'
 
     export default {
@@ -240,9 +240,9 @@
                             let obj = {
                                 code: this.ruleForm.checkCode,
                                 newPassword: this.ruleForm.checkPass,
-                                // oldPassword: this.ruleForm.oldPass,
+                                oldPassword: this.ruleForm.oldPass,
                                 phone: this.ruleForm.age,
-                                userType: 1,
+                                userType: 0,
                             }
                             forgotpassword(obj)
                                 .then(res => {
@@ -261,7 +261,7 @@
                 let _this = this
                 if (this.ruleForm.age !== "") {
                     let obj = {
-                        userType: 1,
+                        userType: 0,
                         type: 1,
                         phone: this.ruleForm.age,
                     }

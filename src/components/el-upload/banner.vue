@@ -126,9 +126,13 @@ export default {
       let instId = JSON.parse(sessionStorage.getItem("userInfo")).instId;
       if (this.isUpload) {
         let res = await instDetail(instId);
-        if (res.data.banner !== "") {
+        if (res.data.banner !== "" ) {
+          console.log(res.data.banner);
           this.baseImage = res.data.banner;
           this.isShow = false;
+        }
+        if (res.data.banner==="null"){
+          this.isShow = true;
         }
       }
       let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));

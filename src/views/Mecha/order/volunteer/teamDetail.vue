@@ -42,13 +42,13 @@
           <el-col :span="12" class="el-right">
             <div class="time-address">
               <div class="co-fl">
-                <p>签到时间 ：</p>
-                <p>{{formData.checkInTime}}</p>
+                <p>签退时间 ：</p>
+                <p>{{formData.checkOutTime}}</p>
               </div>
             </div>
             <div class="co-fl">
-              <p>签到地点：</p>
-              <p class="address_right">{{checkInAddress1}}</p>
+              <p>签退地点：</p>
+              <p class="address_right">{{checkInAddress2}}</p>
             </div>
             <div class="map">
               <Map :checkInCo="formData.checkInCo" :userInfo="userInfo" />
@@ -59,12 +59,12 @@
             <div class="time-address">
               <div class="co-fl">
                 <p>签到时间 ：</p>
-                <p>{{formData.checkOutTime}}</p>
+                <p>{{formData.checkInTime}}</p>
               </div>
             </div>
             <div class="co-fl">
               <p>签到地点 ：</p>
-              <p class="address_left">{{checkInAddress2}}</p>
+              <p class="address_left">{{checkInAddress1}}</p>
             </div>
             <div class="map">
               <Map2 :checkInCo="formData.checkOutCo" :userInfo="userInfo" />
@@ -111,6 +111,7 @@
                 :form="walletURL"
                 @Sure="Sure()"
                 :title="Vistitle"
+                @Sure2="rateSure"
         />
 
       <div class="my-block block_bot">
@@ -120,9 +121,6 @@
           </el-col>
           <el-col :span="3">
             <el-button type="primary" @click="rateSure" v-if="isRate">确定</el-button>
-          </el-col>
-          <el-col :span="3">
-            <el-button type="success" @click="ISdialog">转账</el-button>
           </el-col>
           <el-col :span="3" :offset="1">
             <el-button type="info" @click="back">返回</el-button>
@@ -307,10 +305,13 @@ export default {
       console.log(this.imageList);
     },
     sure() {
+      console.log(123);
+
       this.dialogVisible = false;
       this.$router.push({
         name: "ordervolunteer"
       });
+      // this.rateSure()
     },
     async rateSure() {
       let obj = {
@@ -320,8 +321,12 @@ export default {
       };
       let res = await rate(obj);
       if (res && res.code === 1000) {
-        this.$tools.$mes("操作成功", "success");
+        this.$tools.$mes("评价成功", "success");
         this.init();
+        let _this  = this
+        setTimeout(()=>{
+          _this.ISdialog()
+        },500)
       }
     },
      async ISdialog() {
@@ -330,25 +335,6 @@ export default {
                 this.walletURL = res.data
                 this.walletURL.billType=2
             },
-    async SURE(msg) {
-      // if (msg[1] === 1) {
-      //     let res = await instDetail(JSON.parse(sessionStorage.getItem("userInfo")).instId)
-      //     let obj = {
-      //         amount: msg[0].amount,
-      //         billType: 0,
-      //         password: md5(msg[0].password + "fanglin"),
-      //         receiveType: 0,
-      //         receiveWalletUrl: msg[0].walletURL,
-      //     }
-      //     let res2 = await commonTrade(obj)
-      //     if (res2 && res.code === 1000) {
-      //         let assetsUnitName = JSON.parse(
-      //             sessionStorage.getItem("userInfo")
-      //         ).assetsUnitName;
-      //         this.info = assetsUnitName
-      //     }
-      // }
-    }
   },
   created() {
     this.init();

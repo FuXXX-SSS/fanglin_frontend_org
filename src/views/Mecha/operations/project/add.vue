@@ -39,17 +39,17 @@
             </el-form-item>
             <el-form-item label="兑换标准：">
               <el-input v-model="formData.exhAmount" style="    width: 25%;
-    float: left;"></el-input>
+    float: left;" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
               <span style="margin-left: 14px;">{{assetsUnitName}}/单位</span>
             </el-form-item>
             <el-form-item label="购买价格：">
               <el-input v-model="formData.buyAmount" style="    width: 25%;
-    float: left;"></el-input>
+    float: left;" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
               <span style="margin-left: 14px;">元/单位</span>
             </el-form-item>
             <el-form-item label="购买回馈：">
               <el-input v-model="formData.refundAmount" style="    width: 25%;
-    float: left;"></el-input>
+    float: left;" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
               <span style="margin-left: 14px;">{{assetsUnitName}}/单位</span>
             </el-form-item>
             <el-form-item label="摘要：">
@@ -61,7 +61,7 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="缩略图：" style="margin-right: 10px">
-              <Elupload @load="load" :limit="limit" :isDetail="true" />
+              <Banner @load="load" :limit="limit" :isDetail="true" />
             </el-form-item>
           </el-form>
         </el-col>
@@ -94,21 +94,22 @@
 
 <script>
 import Quill from "@com/quill-editor";
-import Elupload from "@com/el-upload";
 import { exhadd } from "@http/exh";
+import Banner from "./upload";
 
 export default {
   name: "teamDetail",
   data() {
     return {
-      formData: { image: "", introduction: "", type: 0 },
+      formData: { imageList:[], introduction: "", type: 0 },
       limit: 3,
-      assetsUnitName: ""
+      assetsUnitName: "",
+
     };
   },
   components: {
     Quill,
-    Elupload
+    Banner
   },
   methods: {
     back() {
@@ -116,13 +117,17 @@ export default {
       this.$router.go(-1);
     },
     load(data) {
-      this.formData.image = data;
+      this.formData.imageList = [];
+      data.forEach(element => {
+        this.formData.imageList.push(element.response.data.url);
+      });
+      console.log(this.formData.imageList);
     },
     qutil(data) {
       this.formData.introduction = data;
     },
     async save() {
-      if (this.formData.image === "") {
+      if (this.formData.imageList === "") {
         this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
         return false;
       }
@@ -147,8 +152,5 @@ export default {
 </script>
 
 <style scoped>
-.el-image {
-  width: 300px;
-  height: 150px;
-}
+
 </style>

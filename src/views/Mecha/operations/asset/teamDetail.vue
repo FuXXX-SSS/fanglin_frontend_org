@@ -61,7 +61,8 @@
                             <div>{{formData.position}}</div>
                         </el-form-item>
                         <el-form-item>
-                            <i class="el-icon-s-opportunity" style="font-size: 18px;color: #0099ff;cursor: pointer" @click="map"></i>
+                            <i class="el-icon-s-opportunity" style="font-size: 18px;color: #0099ff;cursor: pointer"
+                               @click="map" v-if="formData.positionCo!==null"></i>
                         </el-form-item>
                         <br>
 
@@ -86,10 +87,10 @@
                         </el-form-item>
                         <br>
 
-<!--                        <el-form-item label="活动状态：">-->
-<!--                            {{formData.activityStatus===1?'开启':formData.activityStatus===0?'关闭':''}}-->
+                        <!--                        <el-form-item label="活动状态：">-->
+                        <!--                            {{formData.activityStatus===1?'开启':formData.activityStatus===0?'关闭':''}}-->
 
-<!--                        </el-form-item>-->
+                        <!--                        </el-form-item>-->
                         <el-form-item label="发布人：">
                             <div>{{formData.userName}}</div>
 
@@ -163,6 +164,8 @@
                 :visible.sync="dialog"
                 width="50%"
                 center
+                :close-on-click-modal="false"
+
         >
             <div id="container" style="width:100%;height:380px;"></div>
         </el-dialog>
@@ -172,7 +175,7 @@
 <script>
     import detailBottom from '@com/detailBottom'
     import pagination from '@com/el-pagination'
-    import {activityDetail, select, applyList,deal} from '@http/activity'
+    import {activityDetail, select, applyList, deal} from '@http/activity'
     import {mapState} from "vuex";
 
     let value = ''
@@ -191,7 +194,7 @@
                 dataInfo: {},
                 hasSelectList: [],
                 obj: {},
-                value: value,                dialog: false,
+                value: value, dialog: false,
                 projectStatus: '',
 
 

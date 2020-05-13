@@ -13,8 +13,8 @@ router.beforeEach(async (to, from, next) => {
             next();
             NProgress.done();
         } else {
-          if (to.path === '/index') {
-              next(`/index/mecha/volunteer`);
+            if (to.path === '/index') {
+                next(`/index/mecha/volunteer`);
             }
             next();
             store.dispatch('mecha_asset/setAsset', 1)

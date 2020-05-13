@@ -53,8 +53,8 @@
             <DiaLog :dialogVisible="dialogVisible"
                     @diaLog="diaLog"
                     :form="walletURL"
-                    :Isdisabled="false"
                     @Sure="Sure(arguments)"
+                    :Isdisabled="false"
                     :info="info"/>
 
         </div>
@@ -115,7 +115,7 @@
                 let _this = this;
                 let clipboard = new Clipboard('.cobyOrderSn', {
                     text: function () {
-                        return _this.formData.name
+                        return _this.formData.walletURL
                     }
                 })
                 clipboard.on('success', e => {
@@ -130,8 +130,7 @@
             },
             async diaLog(data) {
                 this.dialogVisible = !this.dialogVisible
-                let res = await walletURL(`${2}/${data.assetsUnitId}`)
-                this.walletURL = res.data
+
             },
             async Sure(msg) {
                 if (msg[1] === 1) {

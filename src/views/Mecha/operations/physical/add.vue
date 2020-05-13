@@ -83,14 +83,14 @@
 
 <script>
 import Quill from "@com/quill-editor";
-import Elupload from "@com/el-upload";
+import Elupload from "../project/upload";
 import { exhadd } from "@http/exh";
 
 export default {
   name: "teamDetail",
   data() {
     return {
-      formData: { image: "", introduction: "", type: 1 },
+      formData: {  imageList:[], introduction: "", type: 1 },
       limit: 3,
       assetsUnitName: ""
     };
@@ -105,13 +105,17 @@ export default {
       this.$router.go(-1);
     },
     load(data) {
-      this.formData.image = data;
+      this.formData.imageList = [];
+      data.forEach(element => {
+        this.formData.imageList.push(element.response.data.url);
+      });
+      console.log(this.formData.imageList);
     },
     qutil(data) {
       this.formData.introduction = data;
     },
     async save() {
-      if (this.formData.image === "") {
+      if (this.formData.imageList === "") {
         this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
         return false;
       }

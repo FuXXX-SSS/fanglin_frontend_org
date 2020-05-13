@@ -4,6 +4,8 @@
             :visible.sync="dialogVisible"
             width="30%"
             center
+            :close-on-click-modal="false"
+
     >
         <el-form :model="form" v-if="isSure" label-position="left">
             <el-form-item label="对方账户" :label-width="formLabelWidth">
