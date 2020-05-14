@@ -15,7 +15,7 @@
               <el-input v-model="formData.name"></el-input>
             </el-form-item>
             <el-form-item label="供应单位：">
-              <el-input v-model="formData.instName"></el-input>
+              <el-input v-model="formData.provider"></el-input>
             </el-form-item>
             <el-form-item label="状态：">
               <el-radio-group v-model="formData.goodsStatus">
@@ -32,6 +32,7 @@
               ></el-input>
               <el-input
                 v-model="formData.unit"
+                disabled
                 style="    width: 25%;
     float: left;margin-left: 10px"
                 placeholder="单位"
@@ -90,7 +91,7 @@ export default {
   name: "teamDetail",
   data() {
     return {
-      formData: {  imageList:[], introduction: "", type: 1 },
+      formData: {  imageList:[], introduction: "", type: 1 ,unit:"元"},
       limit: 3,
       assetsUnitName: ""
     };

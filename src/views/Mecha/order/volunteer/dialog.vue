@@ -88,6 +88,7 @@
             Sure2() {
                 this.isSure = !this.isSuccess
                 this.dialogVisible = false
+                this.$emit('rateSure')
             },
             Cancel() {
                 this.$emit('diaLog')

@@ -189,29 +189,32 @@
             async loginClick(type) {
                 let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
                 let phone = ''
+                let codeType = ''
                 if (userInfo.loginPhone) {
                     if (type === 1) {
                         phone = userInfo.loginPhone
+                        codeType = 0
                     }
                 } else {
                     this.$tools.$mes('无手机号码', 'warning')
-                    return  false
+                    return false
                 }
                 if (userInfo.instPhone) {
                     if (type === 2) {
                         phone = userInfo.logiinstPhonenPhone
+                        codeType = 6
                     }
                 } else {
                     this.$tools.$mes('无手机号码', 'warning')
-                    return  false
+                    return false
                 }
 
                 let vm = this
                 const time_count = 60
                 vm.count = time_count
                 let obj = {
-                    type: 6,
-                    userType: 1,
+                    type: codeType,
+                    userType: 0,
                     phone: phone
                 }
                 let res = await verification(obj)
@@ -244,42 +247,29 @@
                 }, 1000)
             },
             async submitForm(formName, type) {
-                console.log(type);
-                let instPhone = (JSON.parse(sessionStorage.getItem("userInfo"))).instPhone
-                let loginPhone = (JSON.parse(sessionStorage.getItem("userInfo"))).instPhone
-                console.log(instPhone);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        let obj ={}
                         if (type === 2) {
-                            let obj = {
-                                phone: (JSON.parse(sessionStorage.getItem("userInfo"))).instPhone,
+                             obj = {
                                 code: this.formData2.setCode,
-                                password1: this.formData2.setWord,
-                                password2: this.formData2.setNew,
+                                newPassword: this.formData2.setNew,
                                 type: 6,
                             }
-                            return new Promise((resolve, reject) => {
-                                resetWalletPwd(obj).then(res => {
-                                    if (res && res.code === 1000) {
-                                        this.$tools.$mes('修改成功', 'success')
-                                    }
-                                }).catch(error => reject(error))
-                            })
                         } else {
-                            let obj = {
+                             obj = {
                                 code: this.formData.loginCode,
                                 newPassword: this.formData.loginNew,
                                 type: 0,
                             }
-                            return new Promise((resolve, reject) => {
-                                resetpassword(obj).then(res => {
-                                    if (res && res.code === 1000) {
-                                        this.$tools.$mes('修改成功', 'success')
-                                    }
-                                }).catch(error => reject(error))
-                            })
                         }
-
+                        return new Promise((resolve, reject) => {
+                            resetpassword(obj).then(res => {
+                                if (res && res.code === 1000) {
+                                    this.$tools.$mes('修改成功', 'success')
+                                }
+                            }).catch(error => reject(error))
+                        })
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -299,8 +289,8 @@
                 if (this.formData2.instphone !== undefined) {
                     this.formData2.instphone = geTel(this.formData2.instphone)
                 }
-                if (this.formData2.loginPhone !== undefined) {
-                    this.formData2.loginPhone = geTel(this.formData2.loginPhone)
+                if (this.formData.loginPhone !== undefined) {
+                    this.formData.loginPhone = geTel(this.formData.loginPhone)
                 }
             }
         },

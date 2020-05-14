@@ -30,6 +30,7 @@
                 style="    width: 25%;
     float: left;margin-left: 10px"
                 placeholder="单位"
+                disabled
               ></el-input>
             </el-form-item>
             <el-form-item label="兑换标准：">
@@ -48,7 +49,7 @@
                 type="textarea"
                 :autosize="{ minRows: 2, maxRows: 4}"
                 placeholder="请输入内容"
-                v-model="formData.textarea2"
+                v-model="formData.description"
               ></el-input>
             </el-form-item>
           </el-form>

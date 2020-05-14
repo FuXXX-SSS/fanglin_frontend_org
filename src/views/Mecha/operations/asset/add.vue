@@ -18,7 +18,6 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-
                 <el-row :gutter="20">
 
                     <el-col :span="14">
@@ -26,22 +25,13 @@
                         <el-form-item label="活动名称 : ">
                             <el-input v-model="formData.activityName" placeholder="活动名称"></el-input>
                         </el-form-item>
-                        <el-form-item label="缩略图：" style="margin-right: 10px">
-                            <Elupload @load="load" :isDetail="isDetail"/>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form
-                                :inline="false"
-                                :model="formData"
-                                size="small"
-                                class="demo-form-inline"
-                                label-width="110px"
-                        >
-                        </el-form>
                         <el-form-item label="联系电话：">
                             <el-input v-model="formData.phone" placeholder="联系电话"
                                       onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"></el-input>
+                        </el-form-item>
+                        <el-form-item label="缩略图：" style="margin-right: 10px">
+                            <Elupload @load="load" :isDetail="isDetail"/>
+                            <p>图片尺寸为900*300像素</p>
                         </el-form-item>
                         <el-form-item label="所属项目：">
                             <el-select filterable v-model="formData.projectId" placeholder="所属项目">
@@ -53,11 +43,6 @@
                                 ></el-option>
                             </el-select>
                         </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row :gutter="20">
-
-                    <el-col :span="16">
                         <el-form-item label="专长要求：">
                             <p style="margin: 0">（不选择则表示不限专长，最多选3项）</p>
                             <el-checkbox-group v-model="formData.serviceCatIdList" :max="3">
@@ -74,12 +59,6 @@
 
                             </el-checkbox-group>
                         </el-form-item>
-
-                    </el-col>
-                </el-row>
-                <el-row :gutter="20">
-
-                    <el-col :span="8">
                         <el-form-item label="人数要求 : " style="margin-right: 0">
                             <el-input v-model="formData.userNum"
                                       placeholder="人数要求"
@@ -90,10 +69,6 @@
                                 <el-radio v-model="formData.idCert" label=0>不要求</el-radio>
                             </el-form-item>
                         </el-form-item>
-
-                    </el-col>
-                    <el-col :span="8">
-
                         <el-form-item label="年龄：">
                             <vue-slider v-model="value2" :tooltip="'always'"
                                         :max="75"
@@ -105,12 +80,6 @@
                             <el-radio v-model="formData.gender" label="0">女</el-radio>
                             <el-radio v-model="formData.gender" label="-1">不限</el-radio>
                         </el-form-item>
-                    </el-col>
-
-                </el-row>
-                <el-row :gutter="20">
-
-                    <el-col :span="16">
                         <el-form-item label="地点：">
                             <el-input v-model="mapLocation.address" @focus="focus" placeholder="地点">
                                 <template slot="append">
@@ -118,25 +87,14 @@
                                     <i slot="suffix" class="el-input__icon el-icon-s-opportunity"
                                        @click="focus"
                                        style="font-size: 18px;color: #0099ff;cursor: pointer">
-
                                     </i>
                                 </template>
-
                             </el-input>
                         </el-form-item>
                         <el-form-item label="详细地址：">
                             <el-input v-model="formData.positionName" placeholder="详细地址"
                             ></el-input>
                         </el-form-item>
-                        <el-form-item>
-
-                        </el-form-item>
-                    </el-col>
-
-                </el-row>
-                <el-row :gutter="20">
-
-                    <el-col :span="4">
                         <el-form-item label="开始时间：">
                             <el-date-picker
                                     v-model="formData.beginTime"
@@ -149,9 +107,7 @@
                             >
                             </el-date-picker>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="重复：" style="margin-right: 0;margin-left: 20px">
+                        <el-form-item label="重复：">
                             <el-radio-group v-model="formData.repeatActivity" @change="changeRadio">
                                 <el-radio label="0">单次</el-radio>
                                 <el-radio label="1">每天</el-radio>
@@ -160,8 +116,6 @@
                                 <el-radio label="4">每年</el-radio>
                             </el-radio-group>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="4">
                         <el-form-item label="结束时间：">
                             <el-date-picker
                                     v-model="formData.endTime"
@@ -174,115 +128,99 @@
                             >
                             </el-date-picker>
                         </el-form-item>
+                        <el-form-item label="重复截止日期：" style="margin-top: 30px">
+                            <el-date-picker
+                                    v-model="formData.repeatEndTime"
+                                    type="datetime"
+                                    placeholder="重复截止日期"
+                                    format="yyyy-MM-dd HH:mm"
+                                    value-format="timestamp"
+                                    align="right"
+                                    @change="changeTime"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row :gutter="20">
-                <el-col :span="4">
-                    <el-form-item label="重复截止日期：" style="margin-top: 30px">
-                        <el-date-picker
-                                v-model="formData.repeatEndTime"
-                                type="datetime"
-                                placeholder="重复截止日期"
-                                format="yyyy-MM-dd HH:mm"
-                                value-format="timestamp"
-                                align="right"
-                                @change="changeTime"
-                        >
-                        </el-date-picker>
-                    </el-form-item>
-                </el-col>
-                </el-row>
-
                 <el-row :gutter="20">
                     <el-col :span="16">
                         <el-form-item label="活动介绍：">
                             <Quill ref="kindeditor" :content="formData.detail" @input="qutil"></Quill>
                         </el-form-item>
                     </el-col>
-
                 </el-row>
             </el-form>
+            <div class="my-block">
+                <el-row type="flex" class="row-bg" justify="center">
 
-
-            <!--                        <el-form-item label="服务时长：">-->
-            <!--                            <el-input-number v-model.number="formData.duration"-->
-            <!--                                             :min="0.5"-->
-            <!--                                             :step="0.5"-->
-            <!--                                             step-strictly-->
-            <!--                                             @change="change"-->
-            <!--                                             size="medium"></el-input-number>-->
-            <!--                            <p style="display: inline-block;margin: 0;margin-left:10px!important;">服务时长以半小时为单位</p>-->
-            <!--                        </el-form-item>-->
-
-        </div>
-        <div class="my-block">
-            <el-row type="flex" class="row-bg" justify="center">
-
-                <el-col :span="3">
-                    <el-button type="warning" @click="submit">提交</el-button>
-                </el-col>
-                <el-col :span="3">
-                    <el-button type="info" @click="back">返回</el-button>
-                </el-col>
-            </el-row>
-        </div>
-        <el-dialog
-                title="地址"
-                :visible.sync="dialog"
-                width="50%"
-                center
-                :close-on-click-modal="false"
-
-        >
-            <!--            <el-autocomplete-->
-            <!--                    v-model="mapLocation.address"-->
-            <!--                    :fetch-suggestions="querySearch"-->
-            <!--                    placeholder="请输入详细地址"-->
-            <!--                    style="width: 100%"-->
-            <!--                    :trigger-on-focus="false"-->
-            <!--                    @select="handleSelect"-->
-            <!--            >-->
-            <!--                <template slot="append">-->
-            <!--                    <el-button type="primary" @click="sure">确定</el-button>-->
-            <!--                </template>-->
-            <!--            </el-autocomplete>-->
-            <div style="margin: 5px">
-                <baidu-map class="bm-view"
-                           :center="mapCenter"
-                           :zoom="mapZoom"
-                           :scroll-wheel-zoom="true"
-                           ak="baidu-ak"
-                           @click="getClickInfo"
-                           :autoLocation="true"
-                           style="display: none"
-                           @ready="handlerBMap"
-                >
-                </baidu-map>
-                <div class="map">
-                    <el-autocomplete
-                            v-model="mapvalue"
-                            :fetch-suggestions="querySearchAsync"
-                            @select="handleSelect"
-                            placeholder="请输入内容"
-                            style="width: 100%"
-                            @keyup.native="keyup()"
-                    >
-                        <template slot="append">
-                            <el-button type="primary" @click="sure">确定</el-button>
-                        </template>
-                    </el-autocomplete>
-
-                    <el-main id="container"
-                             style="width:100%;height:380px;"
-                             :autoLocation="true"
-                             v-loading="pictLoading"
-                             element-loading-background="rgba(0, 0, 0, 0.5)"
-                             element-loading-text="获取当前位置中"
-                             element-loading-spinner="el-icon-loading"
-                    ></el-main>
-                </div>
+                    <el-col :span="3">
+                        <el-button type="warning" @click="submit">提交</el-button>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-button type="info" @click="back">返回</el-button>
+                    </el-col>
+                </el-row>
             </div>
-        </el-dialog>
+            <el-dialog
+                    title="地址"
+                    :visible.sync="dialog"
+                    width="50%"
+                    center
+                    :close-on-click-modal="false"
+
+            >
+                <!--            <el-autocomplete-->
+                <!--                    v-model="mapLocation.address"-->
+                <!--                    :fetch-suggestions="querySearch"-->
+                <!--                    placeholder="请输入详细地址"-->
+                <!--                    style="width: 100%"-->
+                <!--                    :trigger-on-focus="false"-->
+                <!--                    @select="handleSelect"-->
+                <!--            >-->
+                <!--                <template slot="append">-->
+                <!--                    <el-button type="primary" @click="sure">确定</el-button>-->
+                <!--                </template>-->
+                <!--            </el-autocomplete>-->
+                <div style="margin: 5px">
+                    <baidu-map class="bm-view"
+                               :center="mapCenter"
+                               :zoom="mapZoom"
+                               :scroll-wheel-zoom="true"
+                               ak="baidu-ak"
+                               @click="getClickInfo"
+                               :autoLocation="true"
+                               style="display: none"
+                               @ready="handlerBMap"
+                    >
+                    </baidu-map>
+                    <div class="map">
+                        <el-autocomplete
+                                v-model="mapvalue"
+                                :fetch-suggestions="querySearchAsync"
+                                @select="handleSelect"
+                                placeholder="请输入内容"
+                                style="width: 100%"
+                                @keyup.native="keyup()"
+                        >
+                            <template slot="append">
+                                <el-button type="primary" @click="sure">确定</el-button>
+                            </template>
+                        </el-autocomplete>
+
+                        <el-main id="container"
+                                 style="width:100%;height:380px;"
+                                 :autoLocation="true"
+                                 v-loading="pictLoading"
+                                 element-loading-background="rgba(0, 0, 0, 0.5)"
+                                 element-loading-text="获取当前位置中"
+                                 element-loading-spinner="el-icon-loading"
+                        ></el-main>
+
+                    </div>
+
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 <script>
