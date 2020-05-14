@@ -31,7 +31,7 @@
                         </el-form-item>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
                             <Elupload @load="load" :isDetail="isDetail"/>
-                            <p>图片尺寸为900*300像素</p>
+                            <p>图片尺寸为686*218像素</p>
                         </el-form-item>
                         <el-form-item label="所属项目：">
                             <el-select filterable v-model="formData.projectId" placeholder="所属项目">

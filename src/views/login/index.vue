@@ -1,107 +1,123 @@
 <!-- 登录 -->
 <template>
     <div class="box">
-        <div class="logo">
-            <div class="logo1">
-                <h3>芳邻机构管理后台</h3>
-
+        <div class="bgshang"></div>
+        <div class="logo showTrue" v-if="isShow">
+            <div class="bg"></div>
+            <div style="float: left">
                 <el-collapse-transition>
-                    <div v-if="isShow">
-                        <el-form :model="loginData" status-icon :rules="rules" ref="loginFrom">
-                            <el-form-item prop="username">
+                    <div>
+                        <h1>欢迎登录芳邻机构后台管理</h1>
+                        <div class="logo1">
+                            <el-form :model="loginData" status-icon :rules="rules" ref="loginFrom">
+                                <el-form-item prop="username">
 
-                                <el-input v-model="loginData.username"
-                                          placeholder="请输入手机号/用户名"
-                                          class="username"
-                                ></el-input>
-                            </el-form-item>
-                            <el-form-item prop="password">
+                                    <el-input v-model="loginData.username"
+                                              placeholder="请输入手机号/用户名"
+                                              class="username"
+                                    ></el-input>
+                                </el-form-item>
+                                <el-form-item prop="password">
 
-                                <el-input v-model="loginData.password"
-                                          placeholder="请输入登录密码"
-                                          type="password"
-                                          @keyup.enter.native="onIndex"
-                                ></el-input>
-                            </el-form-item>
-                        </el-form>
+                                    <el-input v-model="loginData.password"
+                                              placeholder="请输入登录密码"
+                                              type="password"
+                                              @keyup.enter.native="onIndex"
+                                    ></el-input>
+                                </el-form-item>
+                            </el-form>
 
-                        <el-button class="but"
-                                   @click="onIndex"
-                                   :loading="isLoading"
-                                   @keyup.enter="onIndex"
-                                   :disabled="isdisabled">{{login}}
-                        </el-button>
+                            <el-button class="but"
+                                       @click="onIndex"
+                                       :loading="isLoading"
+                                       @keyup.enter="onIndex"
+                                       :disabled="isdisabled">{{login}}
+                            </el-button>
 
-                    </div>
-                </el-collapse-transition>
-                <el-collapse-transition>
-
-                    <div v-if="!isShow" class="change">
-                        <el-form :model="ruleForm" :rules="newRules" ref="ruleForm"
-                                 class="demo-ruleForm">
-                            <el-form-item label="" prop="age">
-                                <el-input
-                                        v-model="ruleForm.age"
-                                        placeholder="请输入手机号/"
-                                ></el-input>
-                            </el-form-item>
-                            <!--                            <el-form-item label="" prop="oldPass">-->
-                            <!--                                <el-input-->
-                            <!--                                        v-model="ruleForm.oldPass"-->
-                            <!--                                        autocomplete="off"-->
-                            <!--                                        placeholder="请输入旧密码"-->
-                            <!--                                ></el-input>-->
-                            <!--                            </el-form-item>-->
-                            <el-form-item label="" prop="pass">
-                                <el-input
-                                        v-model="ruleForm.pass"
-                                        autocomplete="off"
-                                        placeholder="请输入登录密码"
-                                ></el-input>
-                            </el-form-item>
-                            <el-form-item label="" prop="checkPass">
-                                <el-input
-                                        v-model="ruleForm.checkPass"
-                                        autocomplete="off"
-                                        placeholder="请确认登录密码"
-                                ></el-input>
-                            </el-form-item>
-                            <el-form-item label="" prop="checkCode">
-                                <el-input
-                                        v-model="ruleForm.checkCode"
-                                        autocomplete="off"
-                                        style=""
-                                        placeholder="请输入验证码"
-                                        class="codeSend"
-                                >
-                                    <template slot="append">
-                                        <el-button type="primary" class="send" @click="sendCode" :disabled="isDisabled">
-                                            {{codeText}}
-                                        </el-button>
-                                    </template>
-                                </el-input>
-
-
-                            </el-form-item>
-
-                        </el-form>
-
-                        <el-button class="but"
-                                   @click="submitForm('ruleForm')"
-                                   :loading="isLoading"
-                                   @keyup.enter="submitForm('ruleForm')"
-                                   :disabled="isdisabled">提交
-                        </el-button>
+                        </div>
                     </div>
                 </el-collapse-transition>
                 <div class="passWords" @click="changeWords">{{changeText}}</div>
             </div>
         </div>
+        <div class="logo showFalse" v-if="!isShow">
+            <div class="bg"></div>
+            <div style="float: left">
+                <el-collapse-transition>
+
+                    <div>
+                        <h1>欢迎登录芳邻机构后台管理</h1>
+                        <div class="logo1">
+                            <el-form :model="ruleForm" :rules="newRules" ref="ruleForm"
+                                     class="demo-ruleForm">
+                                <el-form-item label="" prop="age">
+                                    <el-input
+                                            v-model="ruleForm.age"
+                                            placeholder="请输入手机号/"
+                                    ></el-input>
+                                </el-form-item>
+                                <!--                            <el-form-item label="" prop="oldPass">-->
+                                <!--                                <el-input-->
+                                <!--                                        v-model="ruleForm.oldPass"-->
+                                <!--                                        autocomplete="off"-->
+                                <!--                                        placeholder="请输入旧密码"-->
+                                <!--                                ></el-input>-->
+                                <!--                            </el-form-item>-->
+                                <el-form-item label="" prop="pass">
+                                    <el-input
+                                            v-model="ruleForm.pass"
+                                            autocomplete="off"
+                                            placeholder="请输入登录密码"
+                                    ></el-input>
+                                </el-form-item>
+                                <el-form-item label="" prop="checkPass">
+                                    <el-input
+                                            v-model="ruleForm.checkPass"
+                                            autocomplete="off"
+                                            placeholder="请确认登录密码"
+                                    ></el-input>
+                                </el-form-item>
+                                <el-form-item label="" prop="checkCode">
+                                    <el-input
+                                            v-model="ruleForm.checkCode"
+                                            autocomplete="off"
+                                            style=""
+                                            placeholder="请输入验证码"
+                                            class="codeSend"
+                                    >
+                                        <template slot="append">
+                                            <el-button type="primary" class="send" @click="sendCode"
+                                                       :disabled="isDisabled">
+                                                {{codeText}}
+                                            </el-button>
+                                        </template>
+                                    </el-input>
+
+
+                                </el-form-item>
+
+                            </el-form>
+
+                            <el-button class="but"
+                                       @click="submitForm('ruleForm')"
+                                       :loading="isLoading"
+                                       @keyup.enter="submitForm('ruleForm')"
+                                       :disabled="isdisabled">提交
+                            </el-button>
+
+                        </div>
+                    </div>
+                </el-collapse-transition>
+
+                <div class="passWords" @click="changeWords">{{changeText}}</div>
+            </div>
+        </div>
+        <div class="bgxia"></div>
     </div>
 </template>
 
 <script>
-    import {menuInfo, privilege, managerUserDetail, verification,forgotpassword} from '@http/managerUser'
+    import {menuInfo, privilege, managerUserDetail, verification, forgotpassword} from '@http/managerUser'
     import {instInfo} from '@http/inst'
 
     export default {
@@ -291,36 +307,29 @@
     };
 </script>
 <style lang="less" scoped>
-    @bg: #FFFFFF !important;
+    @bg: rgba(253, 143, 75, 1) !important;
     .box {
         width: 100vw;
         height: 100vh;
-        background: url("../../assets/back.jpg") no-repeat;
+        /*background: url("../../assets/back.jpg") no-repeat;*/
         background-size: cover;
         background-position: center;
         display: flex;
         justify-content: center;
-        color: @bg;
+        position: relative;
+        overflow: hidden;
 
         .iocn {
-            color: white;
             font-size: 60px;
         }
 
         .logo {
-            margin-top: 82px;
-            width: 406px;
-            height: 304px;
+            box-shadow: 0px 2px 30px 0px rgba(0, 0, 0, 0.11);
+            padding-right: 120px;
             border-radius: 10px;
-            display: flex;
-            // justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            align-self: center;
 
             .logo1 {
-                width: 280px;
-                margin-top: 50px;
-
                 .username {
                     height: 48px;
                 }
@@ -334,10 +343,10 @@
                     width: 280px;
                     border-radius: 50px;
                     height: 48px;
-                    background: #0099ff;
+                    background: @bg;
                     font-size: 16px;
-                    color: white;
-                    margin-top: 40px;
+                    color: #fff;
+                    margin-top: 10px;
                     border: none;
                 }
             }
@@ -346,7 +355,6 @@
                 text-align: center;
                 height: 23px;
                 font: 20px "microsoft yahei", Helvetica, Tahoma, Arial, "Microsoft jhengHei", sans-serif;
-                color: #FFFFFF;
                 line-height: 20px;
                 padding: 0 0 33px 0;
                 font-weight: bold;
@@ -363,16 +371,13 @@
     .box /deep/ .el-input__icon {
         height: 109%;
         font-size: 17px;
-        color: @bg;
 
     }
 
     .box /deep/ .el-input__inner {
         background-color: transparent;
         border-radius: 50px;
-        border-color: rgba(255, 255, 255, 0.2);
         height: 50px;
-        color: @bg;
         padding-left: 50px;
     }
 
@@ -385,7 +390,7 @@
     }
 
     .box /deep/ .el-switch__label.is-active {
-        color: #409EFF;
+        color: @bg;
     }
 
     .passWords {
@@ -404,16 +409,14 @@
         text-align: right;
 
         &:hover {
-            color: #409EFF;
+            color: @bg;
             cursor: pointer;
         }
     }
 
     .box /deep/ .el-input-group__append {
-        background-color: #0099ff;
-        color: #fff;
+        background-color:@bg;
         border-radius: 0 30px 30px 0;
-        border-color: rgba(255, 255, 255, 0.2);;
     }
 
     .box /deep/ .codeSend {
@@ -424,10 +427,58 @@
     }
 
     .el-button.is-disabled:hover {
-        background: transparent;
+        /*background: transparent;*/
     }
 
     .change /deep/ .el-input__inner {
         height: 40px;
+    }
+
+    .bgshang {
+        position: absolute;
+        background: url("../../assets/bgshang.png") no-repeat;
+        top: 4rem;
+        right: -4rem;
+        width: 15.5%;
+        height: 15.5%;
+    }
+
+    .bgxia {
+        position: absolute;
+        background: url("../../assets/bgxia.png") no-repeat;
+        bottom: 4rem;
+        left: -3rem;
+        width: 15.5%;
+        height: 15.5%;
+    }
+
+    .bg {
+        float: left;
+        width: 300px;
+        background: url("../../assets/bg.png") no-repeat;
+        height: 464px;
+        background-size: cover;
+        margin-right: 120px;
+    }
+
+    .el-button--primary {
+        color: #fff !important;
+    }
+
+    h1 {
+        font-size: 20px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: rgba(51, 51, 51, 1);
+        line-height: 28px;
+        text-align: center;
+        margin-bottom: 65px;
+        margin-top: 63px;
+    }
+    .showFalse{
+        .bg{
+            height: 600px;
+
+        }
     }
 </style>

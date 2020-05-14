@@ -132,6 +132,7 @@
             // }
         },
         created() {
+            console.log(this.outContent);
             if (
                 this.html &&
                 (this.html.startsWith("https://") || this.html.startsWith("http://"))

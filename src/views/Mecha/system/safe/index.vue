@@ -271,7 +271,6 @@
                             }).catch(error => reject(error))
                         })
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });

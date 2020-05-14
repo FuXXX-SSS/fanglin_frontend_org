@@ -177,7 +177,7 @@
         },
         computed: {
             ...mapState({
-                userInfo: state => state.baseData.ProjectData,
+                userInfo: state => state.baseData.eventupdate,
             })
         },
         methods: {

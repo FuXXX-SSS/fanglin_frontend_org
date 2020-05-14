@@ -1,3 +1,5 @@
+@bg: rgba(253, 143, 75, 1) !important;
+
 .my-block{
   padding: 10px 25px;
   background: #fff;
@@ -13,7 +15,7 @@
 }
 
 #nprogress .bar {
-  background: #e066ff !important;
+  background:@bg;
 }
 
 .titleDetail{
@@ -123,4 +125,15 @@
 
 .avatar {
   display: block;
+}
+
+.el-icon-loading{
+  color: @bg;
+}
+.el-loading-text{
+  color: @bg;
+}
+.el-loading-spinner{
+  color: @bg;
+
 }

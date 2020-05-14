@@ -21,7 +21,8 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="手机号">
-                        <el-input v-model="formData.phone" placeholder="手机号" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
+                        <el-input v-model="formData.phone" placeholder="手机号"
+                                  onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                     </el-form-item>
                     <el-form-item class="options">
                         <el-button @click="formData = {},init()" size="medium">重 置
@@ -94,6 +95,49 @@
         <div class="detail" v-else>
             <Deatail @Godetail="Godetail" :userInfo="userInfo"/>
         </div>
+        <el-dialog
+                title="设置支付密码"
+                :visible.sync="dialogVisible"
+                width="30%"
+                center
+                :showClose="false"
+                :close-on-click-modal="false"
+        >
+            <el-form
+                    :inline="false"
+                    :model="formData2"
+                    size="small"
+                    class="demo-form-inline"
+                    label-width="130px"
+                    :rules="rules2"
+                    ref="formData2"
+            >
+                <el-form-item label="注册手机号 : ">
+                    <div>{{formData2.instphone||'无'}}</div>
+                </el-form-item>
+                <el-form-item label="短信验证码 : " prop="setCode">
+                    <el-input v-model="formData2.setCode">
+                        <template slot="append">
+                            <el-button type="warning" class="send" @click="loginClick(2)" :disabled="disabled2">
+                                {{setText}}
+                            </el-button>
+                        </template>
+                    </el-input>
+
+                </el-form-item>
+
+                <el-form-item label="新密码 : " prop="setWord">
+                    <el-input v-model="formData2.setWord"></el-input>
+                </el-form-item>
+                <el-form-item label="再次输入：" prop="setNew">
+                    <el-input v-model="formData2.setNew"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary">确 定</el-button>
+         </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -101,10 +145,30 @@
     import pagination from '@com/el-pagination'
     import Deatail from './teamDetail'
     import {userList} from '@http/user'
+    import {verification, resetpassword} from '@http/managerUser'
 
     export default {
         name: "index",
         data() {
+            var validatePass3 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    if (this.formData2.setWord !== '') {
+                        this.$refs.formData2.validateField('setNew');
+                    }
+                    callback();
+                }
+            };
+            var validatePass4 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.formData2.setWord) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
             return {
                 isShow: true,
                 formData: {pageNum: 1, pageSize: 10, type: 1},
@@ -112,7 +176,32 @@
                 pageData: {},
                 userInfo: {},
                 total: 0,
-
+                dialogVisible: true,
+                formData2: {
+                    loginCode: '',
+                    loginWord: '',
+                    loginNew: '',
+                    setCode: '',
+                    setWord: '',
+                    setNew: '',
+                },
+                setText: '立即获取',
+                count: "",
+                timer: null,
+                disabled2: false,
+                rules2: {
+                    setCode: {
+                        trigger: "blur",
+                        required: true,
+                        message: "验证码不能为空"
+                    },
+                    setWord: [
+                        {validator: validatePass3, trigger: 'blur', required: true,}
+                    ],
+                    setNew: [
+                        {validator: validatePass4, trigger: 'blur', required: true,}
+                    ],
+                },
             }
         },
         components: {
@@ -142,10 +231,95 @@
                 this.formData.pageSize = item.page_limit;
                 this.init()
             },
+            isAdmin() {
+                let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+                if (userInfo.admin || userInfo.setWalletPwd) {
+                    this.formData2.instphone = userInfo.instPhone
+
+                    function geTel(tel) {
+                        var reg = /^(\d{3})\d{4}(\d{4})$/;
+                        return tel.replace(reg, "$1****$2");
+                    }
+
+                    if (this.formData2.instphone !== undefined) {
+                        this.formData2.instphone = geTel(this.formData2.instphone)
+                    }
+                } else {
+                    this.dialogVisible = true
+                }
+
+            },
+            async loginClick(type) {
+                let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+                let phone = ''
+                let codeType = ''
+                if (userInfo.instPhone) {
+                    if (type === 2) {
+                        phone = userInfo.instPhone
+                        codeType = 6
+                    }
+                } else {
+                    this.$tools.$mes('无手机号码', 'warning')
+                    return false
+                }
+
+                let vm = this
+                const time_count = 60
+                vm.count = time_count
+                let obj = {
+                    type: codeType,
+                    userType: 0,
+                    phone: phone
+                }
+                let res = await verification(obj)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('短信验证码发送成功', 'success')
+                }
+                vm.timer = window.setInterval(() => {
+                    if (vm.count > 0 && vm.count <= time_count) {
+                        vm.count--
+
+                        vm.disabled2 = true
+                        vm.setText = `${vm.count}s秒后重新获取`
+
+                    } else {
+                        vm.disabled2 = false
+                        vm.setText = '立即获取'
+                        clearInterval(vm.timer)
+                        vm.timer = null
+                    }
+
+                }, 1000)
+            },
+
+            async submitForm(formName, type) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        let obj = {}
+                        if (type === 2) {
+                            obj = {
+                                code: this.formData2.setCode,
+                                newPassword: this.formData2.setNew,
+                                type: 6,
+                            }
+                        }
+                        return new Promise((resolve, reject) => {
+                            resetpassword(obj).then(res => {
+                                if (res && res.code === 1000) {
+                                    this.$tools.$mes('设置成功', 'success')
+                                }
+                            }).catch(error => reject(error))
+                        })
+                    } else {
+                        return false;
+                    }
+                });
+            },
 
         },
         created() {
-            this.init()
+            // this.init()
+            this.isAdmin()
         }
     }
 </script>

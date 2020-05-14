@@ -38,7 +38,7 @@
                         <el-form-item label="缩略图：" style="margin-right: 10px" class="image">
                             <Elupload @load="load"
                                       :isDetail=true
-                                      :isevent=true :Info=formData
+                                      :isevent=true :Info=userInfo
                             />
                         </el-form-item>
                     </el-form>
@@ -53,11 +53,9 @@
                     label-width="100px"
             >
                 <el-form-item label="项目详情 : ">
-                    <Quill ref="kindeditor" :content="formData.detail" @input="qutil"></Quill>
-
+                    <Qutil ref="kindeditor" :content="formData.detail" @input="qutil"></Qutil>
                 </el-form-item>
             </el-form>
-
         </div>
         <div class="my-block">
             <el-row type="flex" class="row-bg" justify="center">
@@ -75,8 +73,8 @@
 </template>
 
 <script>
-    import Quill from '@com/quill-editor'
-    import {update} from '@http/project'
+    import Qutil from '@com/quill-editor'
+    import {update,projectDetail} from '@http/project'
     import baseUrl from '@/http/baseUrl'
     import Elupload from '@com/el-upload'
     import {mapState} from "vuex";
@@ -91,9 +89,7 @@
                 imageUrl: '',
                 dialogImageUrl: '',
                 headers: {},
-                form: {
-                    picList: []
-                },
+                formData: {},
                 activeName: "0",
                 isDetail: true,
                 assetsUnitName: '',
@@ -101,12 +97,12 @@
             }
         },
         components: {
-            Quill,
+            Qutil,
             Elupload
         },
         computed: {
             ...mapState({
-                formData: state => state.baseData.eventupdate,
+                userInfo: state => state.baseData.eventupdate,
             })
         },
         methods: {
@@ -133,7 +129,7 @@
                     refundStd: refundStd,
                 }
                 console.log(obj);
-                let res = await update(this.formData)
+                let res = await update(obj)
                 if (res && res.code === 1000) {
                     this.$tools.$mes('操作成功', 'success')
                     this.$emit('init')
@@ -148,10 +144,13 @@
                 this.formData.image = data
                 console.log(this.formData.image);
             },
-            init() {
+           async init() {
                 this.assetsUnitName = JSON.parse(
                     sessionStorage.getItem("userInfo")
                 ).assetsUnitName;
+               console.log(this.userInfo);
+               let res = await projectDetail(this.userInfo.projectId)
+                this.formData = await res.data
             }
         },
         created() {
