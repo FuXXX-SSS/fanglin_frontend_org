@@ -44,7 +44,7 @@
             <div class="my-block">
                 <div class="total">
                     <p>成交总额</p>
-                    <p>{{totalAmount}}</p>
+                    <p>{{totalAmount||0}}</p>
                     <p>元</p>
                 </div>
                 <el-table :data="tableData.records" border>
@@ -53,9 +53,9 @@
                     <el-table-column prop="billDate" label="申请时间"/>
                     <el-table-column prop="cashName" label="资金名称"/>
                     <el-table-column prop="exhUserName" label="兑换人"/>
-                    <el-table-column prop="name" label="联系电话"/>
+                    <el-table-column prop="receiverPhone" label="联系电话"/>
                     <el-table-column prop="amount" label="支付"/>
-                    <el-table-column prop="amount" label="兑换金额"/>
+                    <el-table-column prop="billNumber" label="兑换金额"/>
                     <el-table-column prop="receiverAccount" label="收款账户"/>
                     <el-table-column prop="billStatus" label="状态">
                         <template slot-scope="scope">

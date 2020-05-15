@@ -11,12 +11,14 @@
                 <el-input v-model="form.walletURL" autocomplete="off" :disabled="Isdisabled"></el-input>
             </el-form-item>
             <el-form-item label="转账数量" :label-width="formLabelWidth">
-                <el-input v-model.number="form.amount" autocomplete="off" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                <input type="hidden" style="display: none">
+                <el-input v-model.number="form.amount"  onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"  auto-complete="off">
                     <template slot="append">{{assetsUnitName}}</template>
                 </el-input>
             </el-form-item>
             <el-form-item label="钱包密码" :label-width="formLabelWidth">
-                <el-input v-model="form.password" autocomplete="off" type="password" placeholder="输入钱包密码">
+                <input type="hidden" style="display: none">
+                <el-input v-model="form.password" autocomplete="off" type="password" placeholder="输入钱包密码" auto-complete="off">
                 </el-input>
             </el-form-item>
         </el-form>
