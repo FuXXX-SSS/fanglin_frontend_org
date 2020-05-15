@@ -74,7 +74,19 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="name" label="交易方"/>
-                    <el-table-column prop="amount" label="交易数量"/>
+                    <el-table-column prop="amount" label="交易数量">
+                        <template slot-scope="scope">
+                            <p :style="{
+                color:
+                  scope.row.add
+                    ? '#e11229'
+                    : scope.row.add === false
+                    ? ''
+                    : ''
+              }"
+                            >{{scope.row.add?'+':'-'}}{{scope.row.amount}}</p>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="assetsUnitName" label="资产名称"/>
                     <el-table-column prop="notes" label="备注"/>
                 </el-table>

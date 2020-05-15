@@ -39,17 +39,17 @@
             </el-form-item>
             <el-form-item label="兑换标准：">
               <el-input v-model="formData.exhAmount" style="    width: 25%;
-    float: left;" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
+    float: left;" onkeyup="value=value.match(/\d+\.?\d{0,6}/,'')"></el-input>
               <span style="margin-left: 14px;">{{assetsUnitName}}/单位</span>
             </el-form-item>
             <el-form-item label="购买价格：">
               <el-input v-model="formData.buyAmount" style="    width: 25%;
-    float: left;" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
+    float: left;" onkeyup="value=value.match(/\d+\.?\d{0,6}/,'')"></el-input>
               <span style="margin-left: 14px;">元/单位</span>
             </el-form-item>
             <el-form-item label="购买回馈：">
               <el-input v-model="formData.refundAmount" style="    width: 25%;
-    float: left;" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
+    float: left;" onkeyup="value=value.match(/\d+\.?\d{0,6}/,'')"></el-input>
               <span style="margin-left: 14px;">{{assetsUnitName}}/单位</span>
             </el-form-item>
             <el-form-item label="摘要：">
@@ -117,11 +117,13 @@ export default {
       this.$router.go(-1);
     },
     load(data) {
+      console.log(data);
       this.formData.imageList = [];
-      data.forEach(element => {
-        this.formData.imageList.push(element.response.data.url);
-      });
-      console.log(this.formData.imageList);
+      if (data){
+        data.forEach(item=>{
+          this.formData.imageList.push(item.url)
+        })
+      }
     },
     qutil(data) {
       this.formData.introduction = data;

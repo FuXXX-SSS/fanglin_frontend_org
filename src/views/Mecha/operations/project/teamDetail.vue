@@ -3,7 +3,7 @@
     <div class="my-block">
       <div class="sub-title">兑换品详情</div>
       <el-row :gutter="20">
-        <el-col :span="12">
+        <el-col :span="18">
           <el-form
             :inline="false"
             :model="formData"
@@ -100,7 +100,7 @@
 <script>
 import Quill from "@com/quill-editor";
 import { exhDetail, exhupdate } from "@http/exh";
-import Elupload from "@com/el-upload";
+import Elupload from "./upload";
 import { mapState } from "vuex";
 
 export default {
@@ -143,13 +143,19 @@ export default {
         : (this.projectStatus = false);
     },
     load(data) {
-      this.formData.image = data;
+      console.log(data);
+      this.formData.imageList = [];
+      if (data){
+        data.forEach(item=>{
+          this.formData.imageList.push(item.url)
+        })
+      }
     },
     qutil(data) {
       this.formData.introduction = data;
     },
     async save() {
-      if (this.formData.image === "") {
+      if (this.formData.imageList === "") {
         this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
         return false;
       }
@@ -186,9 +192,6 @@ export default {
   height: 109px;
 }
 .my-block /deep/.load {
-  .successImg {
-    width: 375px !important;
-    height: 186px;
-  }
+
 }
 </style>

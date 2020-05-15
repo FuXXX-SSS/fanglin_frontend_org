@@ -27,7 +27,7 @@
                         </el-form-item>
                         <el-form-item label="联系电话：">
                             <el-input v-model="formData.phone" placeholder="联系电话"
-                                      onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"></el-input>
+                                      onkeyup="this.value=this.value.replace(/[^\w_]/g,'');"></el-input>
                         </el-form-item>
                         <el-form-item label="缩略图：" style="margin-right: 10px">
                             <Elupload @load="load" :isDetail="isDetail"/>
@@ -59,27 +59,39 @@
 
                             </el-checkbox-group>
                         </el-form-item>
-                        <el-form-item label="人数要求 : " style="margin-right: 0">
+                        <el-form-item label="人员要求 : " style="margin-right: 0">
+                            <p style="display: inline-block;margin: 0;float: left">人数</p>
                             <el-input v-model="formData.userNum"
                                       placeholder="人数要求"
                                       onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
-                                      @change="numChange"></el-input>
-                            <el-form-item label="实名认证：" class="renz">
-                                <el-radio v-model="formData.idCert" label=1>要求</el-radio>
-                                <el-radio v-model="formData.idCert" label=0>不要求</el-radio>
-                            </el-form-item>
-                        </el-form-item>
-                        <el-form-item label="年龄：">
+                                      @change="numChange"
+                                      style="float: left;margin-left: 20px;width: 30%"
+                            ></el-input>
+                            <p style="display: inline-block;margin: 0 19px 0 20px;float: left">年龄</p>
+
                             <vue-slider v-model="value2" :tooltip="'always'"
                                         :max="75"
                                         :min="6"
                                         :tooltip-placement="['bottom', 'bottom']"></vue-slider>
                         </el-form-item>
-                        <el-form-item label="性别：">
-                            <el-radio v-model="formData.gender" label="1">男</el-radio>
-                            <el-radio v-model="formData.gender" label="0">女</el-radio>
-                            <el-radio v-model="formData.gender" label="-1">不限</el-radio>
+
+                        <el-form-item label="" style="margin-top: 34px">
+                               <div style="float: left">
+                                   <p style="display: inline-block;margin: 0;float: left;margin-right: 20px">实名认证</p>
+                                   <el-radio v-model="formData.idCert" label=1>要求</el-radio>
+                                   <el-radio v-model="formData.idCert" label=0>不要求</el-radio>
+                               </div>
+                            <div style="float: left;margin-left: 70px">
+                                <p style="display: inline-block;margin: 0;float: left;margin-left: 20px;margin-right: 20px">性别</p>
+                                <el-radio v-model="formData.gender" label="1">男</el-radio>
+                                <el-radio v-model="formData.gender" label="0">女</el-radio>
+                                <el-radio v-model="formData.gender" label="-1">不限</el-radio>
+                            </div>
+
+
                         </el-form-item>
+
+
                         <el-form-item label="地点：">
                             <el-input v-model="mapLocation.address" @focus="focus" placeholder="地点">
                                 <template slot="append">
@@ -91,10 +103,10 @@
                                 </template>
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="详细地址：">
-                            <el-input v-model="formData.positionName" placeholder="详细地址"
-                            ></el-input>
-                        </el-form-item>
+                        <!--                        <el-form-item label="详细地址：">-->
+                        <!--                            <el-input v-model="formData.positionName" placeholder="详细地址"-->
+                        <!--                            ></el-input>-->
+                        <!--                        </el-form-item>-->
                         <el-form-item label="开始时间：">
                             <el-date-picker
                                     v-model="formData.beginTime"
@@ -107,15 +119,6 @@
                             >
                             </el-date-picker>
                         </el-form-item>
-                        <el-form-item label="重复：">
-                            <el-radio-group v-model="formData.repeatActivity" @change="changeRadio">
-                                <el-radio label="0">单次</el-radio>
-                                <el-radio label="1">每天</el-radio>
-                                <el-radio label="2">每周</el-radio>
-                                <el-radio label="3">每月</el-radio>
-                                <el-radio label="4">每年</el-radio>
-                            </el-radio-group>
-                        </el-form-item>
                         <el-form-item label="结束时间：">
                             <el-date-picker
                                     v-model="formData.endTime"
@@ -127,6 +130,16 @@
                                     @change="changeTime"
                             >
                             </el-date-picker>
+                        </el-form-item>
+
+                        <el-form-item label="重复次数：">
+                            <el-radio-group v-model="formData.repeatActivity" @change="changeRadio">
+                                <el-radio label="0">单次</el-radio>
+                                <el-radio label="1">每天</el-radio>
+                                <el-radio label="2">每周</el-radio>
+                                <el-radio label="3">每月</el-radio>
+                                <el-radio label="4">每年</el-radio>
+                            </el-radio-group>
                         </el-form-item>
                         <el-form-item label="重复截止日期：" style="margin-top: 30px">
                             <el-date-picker
@@ -249,7 +262,7 @@
                 formData: {
                     duration: 0.5,
                     serviceCatIdList: [],
-                    userNum: 1,
+                    userNum: 0,
                     projectId: '',
                     image: '',
                     mapvalue: '',
@@ -450,6 +463,11 @@
                 } else {
                     this.project = []
                 }
+                this.project.forEach(item=>{
+                    if (item&&item.projectName.length>=10){
+                        item.projectName=`${item.projectName.substr(0,10)}...`
+                    }
+                })
                 if (res2) {
                     this.serviceList = res2.data
                 } else {
@@ -459,6 +477,7 @@
                 this.assetsUnitName = JSON.parse(sessionStorage.getItem("userInfo")).assetsUnitName
             },
             async submit() {
+                console.log(this.mapLocation);
                 if (this.formData.image === "") {
                     this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
                     return false;
@@ -467,6 +486,7 @@
                 this.formData.value = this.calValue
                 this.formData.maxAge = this.value2[1]
                 this.formData.minAge = this.value2[0]
+                this.formData.positionName = this.mapLocation.address
                 let res = await publish(this.formData)
                 if (res && res.code === 1000) {
                     this.$tools.$mes('发布成功', 'success')
@@ -488,9 +508,15 @@
                 }
                 let res = await cal(obj)
                 this.calValue = res.data.value
+                if (this.formData.userNum === '') {
+                    this.formData.userNum = 0
+                }
                 this.toatalValue = parseInt(this.calValue) * parseInt(this.formData.userNum)
             },
             numChange() {
+                if (this.formData.userNum === '') {
+                    this.formData.userNum = 0
+                }
                 this.toatalValue = parseInt(this.calValue) * parseInt(this.formData.userNum)
                 console.log(this.toatalValue);
             },
@@ -648,7 +674,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
     .el-image {
         width: 686px;
         height: 218px;
@@ -666,9 +692,27 @@
 
     .renz {
         margin-top: 18px;
+        width: 45%;
+        margin-right: 0;
+        /deep/ .el-form-item__content {
+        margin-left: 0!important;
+        float: left;
+    }
+
     }
 
     .renz /deep/ .el-form-item__label {
         width: 86px !important;
+        color: #8e9aac;
+    }
+
+    .el-input--small .el-input__icon {
+        line-height: 29px;
+    }
+
+    .vue-slider {
+        width: 43% !important;
+        float: left;
+        padding: 13px 0px !important;
     }
 </style>

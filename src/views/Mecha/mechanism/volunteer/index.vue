@@ -134,7 +134,8 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary">确 定</el-button>
+                                    <el-button type="danger" size="medium" @click="submitForm('formData2',2)">保存</el-button>
+
          </span>
         </el-dialog>
 
@@ -176,7 +177,7 @@
                 pageData: {},
                 userInfo: {},
                 total: 0,
-                dialogVisible: true,
+                dialogVisible: false,
                 formData2: {
                     loginCode: '',
                     loginWord: '',
@@ -273,23 +274,24 @@
                 }
                 let res = await verification(obj)
                 if (res && res.code === 1000) {
+                    vm.timer = window.setInterval(() => {
+                        if (vm.count > 0 && vm.count <= time_count) {
+                            vm.count--
+
+                            vm.disabled2 = true
+                            vm.setText = `${vm.count}s秒后重新获取`
+
+                        } else {
+                            vm.disabled2 = false
+                            vm.setText = '立即获取'
+                            clearInterval(vm.timer)
+                            vm.timer = null
+                        }
+
+                    }, 1000)
                     this.$tools.$mes('短信验证码发送成功', 'success')
                 }
-                vm.timer = window.setInterval(() => {
-                    if (vm.count > 0 && vm.count <= time_count) {
-                        vm.count--
 
-                        vm.disabled2 = true
-                        vm.setText = `${vm.count}s秒后重新获取`
-
-                    } else {
-                        vm.disabled2 = false
-                        vm.setText = '立即获取'
-                        clearInterval(vm.timer)
-                        vm.timer = null
-                    }
-
-                }, 1000)
             },
 
             async submitForm(formName, type) {
@@ -318,8 +320,8 @@
 
         },
         created() {
-            // this.init()
-            this.isAdmin()
+            this.init()
+            // this.isAdmin()
         }
     }
 </script>

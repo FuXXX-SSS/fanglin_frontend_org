@@ -62,7 +62,7 @@
                 </el-form-item>
                 <br>
 
-                <el-form-item label="状态">
+                <el-form-item label="权限">
                     <div v-for="(item,index) in cities" :key="index">
                         <el-form-item :label="ruleForm.labelName">
                             <el-checkbox-group

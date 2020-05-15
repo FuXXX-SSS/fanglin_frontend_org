@@ -109,8 +109,8 @@
                 this.$router.push({
                     name: "eventDetail",
                 });
-                this.$store.dispatch('baseData/setProject', data)
-                sessionStorage.setItem("ProjectData", JSON.stringify(data));
+                this.$store.dispatch('baseData/seteventupdate', data)
+                sessionStorage.setItem("eventupdate", JSON.stringify(data));
             },
             add() {
                 this.$store.dispatch('mecha_asset/setEvent', 3)
@@ -124,6 +124,12 @@
                 let {total, pageNum, pageSize, list} = res.data
                 this.tableData.records = list
                 this.total = total
+                this.tableData.records.forEach(item=>{
+                    if (item&&item.name.length>=10){
+                        item.name=`${item.name.substr(0,10)}...`
+                        console.log(item.name.length);
+                    }
+                })
             },
             pageChange(item) {
                 this.formData.pageNum = item.page_index;

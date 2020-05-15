@@ -27,17 +27,17 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item label="新密码 : " prop="loginWord">
-                            <el-input v-model="formData.loginWord"></el-input>
+                            <el-input v-model="formData.loginWord" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" type="password"></el-input>
                         </el-form-item>
                         <el-form-item label="再次输入：" prop="loginNew">
-                            <el-input v-model="formData.loginNew"></el-input>
+                            <el-input v-model="formData.loginNew" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" type="password"></el-input>
                         </el-form-item>
                     </el-form>
                 </el-col>
             </el-row>
             <el-row type="flex" class="row-bg" justify="center">
                 <el-col :span="3">
-                    <el-button type="danger" size="medium" @click="submitForm('formData',1)">保存</el-button>
+                        <el-button type="danger" size="medium" @click="submitForm('formData',1)">保存</el-button>
                 </el-col>
             </el-row>
             <el-row :gutter="20">
@@ -68,10 +68,10 @@
                         </el-form-item>
 
                         <el-form-item label="新密码 : " prop="setWord">
-                            <el-input v-model="formData2.setWord"></el-input>
+                            <el-input v-model="formData2.setWord" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" type="password"></el-input>
                         </el-form-item>
                         <el-form-item label="再次输入：" prop="setNew">
-                            <el-input v-model="formData2.setNew"></el-input>
+                            <el-input v-model="formData2.setNew" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" type="password"></el-input>
                         </el-form-item>
                     </el-form>
 
@@ -201,7 +201,7 @@
                 }
                 if (userInfo.instPhone) {
                     if (type === 2) {
-                        phone = userInfo.logiinstPhonenPhone
+                        phone = userInfo.instPhone
                         codeType = 6
                     }
                 } else {
@@ -219,32 +219,33 @@
                 }
                 let res = await verification(obj)
                 if (res && res.code === 1000) {
+                    vm.timer = window.setInterval(() => {
+                        if (vm.count > 0 && vm.count <= time_count) {
+                            vm.count--
+                            if (type === 1) {
+                                vm.disabled = true
+                                vm.loginText = `${vm.count}s秒后重新获取`
+                            } else {
+                                vm.disabled2 = true
+                                vm.setText = `${vm.count}s秒后重新获取`
+                            }
+
+                        } else {
+                            if (type === 1) {
+                                vm.disabled = false
+                                vm.loginText = '立即获取'
+                            } else {
+                                vm.disabled2 = false
+                                vm.setText = '立即获取'
+                            }
+                            clearInterval(vm.timer)
+                            vm.timer = null
+                        }
+
+                    }, 1000)
                     this.$tools.$mes('短信验证码发送成功', 'success')
                 }
-                vm.timer = window.setInterval(() => {
-                    if (vm.count > 0 && vm.count <= time_count) {
-                        vm.count--
-                        if (type === 1) {
-                            vm.disabled = true
-                            vm.loginText = `${vm.count}s秒后重新获取`
-                        } else {
-                            vm.disabled2 = true
-                            vm.setText = `${vm.count}s秒后重新获取`
-                        }
 
-                    } else {
-                        if (type === 1) {
-                            vm.disabled = false
-                            vm.loginText = '立即获取'
-                        } else {
-                            vm.disabled2 = false
-                            vm.setText = '立即获取'
-                        }
-                        clearInterval(vm.timer)
-                        vm.timer = null
-                    }
-
-                }, 1000)
             },
             async submitForm(formName, type) {
                 this.$refs[formName].validate((valid) => {

@@ -19,7 +19,8 @@
                         <el-input v-model="formData.publishName" placeholder="发布者"></el-input>
                     </el-form-item>
                     <el-form-item label="电话 : ">
-                        <el-input v-model="formData.phone" placeholder="电话" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
+                        <el-input v-model="formData.phone" placeholder="电话"
+                                  onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                     </el-form-item>
                     <el-form-item label="活动状态">
                         <el-select v-model="formData.activityStatus">
@@ -45,7 +46,21 @@
                     <el-table-column prop="beginTime" label="开始时间"/>
                     <el-table-column prop="duration" label="时长"/>
                     <el-table-column prop="value" label="价值/人"/>
-                    <el-table-column prop="userName" label="人员"/>
+                    <el-table-column prop="serviceCategoryList" label="人员">
+                        <template slot-scope="scope">
+                            <div>{{scope.row.userNum||0}}人
+                                {{scope.row.gender===1?'男':scope.row.gender===0?'女':'性别不限'}}
+                                {{scope.row.idCert?'实名认证':'未实名认证'}}
+                                <p
+                                        v-for="(item) in scope.row.serviceCategoryList"
+                                        :key="item.id+1"
+                                        style="display: inline-block;margin: 0;margin-right: 10px"
+                                >
+                                    {{item.name}}
+                                </p>
+                            </div>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="userNum" label="报名"/>
                     <el-table-column prop="activityStatus" label="状态">
                         <template slot-scope="scope">
@@ -124,6 +139,13 @@
                 let res = await activityList(this.formData)
                 let {total, pageNum, pageSize, list} = res.data
                 this.tableData.records = list
+                this.tableData.records.forEach(item=>{
+                    if (item&&item.name.length>=10){
+                        item.name=`${item.name.substr(0,10)}...`
+                        console.log(item.name.length);
+                    }
+                })
+
                 this.total = total
             },
             pageChange(item) {

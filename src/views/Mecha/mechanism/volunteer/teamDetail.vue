@@ -32,14 +32,14 @@
                             <div>{{formData.inviteNum}}</div>
                         </el-form-item>
                         <el-form-item label="服务时长 : ">
-                            <div>{{formData.serviceDuration}}</div>
+                            <div>{{formData.serviceDuration}}小时</div>
                         </el-form-item>
                         <br>
                         <el-form-item label="服务次数 : ">
                             <div>{{formData.serviceTime}}</div>
                         </el-form-item>
                         <el-form-item label="评分 : ">
-                            <div>{{formData.score}}</div>
+                            <div>{{formData.score.toFixed(2)}}</div>
                         </el-form-item>
                         <el-form-item label="实名认证 : ">
                             <div>{{formData.cert?'是':'否'}}</div>
@@ -68,14 +68,28 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="certName" label="证书名称"/>
-                <el-table-column prop="trainDuration" label="培训时长"/>
+                <el-table-column label="培训时长">
+                    <template slot-scope="scope">
+                        <input type="text"
+                               class="elInput"
+                               onkeyup="value=value.match(/\d+\.?\d{0,2}/,'')"
+                               v-model="scope.row.trainDuration"
+                               v-if="scope.row.certStatus===0"
+                        />
+                        <p v-else>{{scope.row.trainDuration}}小时</p>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="name" label="状态">
                     <template slot-scope="scope">
                         {{ scope.row.certStatus===1 ? "已认证" :'未认证' }}
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="instName" label="认证社区"/>
+                <el-table-column prop="instName" label="认证机构">
+                    <template slot-scope="scope">
+                        <p v-if=" scope.row.certStatus===1"> {{scope.row.instName}}</p>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button
@@ -142,7 +156,9 @@
                 projectStatus: '',
                 info: '',
                 walletURL: {},
-                title: '转账'
+                title: '转账',
+                trainDuration: 0,
+                instName: ''
             }
         },
         computed: {
@@ -151,6 +167,10 @@
             })
         },
         methods: {
+            change(e) {
+                console.log(e);
+            },
+
             back() {
                 this.$router.go(-1)
             },
@@ -168,17 +188,16 @@
                 } else {
                     this.tableData.records = []
                 }
+                this.instName = JSON.parse(sessionStorage.getItem("userInfo")).instName
             },
             async quaClick(data) {
                 let certStatus = ''
                 data.certStatus === 1 ? certStatus = 0 : certStatus = 1
-                console.log(certStatus);
                 let obj = {
                     certStatus: certStatus,
                     quaId: data.id,
-                    trainDuration: data.trainDuration,
+                    trainDuration: data.trainDuration || 0,
                 }
-                console.log(obj);
                 let res = await userQuaCertPost(obj)
                 if (res && res.code === 1000) {
                     this.$tools.$mes('修改成功', 'success')
@@ -281,5 +300,27 @@
     .demonstration {
         display: block;
         text-align: center;
+    }
+
+    .elInput {
+        -webkit-appearance: none;
+        background-color: #FFF;
+        background-image: none;
+        border-radius: 4px;
+        border: 1px solid #DCDFE6;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        color: #606266;
+        display: inline-block;
+        font-size: inherit;
+        height: 40px;
+        line-height: 40px;
+        outline: 0;
+        padding: 0 15px;
+        -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+        transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+        width: 100%;
+        height: 32px;
+        line-height: 32px;
     }
 </style>

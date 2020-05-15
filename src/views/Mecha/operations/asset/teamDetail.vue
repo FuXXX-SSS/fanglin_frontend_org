@@ -54,7 +54,7 @@
                         <br>
 
                         <el-form-item label="活动价值：">
-                            <div>{{formData.value}}</div>
+                            <div>{{formData.value}}{{assetsUnitName}}</div>
 
                         </el-form-item>
                         <el-form-item label="地点：" style="margin-right: 10px">
@@ -130,7 +130,11 @@
                 <el-table-column prop="userAge" label="年龄"/>
                 <el-table-column prop="serviceDuration" label="服务时长"/>
                 <el-table-column prop="serviceTime" label="服务次数"/>
-                <el-table-column prop="score" label="评价"/>
+                <el-table-column prop="score" label="评价">
+                <template slot-scope="scope">
+                   {{scope.row.score.toFixed(2)}}
+                </template>
+                </el-table-column>
                 <el-table-column prop="selected" label="实名认证"/>
                 <el-table-column prop="serviceCategoryList" label="专长">
                     <template slot-scope="scope">
@@ -196,6 +200,7 @@
                 obj: {},
                 value: value, dialog: false,
                 projectStatus: '',
+                assetsUnitName: '',
 
 
             }
@@ -235,6 +240,8 @@
                 this.formData = res.data
                 this.projectStatus = res.data.activityStatus
                 this.projectStatus === 1 ? this.projectStatus = true : this.projectStatus = false
+                this.assetsUnitName = JSON.parse(sessionStorage.getItem("userInfo")).assetsUnitName
+                console.log(this.assetsUnitName);
             },
             async applyList() {
                 let res = await applyList(this.userInfo.activityId)
