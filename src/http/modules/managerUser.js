@@ -98,3 +98,11 @@ export const resetpassword = data =>
         method: "post",
         data: data
     });
+
+// 修改账户信息
+export const managerUserupdate = data =>
+    _axios({
+        url: "/bms/managerUser/update",
+        method: "post",
+        data: data
+    });

@@ -29,6 +29,8 @@ const actions = {
                 .then(res => {
                     if (res.code === 1000) {
                         const {data} = res;
+                        data.password = md5(`${password}fanglin`)
+                        data.username = username
                         sessionStorage.setItem("userInfo", JSON.stringify(data));
                         sessionStorage.setItem("token", '123');
                         resolve();
@@ -43,7 +45,7 @@ const actions = {
     },
     getRoleBtn({commit}, data) {
         commit("SET_ROLEBTN", data);
-    },getInfo({commit}, data) {
+    }, getInfo({commit}, data) {
         commit("SET_INFO", data);
     },
 };

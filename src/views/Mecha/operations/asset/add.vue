@@ -332,38 +332,6 @@
             keyup() {
                 this.onSearch()
             },
-            remoteMethod(query) {
-                if (query !== '') {
-                    this.loading = true;
-                    setTimeout(() => {
-                        this.loading = false;
-                        this.options = this.list.filter(item => {
-                            return item.label.toLowerCase()
-                                .indexOf(query.toLowerCase()) > -1;
-                        });
-                    }, 200);
-                } else {
-                    this.options = [];
-                }
-            },
-            getClickInfo(e) {
-                let geocoder = new BMap.Geocoder();  //创建地址解析器的实例
-                geocoder.getLocation(e.point, rs => {
-                    //地址描述(string)=
-                    this.formData.positionCo = `${e.point.lng},${e.point.lat}`
-                    this.mapLocation.address = rs.address
-                    // console.log(rs);    //这里打印可以看到里面的详细地址信息，可以根据需求选择想要的
-                    // console.log(rs.addressComponents);//结构化的地址描述(object)
-                    // console.log(rs.addressComponents.province); //省
-                    // console.log(rs.addressComponents.city); //城市
-                    // console.log(rs.addressComponents.district); //区县
-                    // console.log(rs.addressComponents.street); //街道
-                    // console.log(rs.addressComponents.streetNumber); //门牌号
-                    // console.log(rs.surroundingPois); //附近的POI点(array)
-                    // console.log(rs.business); //商圈字段，代表此点所属的商圈(string)
-                });
-
-            },
             changeRadio() {
                 this.cal()
             },
@@ -405,99 +373,12 @@
                     self.initMap()
                 })
             },
-            // querySearch(queryString, cb) {
-            //     var that = this
-            //     var myGeo = new this.BMap.Geocoder()
-            //     myGeo.getPoint(queryString, function (point) {
-            //         if (point) {
-            //             that.mapLocation.coordinate = point
-            //             that.makerCenter(point)
-            //         } else {
-            //             that.mapLocation.coordinate = null
-            //         }
-            //     }, this.locationCity)
-            //     var options = {
-            //         onSearchComplete: function (results) {
-            //             if (local.getStatus() === 0) {
-            //                 // 判断状态是否正确
-            //                 var s = []
-            //                 for (var i = 0; i < results.getCurrentNumPois(); i++) {
-            //                     var x = results.getPoi(i)
-            //                     var item = {value: x.address + x.title, point: x.point}
-            //                     s.push(item)
-            //                     cb(s)
-            //                 }
-            //             } else {
-            //                 cb()
-            //             }
-            //         }
-            //     }
-            //     var local = new this.BMap.LocalSearch(this.map, options)
-            //     local.search(queryString)
-            // },
-            // handleSelect(item) {
-            //     var {point} = item
-            //     this.mapLocation.coordinate = point
-            //     this.makerCenter(point)
-            //     this.formData.positionCo = `${point[Object.keys(point)[0]]},${point[Object.keys(point)[1]]}`
-            //     console.log(this.formData.positionCo);
-            // },
-            makerCenter(point) {
-                if (this.map) {
-                    this.map.clearOverlays()
-                    this.map.addOverlay(new this.BMap.Marker(point))
-                    this.mapCenter.lng = point.lng
-                    this.mapCenter.lat = point.lat
-                    this.mapZoom = 15
-                }
-            },
-            sure() {
-                this.mapLocation.address = this.mapvalue
-                this.dialog = false
-            },
-            async init() {
-                let res = await projectname()
-                let res2 = await instList()
-                if (res && res.data.list !== null) {
-                    this.project = res.data
-                } else {
-                    this.project = []
-                }
-                this.project.forEach(item=>{
-                    if (item&&item.projectName.length>=10){
-                        item.projectName=`${item.projectName.substr(0,10)}...`
-                    }
-                })
-                if (res2) {
-                    this.serviceList = res2.data
-                } else {
-                    this.serviceList = []
 
-                }
-                this.assetsUnitName = JSON.parse(sessionStorage.getItem("userInfo")).assetsUnitName
-            },
-            async submit() {
-                console.log(this.mapLocation);
-                if (this.formData.image === "") {
-                    this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
-                    return false;
-                }
-                console.log(this.formData);
-                this.formData.value = this.calValue
-                this.formData.maxAge = this.value2[1]
-                this.formData.minAge = this.value2[0]
-                this.formData.positionName = this.mapLocation.address
-                let res = await publish(this.formData)
-                if (res && res.code === 1000) {
-                    this.$tools.$mes('发布成功', 'success')
-                    this.back()
-                    this.$emit('init')
-                }
-            },
             async selectChange() {
                 console.log(this.formData.serviceCatIdList);
                 this.cal()
             },
+            //1 活动价值
             async cal() {
                 let obj = {
                     repeatEndTime: this.formData.repeatEndTime,
@@ -513,6 +394,7 @@
                 }
                 this.toatalValue = parseInt(this.calValue) * parseInt(this.formData.userNum)
             },
+            //2 活动价值
             numChange() {
                 if (this.formData.userNum === '') {
                     this.formData.userNum = 0
@@ -536,6 +418,10 @@
             onchange() {
                 console.log(this.mapvalue);
             },
+            loadAll() {
+                return this.restaurants;
+            },
+            // 当前位置
             onSearch(value) {
                 console.log(this.formData.mapvalue)
                 const key = 'TQOBZ-4F432-Q2VUH-CDSN5-YHDCT-ZNFOT'
@@ -566,6 +452,7 @@
                 //         console.log(err)
                 //     })
             },
+            // 地图下拉模糊搜索地址
             querySearchAsync(queryString, cb) {
 
                 let url = 'https://apis.map.qq.com/ws/place/v1/suggestion';
@@ -590,12 +477,14 @@
                         console.log(err);
                     })
             },
+            // 地图下拉模糊过滤
             createStateFilter(queryString) {
                 return (state) => {
                     console.log(state);
                     return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
                 };
             },
+            // 地图点击
             handleSelect(item) {
                 console.log(item);
                 this.lat = item.location.lat
@@ -603,13 +492,7 @@
                 this.formData.positionCo = `${item.location.lng},${item.location.lat}`
                 this.initMap()
             },
-            loadAll() {
-                return this.restaurants;
-            },
-
-            // handleSelect(item) {
-            //     console.log(item);
-            // },
+            // 初始化地图
             async initMap() {
                 //步骤：定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
                 //设置地图中心点
@@ -641,6 +524,7 @@
                 });
                 console.log(this.mapvalue);
             },
+            // 腾讯地图位置详细信息
             analysis(data1) {
                 console.log(data1);
                 this.lat = data1.lat
@@ -665,6 +549,96 @@
                             console.log(err);
                         })
                 })
+            },
+            // 经纬度赋值
+            makerCenter(point) {
+                if (this.map) {
+                    this.map.clearOverlays()
+                    this.map.addOverlay(new this.BMap.Marker(point))
+                    this.mapCenter.lng = point.lng
+                    this.mapCenter.lat = point.lat
+                    this.mapZoom = 15
+                }
+            },
+            // 点击位置下拉
+            getClickInfo(e) {
+                let geocoder = new BMap.Geocoder();  //创建地址解析器的实例
+                geocoder.getLocation(e.point, rs => {
+                    //地址描述(string)=
+                    this.formData.positionCo = `${e.point.lng},${e.point.lat}`
+                    this.mapLocation.address = rs.address
+                    // console.log(rs);    //这里打印可以看到里面的详细地址信息，可以根据需求选择想要的
+                    // console.log(rs.addressComponents);//结构化的地址描述(object)
+                    // console.log(rs.addressComponents.province); //省
+                    // console.log(rs.addressComponents.city); //城市
+                    // console.log(rs.addressComponents.district); //区县
+                    // console.log(rs.addressComponents.street); //街道
+                    // console.log(rs.addressComponents.streetNumber); //门牌号
+                    // console.log(rs.surroundingPois); //附近的POI点(array)
+                    // console.log(rs.business); //商圈字段，代表此点所属的商圈(string)
+                });
+
+            },
+            // 地址下拉
+            remoteMethod(query) {
+                if (query !== '') {
+                    this.loading = true;
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.options = this.list.filter(item => {
+                            return item.label.toLowerCase()
+                                .indexOf(query.toLowerCase()) > -1;
+                        });
+                    }, 200);
+                } else {
+                    this.options = [];
+                }
+            },
+            // 确定
+            sure() {
+                this.mapLocation.address = this.mapvalue
+                this.dialog = false
+            },
+            // 初始化
+            async init() {
+                let res = await projectname()
+                let res2 = await instList()
+                if (res && res.data.list !== null) {
+                    this.project = res.data
+                } else {
+                    this.project = []
+                }
+                this.project.forEach(item=>{
+                    if (item&&item.projectName.length>=10){
+                        item.projectName=`${item.projectName.substr(0,10)}...`
+                    }
+                })
+                if (res2) {
+                    this.serviceList = res2.data
+                } else {
+                    this.serviceList = []
+
+                }
+                this.assetsUnitName = JSON.parse(sessionStorage.getItem("userInfo")).assetsUnitName
+            },
+            // 发布
+            async submit() {
+                console.log(this.mapLocation);
+                if (this.formData.image === "") {
+                    this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
+                    return false;
+                }
+                console.log(this.formData);
+                this.formData.value = this.calValue
+                this.formData.maxAge = this.value2[1]
+                this.formData.minAge = this.value2[0]
+                this.formData.positionName = this.mapLocation.address
+                let res = await publish(this.formData)
+                if (res && res.code === 1000) {
+                    this.$tools.$mes('发布成功', 'success')
+                    this.back()
+                    this.$emit('init')
+                }
             },
         },
         created() {

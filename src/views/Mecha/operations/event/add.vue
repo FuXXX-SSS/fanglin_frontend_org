@@ -85,6 +85,8 @@
                     image: "",
                     name: "",
                     phone: "",
+                    targetAmount: "",
+                    refundStd: "",
                 },
                 baseUrl: baseUrl,
                 imageUrl: "",
@@ -118,6 +120,15 @@
                     this.$tools.$mes("联系电话为空，无法提交发布", "warning");
                     return false;
                 }
+                if (this.formData.targetAmount === "") {
+                    this.$tools.$mes("募资目标为空，无法提交发布", "warning");
+                    return false;
+                }
+                if (this.formData.refundStd === "") {
+                    this.$tools.$mes("回馈标准为空，无法提交发布", "warning");
+                    return false;
+                }
+
                 if (this.formData.image === "") {
                     this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
                     return false;
@@ -125,9 +136,9 @@
                 console.log(this.formData);
                 let res = await projectpublish(this.formData);
                 if (res && res.code === 1000) {
-                  this.$tools.$mes("操作成功", "success");
-                  this.$emit("init");
-                  this.back();
+                    this.$tools.$mes("操作成功", "success");
+                    this.$emit("init");
+                    this.back();
                 }
             },
             qutil(data) {

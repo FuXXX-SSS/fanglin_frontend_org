@@ -15,6 +15,7 @@
                                     <el-input v-model="loginData.username"
                                               placeholder="请输入手机号/用户名"
                                               class="username"
+                                              autocomplete="off"
                                     ></el-input>
                                 </el-form-item>
                                 <el-form-item prop="password">
@@ -22,6 +23,7 @@
                                     <el-input v-model="loginData.password"
                                               placeholder="请输入登录密码"
                                               type="password"
+                                              autocomplete="off"
                                               @keyup.enter.native="onIndex"
                                     ></el-input>
                                 </el-form-item>
@@ -273,6 +275,7 @@
                     }
                 });
             },
+            //验证码
             async sendCode() {
                 let _this = this
                 if (this.ruleForm.age !== "") {

@@ -18,7 +18,8 @@
 
                         </el-form-item>
                         <el-form-item label="联系电话：">
-                            <el-input v-model="formData.phone" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
+                            <el-input v-model="formData.phone"
+                                      onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></el-input>
                         </el-form-item>
                         <el-form-item label="募资目标：">
                             <el-input v-model="formData.amount" style="width: 80%;float: left;" disabled></el-input>
@@ -28,7 +29,8 @@
                         <el-form-item label="回馈标准：">
                             <span style="float: left;">资助1元回馈</span>
                             <el-input v-model="formData.refundStd"
-                                      style="width: 50%;float: left;margin-left: 10px;margin-right: 10px" disabled></el-input>
+                                      style="width: 50%;float: left;margin-left: 10px;margin-right: 10px"
+                                      disabled></el-input>
                             <span style="margin-left: 14px;">{{assetsUnitName}}</span>
                         </el-form-item>
                         <el-form-item>
@@ -74,7 +76,7 @@
 
 <script>
     import Qutil from '@com/quill-editor'
-    import {update,projectDetail} from '@http/project'
+    import {update, projectDetail} from '@http/project'
     import baseUrl from '@/http/baseUrl'
     import Elupload from '@com/el-upload'
     import {mapState} from "vuex";
@@ -93,7 +95,7 @@
                 activeName: "0",
                 isDetail: true,
                 assetsUnitName: '',
-                event:true
+                event: true
             }
         },
         components: {
@@ -113,7 +115,7 @@
 
             async save() {
                 console.log(this.formData.image);
-                  if (this.formData.image==='') {
+                if (this.formData.image === '') {
                     this.$tools.$mes('图片没上传到服务器，无法提交发布', 'warning')
                     return false
                 }
@@ -144,12 +146,12 @@
                 this.formData.image = data
                 console.log(this.formData.image);
             },
-           async init() {
+            async init() {
                 this.assetsUnitName = JSON.parse(
                     sessionStorage.getItem("userInfo")
                 ).assetsUnitName;
-               console.log(this.userInfo);
-               let res = await projectDetail(this.userInfo.projectId)
+                console.log(this.userInfo);
+                let res = await projectDetail(this.userInfo.projectId)
                 this.formData = await res.data
             }
         },

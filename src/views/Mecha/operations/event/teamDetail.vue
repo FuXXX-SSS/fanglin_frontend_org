@@ -101,7 +101,8 @@
                     >
 
                         <el-form-item label="募集金额 : ">
-                            <div>{{formData.donatedAmount}}元</div>
+                            <div style="display: inline-block;margin-right: 10px">{{formData.donatedAmount}}元</div>
+                            <div style="display: inline-block">完成{{formData.precent}}%</div>
 
                         </el-form-item>
                         <el-form-item label="捐赠人数 : ">
@@ -109,7 +110,7 @@
 
                         </el-form-item>
                         <el-form-item label="回馈 : ">
-                            <div>{{formData.assetsUnitName}}</div>
+                            <div>{{formData.refundStd}}{{formData.assetsUnitName}}</div>
                         </el-form-item>
                         <br>
 
@@ -191,6 +192,7 @@
                 this.des = res.data.description
                 this.projectStatus = res.data.projectStatus
                 this.projectStatus === 1 ? this.projectStatus = true : this.projectStatus = false
+                this.formData.precent = parseFloat(this.formData.donatedAmount)/parseFloat(this.formData.amount)
             },
             qutil(data) {
                 console.log(data);

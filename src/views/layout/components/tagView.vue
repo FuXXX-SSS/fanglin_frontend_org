@@ -53,22 +53,26 @@
         },
 
         methods: {
+            // 当前路由
             addViewTag() {
                 const {path} = this.$route
                 if (path) {
                     this.$store.dispatch("tagView/addVisitedView", this.$route);
                 }
             },
+            // 激活当前
             isActive(route) {
                 return route.path === this.$route.path;
             },
             beforeunloadFn(e) {
             },
+            // 删除
             handleClose(view) {
                 this.$store.dispatch("tagView/delVisitedView", view).then(res => {
                     this.toLastView(res.visitedViews, view);
                 });
             },
+            // 为空
             toLastView(visitedViews, view) {
                 const latestView = visitedViews.slice(-1)[0];
                 if (latestView) {

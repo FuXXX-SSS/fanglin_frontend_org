@@ -235,6 +235,7 @@
                 }
 
             },
+            // 活动详情
             async activityDetail() {
                 let res = await activityDetail(this.userInfo.activityId)
                 this.formData = res.data
@@ -243,11 +244,13 @@
                 this.assetsUnitName = JSON.parse(sessionStorage.getItem("userInfo")).assetsUnitName
                 console.log(this.assetsUnitName);
             },
+            // 申请列表
             async applyList() {
                 let res = await applyList(this.userInfo.activityId)
                 this.tableData.records = res.data
                 this.toggle(this.tableData.records)
             },
+           // 单选
             async handleSelectionChange(val) {
                 let res = await activityDetail(this.userInfo.activityId)
                 this.formData = res.data
@@ -289,7 +292,7 @@
                     });
                 }, 2000);
             },
-
+            // 全选
             toggle(data) {
                 if (data.length) {
                     this.$nextTick(function () {

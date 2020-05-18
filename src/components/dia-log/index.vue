@@ -67,6 +67,7 @@
             }
         },
         methods: {
+            // 是否成功
             async Sure() {
                 let obj = {
                     amount: this.form.amount,
@@ -96,6 +97,8 @@
         },
         created() {
             this.assetsUnitName = JSON.parse(sessionStorage.getItem("userInfo")).assetsUnitName
+            this.form.amount=''
+            this.form.password=''
         }
     }
 </script>

@@ -182,7 +182,6 @@
             },
             async userQuaInfo() {
                 let res = await userQuaInfo(this.userInfo.userId)
-                console.log(res);
                 if (res.data.list !== null) {
                     this.tableData.records = res.data
                 } else {
@@ -190,6 +189,7 @@
                 }
                 this.instName = JSON.parse(sessionStorage.getItem("userInfo")).instName
             },
+            // 修改认证
             async quaClick(data) {
                 let certStatus = ''
                 data.certStatus === 1 ? certStatus = 0 : certStatus = 1

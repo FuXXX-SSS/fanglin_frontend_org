@@ -102,6 +102,7 @@
                 center
                 :showClose="false"
                 :close-on-click-modal="false"
+                :close-on-press-escape="false"
         >
             <el-form
                     :inline="false"
@@ -113,10 +114,13 @@
                     ref="formData2"
             >
                 <el-form-item label="注册手机号 : ">
-                    <div>{{formData2.instphone||'无'}}</div>
+                    <div style="text-align: left">{{formData2.instphone||'无'}}</div>
                 </el-form-item>
                 <el-form-item label="短信验证码 : " prop="setCode">
-                    <el-input v-model="formData2.setCode">
+                    <el-input v-model="formData2.setCode"
+                              clearable
+                              autocomplete="off"
+                    >
                         <template slot="append">
                             <el-button type="warning" class="send" @click="loginClick(2)" :disabled="disabled2">
                                 {{setText}}
@@ -127,14 +131,29 @@
                 </el-form-item>
 
                 <el-form-item label="新密码 : " prop="setWord">
-                    <el-input v-model="formData2.setWord"></el-input>
+                    <input type="password" name="password" style="position: fixed;left: -9999px;">
+                    <el-input v-model="formData2.setWord"
+                              type="password"
+                              maxlength="6"
+                              show-word-limit
+                              clearable
+                              autocomplete="off"
+                              onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
+                    />
                 </el-form-item>
                 <el-form-item label="再次输入：" prop="setNew">
-                    <el-input v-model="formData2.setNew"></el-input>
+                    <input type="password" name="password" style="position: fixed;left: -9999px;">
+                    <el-input v-model="formData2.setNew"   type="password"
+                              maxlength="6"
+                              clearable
+                              autocomplete="off"
+                              onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
+                              show-word-limit></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                                    <el-button type="danger" size="medium" @click="submitForm('formData2',2)">保存</el-button>
+                                    <el-button type="danger" size="medium"
+                                               @click="submitForm('formData2',2)">保存</el-button>
 
          </span>
         </el-dialog>
@@ -147,6 +166,8 @@
     import Deatail from './teamDetail'
     import {userList} from '@http/user'
     import {verification, resetpassword} from '@http/managerUser'
+    import {login} from '@http/managerUser'
+    import md5 from "js-md5";
 
     export default {
         name: "index",
@@ -177,7 +198,7 @@
                 pageData: {},
                 userInfo: {},
                 total: 0,
-                dialogVisible: false,
+                dialogVisible: true,
                 formData2: {
                     loginCode: '',
                     loginWord: '',
@@ -232,9 +253,19 @@
                 this.formData.pageSize = item.page_limit;
                 this.init()
             },
+            //一 ；置支付密码
             isAdmin() {
+                this.formData2.setCode=null
+                this.formData2.setNew=''
+                this.formData2.setWord=''
+                console.log(this.formData2.setCode);
                 let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-                if (userInfo.admin || userInfo.setWalletPwd) {
+                if (userInfo.admin && userInfo.setWalletPwd) {
+                    this.dialogVisible = false
+                    this.init()
+                    return false
+                } else {
+                    this.$tools.$mes('未设置支付密码，无权限操作，请联系超级管理员', 'warning')
                     this.formData2.instphone = userInfo.instPhone
 
                     function geTel(tel) {
@@ -245,11 +276,11 @@
                     if (this.formData2.instphone !== undefined) {
                         this.formData2.instphone = geTel(this.formData2.instphone)
                     }
-                } else {
                     this.dialogVisible = true
                 }
 
             },
+            // 二；验证码
             async loginClick(type) {
                 let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
                 let phone = ''
@@ -293,7 +324,7 @@
                 }
 
             },
-
+            // 三；设置
             async submitForm(formName, type) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -301,7 +332,7 @@
                         if (type === 2) {
                             obj = {
                                 code: this.formData2.setCode,
-                                newPassword: this.formData2.setNew,
+                                newPassword: md5(`${this.formData2.setNew}fanglin`),
                                 type: 6,
                             }
                         }
@@ -309,6 +340,22 @@
                             resetpassword(obj).then(res => {
                                 if (res && res.code === 1000) {
                                     this.$tools.$mes('设置成功', 'success')
+                                    return new Promise((resolve, reject) => {
+                                        let obj = JSON.parse(sessionStorage.getItem("userInfo"));
+                                        login({account: obj.username, password: obj.passwprd, type: 0})
+                                            .then(res => {
+                                                if (res.code === 1000) {
+                                                    const {data} = res;
+                                                    sessionStorage.setItem("userInfo", JSON.stringify(data));
+                                                    sessionStorage.setItem("token", '123');
+                                                    setTimeout(() => {
+                                                        location.reload()
+                                                    }, 500)
+                                                    resolve();
+                                                }
+                                            })
+                                            .catch(err => reject(err));
+                                    })
                                 }
                             }).catch(error => reject(error))
                         })
@@ -320,9 +367,9 @@
 
         },
         created() {
-            this.init()
-            // this.isAdmin()
-        }
+            this.isAdmin()
+            // this.init()
+        },
     }
 </script>
 

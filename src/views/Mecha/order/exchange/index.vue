@@ -95,10 +95,10 @@
                     {{sendObj.exhGoodsName}}
                 </el-form-item>
                 <el-form-item label="入库数量：">
-                    {{sendObj.totalStock}}
+                    {{sendObj.totalStock}}{{sendObj.unit}}
                 </el-form-item>
                 <el-form-item label="当前库存：">
-                    {{sendObj.stock}}
+                    {{sendObj.stock}}{{sendObj.unit}}
                 </el-form-item>
                 <br>
                 <el-form-item label="兑换人：">
@@ -113,10 +113,10 @@
                 <br>
 
                 <el-form-item label="支付：">
-                    {{sendObj.amount}}
+                    {{sendObj.amount}}{{sendObj.unit}}
                 </el-form-item>
                 <el-form-item label="兑换数量：">
-                    {{sendObj.billNumber}}
+                    {{sendObj.billNumber}}{{sendObj.unit}}
                 </el-form-item>
                 <br>
                 <el-form-item label="收获地址：">
