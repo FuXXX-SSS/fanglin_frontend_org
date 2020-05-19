@@ -65,7 +65,9 @@
                     <el-input type="password" v-model="ruleForm.name1" autocomplete="off" placeholder="请输入密码"></el-input>
                 </el-form-item>
                 <el-form-item label="确认密码" prop="password">
-                    <el-input type="password" v-model="ruleForm.password" autocomplete="off"
+                    <el-input type="password"
+                              v-model="ruleForm.password"
+                              autocomplete="off"
                               placeholder="请确认密码"></el-input>
                 </el-form-item>
                 <br>
@@ -120,7 +122,7 @@
         name: "index",
         data() {
             var validatePass = (rule, value, callback) => {
-                if (value === '') {
+                if (value ===undefined) {
                     callback(new Error('请输入密码'));
                 } else {
                     if (this.ruleForm.pass !== '') {
@@ -130,11 +132,12 @@
                 }
             };
             var validatePass2 = (rule, value, callback) => {
+                console.log(rule);
                 console.log(value);
-                if (value === '') {
-                    callback(new Error('请再次输入密码'));
-                } else if (value !== this.ruleForm.pass) {
-                    callback(new Error('两次输入密码不一致!'));
+                if (value === undefined) {
+                    callback(new Error("请输入确认密码"));
+                } else if (value !== this.ruleForm.name1) {
+                    callback(new Error("两次输入密码不一致！"));
                 } else {
                     callback();
                 }
@@ -158,7 +161,7 @@
                         { validator: validatePass, trigger: 'blur' ,required: true,}
                     ],
                     password: [
-                        { validator: validatePass2, trigger: 'blur',required: true, }
+                        { required: true, validator: validatePass2, trigger: "blur" }
                     ],
                     account: [{
                         required: true,
@@ -278,12 +281,13 @@
                                     .catch(err => reject(err));
                             } else {
                                 console.log(this.ruleForm);
-                                let {account, id, name, phone} = this.ruleForm
+                                let {account, id, name, phone,password} = this.ruleForm
                                 let obj = {
                                     account,
                                     id,
                                     name,
                                     phone,
+                                    password,
                                     privilegeIdList: this.checkedCities,
                                 }
                                 managerUserupdate(obj)

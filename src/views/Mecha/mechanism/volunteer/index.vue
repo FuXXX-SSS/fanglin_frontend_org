@@ -168,6 +168,7 @@
     import {verification, resetpassword} from '@http/managerUser'
     import {login} from '@http/managerUser'
     import md5 from "js-md5";
+    import {instInfo} from '@http/inst'
 
     export default {
         name: "index",
@@ -260,7 +261,8 @@
                 this.formData2.setWord=''
                 console.log(this.formData2.setCode);
                 let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
-                if (userInfo.admin && userInfo.setWalletPwd) {
+                let InfoData = JSON.parse(sessionStorage.getItem("InfoData"));
+                if (InfoData.admin && InfoData.setWalletPwd) {
                     this.dialogVisible = false
                     this.init()
                     return false
@@ -340,22 +342,22 @@
                             resetpassword(obj).then(res => {
                                 if (res && res.code === 1000) {
                                     this.$tools.$mes('设置成功', 'success')
-                                    return new Promise((resolve, reject) => {
-                                        let obj = JSON.parse(sessionStorage.getItem("userInfo"));
-                                        login({account: obj.username, password: obj.passwprd, type: 0})
-                                            .then(res => {
-                                                if (res.code === 1000) {
-                                                    const {data} = res;
-                                                    sessionStorage.setItem("userInfo", JSON.stringify(data));
-                                                    sessionStorage.setItem("token", '123');
-                                                    setTimeout(() => {
-                                                        location.reload()
-                                                    }, 500)
-                                                    resolve();
-                                                }
-                                            })
-                                            .catch(err => reject(err));
-                                    })
+                                    setTimeout(()=>{
+                                        return new Promise((resolve, reject) => {
+                                            instInfo()
+                                                .then(res => {
+                                                    if (res.code === 1000) {
+                                                        const {data} = res;
+                                                        sessionStorage.setItem("InfoData", JSON.stringify(data));
+                                                        sessionStorage.setItem("token", '123');
+                                                        this.isAdmin()
+                                                        resolve();
+                                                    }
+                                                })
+                                                .catch(err => reject(err));
+                                        })
+                                    },500)
+
                                 }
                             }).catch(error => reject(error))
                         })
