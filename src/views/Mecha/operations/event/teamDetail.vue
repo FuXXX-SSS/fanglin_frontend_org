@@ -102,7 +102,7 @@
 
                         <el-form-item label="募集金额 : ">
                             <div style="display: inline-block;margin-right: 10px">{{formData.donatedAmount}}元</div>
-                            <div style="display: inline-block">完成{{formData.precent}}%</div>
+                            <div style="display: inline-block">完成{{formData.precent||0}}%</div>
 
                         </el-form-item>
                         <el-form-item label="捐赠人数 : ">
