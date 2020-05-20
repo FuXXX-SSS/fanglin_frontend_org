@@ -192,7 +192,11 @@
                 this.des = res.data.description
                 this.projectStatus = res.data.projectStatus
                 this.projectStatus === 1 ? this.projectStatus = true : this.projectStatus = false
-                this.formData.precent = parseFloat(this.formData.donatedAmount)/parseFloat(this.formData.amount)
+                if (this.formData.donatedAmount===0 ||this.formData.amount===0){
+                    this.formData.precent=0
+                }else {
+                    this.formData.precent = parseFloat(this.formData.donatedAmount)/parseFloat(this.formData.amount)
+                }
             },
             qutil(data) {
                 console.log(data);

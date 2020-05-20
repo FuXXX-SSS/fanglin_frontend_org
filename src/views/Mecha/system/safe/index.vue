@@ -27,10 +27,18 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item label="新密码 : " prop="loginWord">
-                            <el-input v-model="formData.loginWord" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" type="password"></el-input>
+                            <el-input v-model="formData.loginWord" v-enter-number type="password"
+
+                                      maxlength="6"
+                                      clearable
+                            ></el-input>
                         </el-form-item>
                         <el-form-item label="再次输入：" prop="loginNew">
-                            <el-input v-model="formData.loginNew" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" type="password"></el-input>
+                            <el-input v-model="formData.loginNew"  type="password"
+                                      v-enter-number
+                                      maxlength="6"
+                                      clearable
+                            ></el-input>
                         </el-form-item>
                     </el-form>
                 </el-col>
@@ -68,10 +76,13 @@
                         </el-form-item>
 
                         <el-form-item label="新密码 : " prop="setWord">
-                            <el-input v-model="formData2.setWord" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" type="password"></el-input>
+                            <el-input v-model="formData2.setWord" v-enter-number maxlength="6" type="password"
+                                      clearable
+                            ></el-input>
                         </el-form-item>
                         <el-form-item label="再次输入：" prop="setNew">
-                            <el-input v-model="formData2.setNew" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" type="password"></el-input>
+                            <el-input v-model="formData2.setNew"  type="password" v-enter-number maxlength="6" clearable
+                            ></el-input>
                         </el-form-item>
                     </el-form>
 
@@ -91,6 +102,7 @@
 
 <script>
     import {verification, resetWalletPwd, resetpassword} from '@http/managerUser'
+    import md5 from "js-md5";
 
     export default {
         name: "teamDetail",
@@ -254,13 +266,13 @@
                         if (type === 2) {
                              obj = {
                                 code: this.formData2.setCode,
-                                newPassword: this.formData2.setNew,
+                                newPassword: md5(`${this.formData2.setNew}fanglin`),
                                 type: 6,
                             }
                         } else {
                              obj = {
                                 code: this.formData.loginCode,
-                                newPassword: this.formData.loginNew,
+                                newPassword:  md5(`${this.formData2.loginNew}fanglin`),
                                 type: 0,
                             }
                         }

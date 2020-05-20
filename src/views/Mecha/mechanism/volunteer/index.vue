@@ -138,7 +138,7 @@
                               show-word-limit
                               clearable
                               autocomplete="off"
-                              onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
+                              v-enter-number
                     />
                 </el-form-item>
                 <el-form-item label="再次输入：" prop="setNew">
@@ -147,7 +147,7 @@
                               maxlength="6"
                               clearable
                               autocomplete="off"
-                              onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
+                              v-enter-number
                               show-word-limit></el-input>
                 </el-form-item>
             </el-form>
