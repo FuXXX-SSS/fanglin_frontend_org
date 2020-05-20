@@ -12,7 +12,8 @@
                 <el-row :gutter="20">
                     <el-col :span="16">
                         <el-form-item label="活动价值：">
-                            <div style="color: red;font-weight: bold;font-size: 16px">{{calValue}}{{assetsUnitName}}/人
+                            <div style="color: red;font-weight: bold;font-size: 16px">
+                                {{calValue}}{{assetsUnitName}}/人
                                 共计{{toatalValue}}{{assetsUnitName}}
                             </div>
                         </el-form-item>
@@ -266,7 +267,7 @@
                     projectId: '',
                     image: '',
                     mapvalue: '',
-                    repeatActivity: 0,
+                    repeatActivity: '',
                     beginTime: new Date().getTime() + 3600000,
                     endTime: new Date().getTime() + 7199820,
                     repeatEndTime: new Date().getTime(),
@@ -601,6 +602,7 @@
             },
             // 初始化
             async init() {
+                this.assetsUnitName = JSON.parse(sessionStorage.getItem("userInfo")).assetsUnitName
                 let res = await projectname()
                 let res2 = await instList()
                 if (res && res.data.list !== null) {
@@ -619,7 +621,6 @@
                     this.serviceList = []
 
                 }
-                this.assetsUnitName = JSON.parse(sessionStorage.getItem("userInfo")).assetsUnitName
             },
             // 发布
             async submit() {

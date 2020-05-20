@@ -299,10 +299,10 @@
                 }
 
                 if (this.formData2.instphone !== undefined) {
-                    this.formData2.instphone = geTel(this.formData2.instphone)
+                    this.formData2.instphone=  this.formData2.instphone.substr(0, 3) + '****' + this.formData2.instphone.substr(7)
                 }
                 if (this.formData.loginPhone !== undefined) {
-                    this.formData.loginPhone = geTel(this.formData.loginPhone)
+                    this.formData.loginPhone = this.formData.loginPhone.substr(0, 3) + '****' + this.formData.loginPhone.substr(7)
                 }
             }
         },

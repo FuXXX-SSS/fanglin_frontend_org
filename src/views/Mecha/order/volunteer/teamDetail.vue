@@ -113,7 +113,7 @@
                     :form="walletURL"
                     @Sure="Sure()"
                     :title="Vistitle"
-                    @Sure2="rateSure"
+                    @Sure2="Sure2"
             />
 
             <div class="my-block block_bot">
@@ -317,19 +317,21 @@
                     name: "ordervolunteer"
                 });
             },
-            async rateSure() {
+            async Sure2(password) {
+                console.log(password);
                 let obj = {
-                  comment: this.formData.comment,
-                  score: this.commentScore,
-                  id: this.userInfo.id
+                    comment: this.formData.comment,
+                    score: this.commentScore,
+                    password,
+                    id: this.userInfo.id
                 };
                 let res = await rate(obj);
                 if (res && res.code === 1000) {
                   this.$tools.$mes("评价成功", "success");
-                  this.init();
                   let _this  = this
                   setTimeout(()=>{
-                    _this.ISdialog()
+                    _this.init()
+                      this.Visible=false
                   },500)
                 }
             },

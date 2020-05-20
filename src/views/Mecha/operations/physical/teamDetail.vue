@@ -36,7 +36,7 @@
                         <el-form-item label="兑换标准：">
                             <el-input v-model="formData.exhAmount" style="    width: 25%;
     float: left;"></el-input>
-                            <span style="margin-left: 14px;">元/芳邻点</span>
+                            <span style="margin-left: 14px;">{{assetsUnitName}}</span>
                         </el-form-item>
                         <el-form-item label="状态：">
                             <el-switch v-model="projectStatus" active-text="上架" inactive-text="下架"></el-switch>
@@ -95,6 +95,7 @@
             return {
                 formData: {type: 1, image: ""},
                 projectStatus: "",
+                assetsUnitName: "",
                 isDetail: true,
                 isexh: true,
                 image: ""
@@ -128,6 +129,9 @@
                 this.$router.go(-1);
             },
             async init() {
+                this.assetsUnitName = JSON.parse(
+                    sessionStorage.getItem("userInfo")
+                ).assetsUnitName;
                 let res = await exhDetail(this.userInfo.id);
                 this.formData = res.data;
                 this.image = res.data.image;

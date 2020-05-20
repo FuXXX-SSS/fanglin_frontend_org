@@ -12,8 +12,8 @@
                 <el-input v-model="form.walletURL" autocomplete="off" disabled></el-input>
             </el-form-item>
             <el-form-item label="转账数量" :label-width="formLabelWidth">
-                <el-input v-model.number="form.amount" autocomplete="off"
-                          onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                <el-input v-model="form.amount"  autocomplete="off" disabled
+                          v-enter-number>
                     <template slot="append">{{assetsUnitName}}</template>
                 </el-input>
             </el-form-item>
@@ -37,7 +37,7 @@
 
 <script>
     import md5 from 'js-md5'
-    import {commonTrade} from '@http/common'
+    import {commonTrade,walletURL} from '@http/common'
 
     export default {
         props: {
@@ -54,7 +54,7 @@
             title: {
                 type: String,
                 default: '转账'
-            }
+            },
         },
         name: "index",
         data() {
@@ -63,7 +63,7 @@
                 diaTitle: '对方钱包',
                 isSure: true,
                 info: '',
-                assetsUnitName: ''
+                assetsUnitName: '',
             }
         },
         methods: {
@@ -86,9 +86,12 @@
                 }
             },
             Sure2() {
+                console.log("aaa");
                 this.isSure = !this.isSuccess
                 this.dialogVisible = false
-                this.$emit('rateSure')
+                console.log(md5(this.form.password + "fanglin"));
+                let password =md5(this.form.password + "fanglin")
+                this.$emit('Sure2',password)
             },
             Cancel() {
                 this.$emit('diaLog')

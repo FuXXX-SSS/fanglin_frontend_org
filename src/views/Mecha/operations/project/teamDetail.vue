@@ -36,7 +36,7 @@
             <el-form-item label="兑换标准：">
               <el-input v-model="formData.exhAmount" style="    width: 25%;
     float: left;" disabled></el-input>
-              <span style="margin-left: 14px;">芳邻点/套</span>
+              <span style="margin-left: 14px;">{{assetsUnitName}}</span>
             </el-form-item>
             <el-form-item label="购买价格：">
               <el-input
@@ -46,12 +46,12 @@
                 disabled
                 onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
               ></el-input>
-              <span style="margin-left: 14px;">元/套</span>
+              <span style="margin-left: 14px;">元</span>
             </el-form-item>
             <el-form-item label="购买回馈：">
               <el-input v-model="formData.refundAmount" style="    width: 25%;
     float: left;" disabled></el-input>
-              <span style="margin-left: 14px;">芳邻点/套</span>
+              <span style="margin-left: 14px;">{{assetsUnitName}}</span>
             </el-form-item>
             <el-form-item label="摘要：">
               <el-input
@@ -114,6 +114,7 @@ export default {
         records: []
       },
       projectStatus: "",
+      assetsUnitName: "",
       isDetail: true,
       isexh: true,
       isUpload: true
@@ -134,6 +135,9 @@ export default {
       this.$router.go(-1);
     },
     async init() {
+      this.assetsUnitName = JSON.parse(
+              sessionStorage.getItem("userInfo")
+      ).assetsUnitName;
       let res = await exhDetail(this.userInfo.id);
       this.formData = res.data;
       console.log(this.formData);
