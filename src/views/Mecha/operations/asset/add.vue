@@ -77,13 +77,14 @@
                         </el-form-item>
 
                         <el-form-item label="" style="margin-top: 34px">
-                               <div style="float: left">
-                                   <p style="display: inline-block;margin: 0;float: left;margin-right: 20px">实名认证</p>
-                                   <el-radio v-model="formData.idCert" label=1>要求</el-radio>
-                                   <el-radio v-model="formData.idCert" label=0>不要求</el-radio>
-                               </div>
+                            <div style="float: left">
+                                <p style="display: inline-block;margin: 0;float: left;margin-right: 20px">实名认证</p>
+                                <el-radio v-model="formData.idCert" label=1>要求</el-radio>
+                                <el-radio v-model="formData.idCert" label=0>不要求</el-radio>
+                            </div>
                             <div style="float: left;margin-left: 70px">
-                                <p style="display: inline-block;margin: 0;float: left;margin-left: 20px;margin-right: 20px">性别</p>
+                                <p style="display: inline-block;margin: 0;float: left;margin-left: 20px;margin-right: 20px">
+                                    性别</p>
                                 <el-radio v-model="formData.gender" label="1">男</el-radio>
                                 <el-radio v-model="formData.gender" label="0">女</el-radio>
                                 <el-radio v-model="formData.gender" label="-1">不限</el-radio>
@@ -610,12 +611,16 @@
                 } else {
                     this.project = []
                 }
-                this.project.forEach(item=>{
-                    if (item&&item.projectName.length>=10){
-                        item.projectName=`${item.projectName.substr(0,10)}...`
+                this.project.forEach(item => {
+                    if(item.projectName!==null){
+                        if (item && item.projectName.length >= 10) {
+                            item.projectName = `${item.projectName.substr(0, 10)}...`
+                        }
                     }
+
                 })
-                if (res2) {
+                console.log(res2);
+                if (res2.code === 1000) {
                     this.serviceList = res2.data
                 } else {
                     this.serviceList = []
@@ -669,10 +674,11 @@
         margin-top: 18px;
         width: 45%;
         margin-right: 0;
+
         /deep/ .el-form-item__content {
-        margin-left: 0!important;
-        float: left;
-    }
+            margin-left: 0 !important;
+            float: left;
+        }
 
     }
 
