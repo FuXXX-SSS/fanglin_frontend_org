@@ -26,3 +26,12 @@ export const serviceAdd = data =>
         method: "post",
         data: data
     });
+
+
+// 评价服务
+export const servicerate = data =>
+    _axios({
+        url: "/bms/bill/service/rate",
+        method: "post",
+        data: data
+    });

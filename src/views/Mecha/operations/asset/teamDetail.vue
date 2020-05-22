@@ -135,7 +135,11 @@
                    {{scope.row.score.toFixed(2)}}
                 </template>
                 </el-table-column>
-                <el-table-column prop="selected" label="实名认证"/>
+                <el-table-column prop="selected" label="实名认证">
+                <template slot-scope="scope">
+                        {{ scope.row.cert===1 ? "已认证" :'未认证' }}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="serviceCategoryList" label="专长">
                     <template slot-scope="scope">
                         <div v-if="scope.row.serviceCategoryList!==null" style="display: inline-block">

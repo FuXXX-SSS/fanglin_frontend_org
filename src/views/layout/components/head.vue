@@ -19,7 +19,7 @@
             </div>
             <div class="rightcontext">
                 <div class="item">用户：{{userName}}</div>
-                <span class="el-dropdown-link" @click="logout">
+                <span class="el-dropdown-link" @click="logout" style="cursor:pointer">
                     退出登录
                   </span>
                 <!--                    <el-dropdown-menu slot="dropdown">-->

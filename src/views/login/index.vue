@@ -68,6 +68,7 @@
                                 <el-form-item label="" prop="pass">
                                     <el-input
                                             v-model="ruleForm.pass"
+                                            type="password"
                                             autocomplete="off"
                                             placeholder="请输入登录密码"
                                     ></el-input>
@@ -76,6 +77,7 @@
                                     <el-input
                                             v-model="ruleForm.checkPass"
                                             autocomplete="off"
+                                            type="password"
                                             placeholder="请确认登录密码"
                                     ></el-input>
                                 </el-form-item>

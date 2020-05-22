@@ -91,7 +91,7 @@
         name: "teamDetail",
         data() {
             return {
-                formData: {imageList: [], introduction: "", type: 1, unit: "元"},
+                formData: {imageList: [], introduction: "", type: 1, unit: "元",totalStock:''},
                 limit: 3,
                 assetsUnitName: ""
             };
@@ -118,6 +118,10 @@
                 this.formData.introduction = data;
             },
             async save() {
+                if (this.formData.totalStock === '') {
+                    this.$tools.$mes("入库数量不能为空", "warning");
+                    return false;
+                }
                 if (this.formData.imageList === "") {
                     this.$tools.$mes("图片没上传到服务器，无法提交发布", "warning");
                     return false;
