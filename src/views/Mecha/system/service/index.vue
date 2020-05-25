@@ -115,7 +115,6 @@
                 this.instServiceCoVOList = res2.data
                 this.formData.instUserCount = res.data.instUserCount
                 this.formData = res.data
-                this.formData.assetsUnitName =''
                 console.log(this.formData.joinType);
             },
             async save() {
@@ -123,6 +122,11 @@
                 let res =await instupdate(this.formData)
                 if (res && res.code === 1000) {
                     console.log(res.data);
+                    let userInfo = JSON.parse(
+                        sessionStorage.getItem("userInfo")
+                    );
+                    userInfo.assetsUnitName=this.formData.assetsUnitName
+                    sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
                     this.$tools.$mes('保存成功', 'success')
                     this.init()
                 }
