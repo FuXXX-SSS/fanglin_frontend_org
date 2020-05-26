@@ -85,7 +85,11 @@
                 total: 0,
                 dialogVisible: false,
                 info: '',
-                walletURL: {}
+                walletURL: {
+                    walletURL:'',
+                    amount:'',
+                    password:'',
+                }
             }
         },
         components: {

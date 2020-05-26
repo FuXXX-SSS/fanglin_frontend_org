@@ -27,14 +27,15 @@
                             </el-input>
                         </el-form-item>
                         <el-form-item label="新密码 : " prop="loginWord">
-                            <el-input v-model="formData.loginWord" v-enter-number type="password"
-
+                            <el-input v-model="formData.loginWord" v-enter-number
+                                      type="password" readonly onfocus="this.removeAttribute('readonly');"
                                       maxlength="6"
                                       clearable
                             ></el-input>
                         </el-form-item>
                         <el-form-item label="再次输入：" prop="loginNew">
-                            <el-input v-model="formData.loginNew"  type="password"
+                            <el-input v-model="formData.loginNew"
+                                      type="password" readonly onfocus="this.removeAttribute('readonly');"
                                       v-enter-number
                                       maxlength="6"
                                       clearable
@@ -76,12 +77,12 @@
                         </el-form-item>
 
                         <el-form-item label="新密码 : " prop="setWord">
-                            <el-input v-model="formData2.setWord" v-enter-number maxlength="6" type="password"
+                            <el-input v-model="formData2.setWord" v-enter-number maxlength="6"  type="password" readonly onfocus="this.removeAttribute('readonly');"
                                       clearable
                             ></el-input>
                         </el-form-item>
                         <el-form-item label="再次输入：" prop="setNew">
-                            <el-input v-model="formData2.setNew"  type="password" v-enter-number maxlength="6" clearable
+                            <el-input v-model="formData2.setNew"   type="password" readonly onfocus="this.removeAttribute('readonly');" v-enter-number maxlength="6" clearable
                             ></el-input>
                         </el-form-item>
                     </el-form>

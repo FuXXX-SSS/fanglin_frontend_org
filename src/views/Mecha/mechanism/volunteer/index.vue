@@ -36,7 +36,7 @@
                 <el-table :data="tableData.records" border>
                     <el-table-column type="index" label="序号" width="50"/>
 
-                    <el-table-column prop="name" label="用户头像">
+                    <el-table-column prop="name" label="用户头像" >
                         <template slot-scope="scope">
                             <img :src="scope.row.avatar" min-width="70" height="70"/>
                         </template>
@@ -133,7 +133,7 @@
                 <el-form-item label="新密码 : " prop="setWord">
                     <input type="password" name="password" style="position: fixed;left: -9999px;">
                     <el-input v-model="formData2.setWord"
-                              type="password"
+                              type="text" onfocus="this.type='password'"
                               maxlength="6"
                               show-word-limit
                               clearable
@@ -143,7 +143,7 @@
                 </el-form-item>
                 <el-form-item label="再次输入：" prop="setNew">
                     <input type="password" name="password" style="position: fixed;left: -9999px;">
-                    <el-input v-model="formData2.setNew"   type="password"
+                    <el-input v-model="formData2.setNew"  type="text" onfocus="this.type='password'"
                               maxlength="6"
                               clearable
                               autocomplete="off"
@@ -262,11 +262,7 @@
                 console.log(this.formData2.setCode);
                 let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
                 let InfoData = JSON.parse(sessionStorage.getItem("InfoData"));
-                if (InfoData.admin && InfoData.setWalletPwd) {
-                    this.dialogVisible = false
-                    this.init()
-                    return false
-                } else {
+                 if (InfoData.admin && !InfoData.setWalletPwd){
                     this.$tools.$mes('未设置支付密码，无权限操作，请联系超级管理员', 'warning')
                     this.formData2.instphone = userInfo.instPhone
 
@@ -279,6 +275,10 @@
                         this.formData2.instphone = geTel(this.formData2.instphone)
                     }
                     this.dialogVisible = true
+                }else {
+                    this.dialogVisible = false
+                    this.init()
+                    return false
                 }
 
             },

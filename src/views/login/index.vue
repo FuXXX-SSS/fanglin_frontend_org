@@ -22,7 +22,7 @@
 
                                     <el-input v-model="loginData.password"
                                               placeholder="请输入登录密码"
-                                              type="password"
+                                              type="password" readonly onfocus="this.removeAttribute('readonly');"
                                               autocomplete="off"
                                               @keyup.enter.native="onIndex"
                                     ></el-input>

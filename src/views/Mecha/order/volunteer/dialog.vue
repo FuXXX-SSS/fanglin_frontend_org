@@ -16,7 +16,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="钱包密码" :label-width="formLabelWidth">
-        <el-input v-model="form.password" autocomplete="off" type="password" placeholder="输入钱包密码"></el-input>
+        <el-input v-model="form.password" autocomplete="off"  type="password" readonly onfocus="this.removeAttribute('readonly');" placeholder="输入钱包密码"></el-input>
       </el-form-item>
     </el-form>
     <span

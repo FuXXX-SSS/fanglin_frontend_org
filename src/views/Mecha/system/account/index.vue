@@ -62,10 +62,10 @@
                 </el-form-item>
                 <br>
                 <el-form-item label="密码" prop="name1">
-                    <el-input type="password" v-model="ruleForm.name1" autocomplete="off" placeholder="请输入密码"></el-input>
+                    <el-input  type="password" readonly onfocus="this.removeAttribute('readonly');" v-model="ruleForm.name1" autocomplete="off" placeholder="请输入密码"></el-input>
                 </el-form-item>
                 <el-form-item label="确认密码" prop="password">
-                    <el-input type="password"
+                    <el-input  type="password" readonly onfocus="this.removeAttribute('readonly');"
                               v-model="ruleForm.password"
                               autocomplete="off"
                               placeholder="请确认密码"></el-input>

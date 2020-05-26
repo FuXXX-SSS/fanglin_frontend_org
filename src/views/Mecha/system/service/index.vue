@@ -41,7 +41,7 @@
                                     <el-input-number
                                             v-model="item.serviceCo"
                                             :min="0"
-                                            :step="1"
+                                            :step="5"
                                             size="small"
                                             :name="item.serviceCatName"
                                     ></el-input-number>

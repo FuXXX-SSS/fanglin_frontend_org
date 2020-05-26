@@ -7,18 +7,23 @@
             :close-on-click-modal="false"
     >
         <el-form :model="form" v-if="isSure" label-position="left">
+            <input style="opacity: 0;position:absolute;width:0;height:0;">
+            <input type="password" style="opacity: 0;position:absolute;width:0;height:0;">
             <el-form-item label="对方钱包" :label-width="formLabelWidth" >
                 <el-input v-model="form.walletURL" autocomplete="off" :disabled="Isdisabled"></el-input>
             </el-form-item>
             <el-form-item label="转账数量" :label-width="formLabelWidth">
                 <input type="hidden" style="display: none">
-                <el-input v-model.number="form.amount"  onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"  auto-complete="off">
+                <el-input v-model.number="form.amount"  v-enter-number  auto-complete="off">
                     <template slot="append">{{assetsUnitName}}</template>
                 </el-input>
             </el-form-item>
             <el-form-item label="钱包密码" :label-width="formLabelWidth">
                 <input type="hidden" style="display: none">
-                <el-input v-model="form.password" autocomplete="off" type="password" placeholder="输入钱包密码" auto-complete="off">
+                <el-input v-model="form.password" autocomplete="off"
+                          type="password"  placeholder="输入钱包密码" auto-complete="off"
+                          readonly onfocus="this.removeAttribute('readonly');"
+                >
                 </el-input>
             </el-form-item>
         </el-form>
