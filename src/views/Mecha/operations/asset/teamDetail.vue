@@ -132,7 +132,7 @@
                 <el-table-column prop="serviceTime" label="服务次数"/>
                 <el-table-column prop="score" label="评价">
                 <template slot-scope="scope">
-                   {{scope.row.score.toFixed(2)}}
+                   {{scope.row.score}}
                 </template>
                 </el-table-column>
                 <el-table-column prop="selected" label="实名认证">

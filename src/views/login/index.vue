@@ -227,9 +227,18 @@
                                                         _this.$tools.$mes('登录成功', 'success')
                                                         _this.isLoading = false
                                                         _this.login = '登录'
-                                                        _this.$router.push({
-                                                            path: "/index"
-                                                        });
+                                                        let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+                                                        if (userInfo.assetsUnitId === null) {
+                                                            _this.$router.push({
+                                                                path: "/index/system/service"
+                                                            });
+                                                            _this.$tools.$mes('请设置资产名称', 'wrong')
+                                                        } else {
+                                                            _this.$router.push({
+                                                                path: "/index"
+                                                            });
+                                                        }
+
                                                     })
                                                 })
 
@@ -420,7 +429,7 @@
     }
 
     .box /deep/ .el-input-group__append {
-        background-color:@bg;
+        background-color: @bg;
         border-radius: 0 30px 30px 0;
     }
 
@@ -480,8 +489,9 @@
         margin-bottom: 65px;
         margin-top: 63px;
     }
-    .showFalse{
-        .bg{
+
+    .showFalse {
+        .bg {
             height: 600px;
 
         }

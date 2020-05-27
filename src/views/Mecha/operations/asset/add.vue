@@ -508,6 +508,44 @@
                 }
                 //获取dom元素添加地图信息
                 var map = new qq.maps.Map(document.getElementById("container"), myOptions);
+                var marker = new qq.maps.Marker({
+                    position: myLatlng,
+                    animation: qq.maps.MarkerAnimation.DROP,
+                    map: map,
+                    // Draggable: true,
+                });
+                // marker.setDraggable(true);
+                console.log(myLatlng);
+                this.restaurants = this.loadAll();
+                var thit = this
+                // 点击
+                qq.maps.event.addListener(map, 'click', async function (event) {
+                    console.log(event);
+                    thit.lat = event.latLng.lat
+                    thit.lng = event.latLng.lng
+                    thit.initMap()
+                    let name = await thit.analysis(event.latLng)
+                    this.mapvalue = name
+                });
+                // 拖拽
+                // qq.maps.event.addListener(marker, 'dragend', function (event) {
+                //     var weizhi = map.getPosition();
+                //     map.setCenter(weizhi)
+                //     console.log(weizhi);
+                // });
+                // console.log(this.mapvalue);
+            },
+            // 点击获取位置
+            async AddList() {
+                var myLatlng = await new qq.maps.LatLng(this.lat, this.lng);
+                //定义工厂模式函数
+                var myOptions = {
+                    zoom: 12,               //设置地图缩放级别
+                    center: myLatlng,      //设置中心点样式
+                    mapTypeId: qq.maps.MapTypeId.ROADMAP  //设置地图样式详情参见MapType
+                }
+                //获取dom元素添加地图信息
+                var map = new qq.maps.Map(document.getElementById("container"), myOptions);
                 setTimeout(function () {
                     var marker = new qq.maps.Marker({
                         position: myLatlng,
@@ -516,18 +554,9 @@
                     });
                     //marker.setAnimation(qq.maps.Animation.DROP);
                 }, 500);
-                console.log(myLatlng);
-                this.restaurants = this.loadAll();
-                var thit = this
-                qq.maps.event.addListener(map, 'click', async function (event) {
-                    let name = await thit.analysis(event.latLng)
-                    console.log(name);
-                    this.mapvalue = name
-                });
-                console.log(this.mapvalue);
             },
             // 腾讯地图位置详细信息
-            analysis(data1) {
+            async analysis(data1) {
                 console.log(data1);
                 this.lat = data1.lat
                 this.lng = data1.lng
@@ -612,7 +641,7 @@
                     this.project = []
                 }
                 this.project.forEach(item => {
-                    if(item.projectName!==null){
+                    if (item.projectName !== null) {
                         if (item && item.projectName.length >= 10) {
                             item.projectName = `${item.projectName.substr(0, 10)}...`
                         }

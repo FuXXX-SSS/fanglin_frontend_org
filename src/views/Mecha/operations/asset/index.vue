@@ -40,7 +40,7 @@
                     <el-table-column type="index" label="序号" width="50"/>
                     <el-table-column prop="publishTime" label="发布时间"/>
                     <el-table-column prop="name" label="活动名称"/>
-                    <el-table-column prop="instName" label="发布者"/>
+<!--                    <el-table-column prop="instName" label="发布者"/>-->
                     <el-table-column prop="phone" label="联系电话"/>
                     <el-table-column prop="position" label="任务地点"/>
                     <el-table-column prop="beginTime" label="开始时间"/>
